@@ -1,9 +1,9 @@
 
-use crate::card::Card;
+use crate::card;
 
 #[derive(Debug)]
 pub struct Deck {
-    cards: Vec<Card>
+    cards: Vec<card::Card>
 }
 
 impl Deck {
@@ -14,24 +14,23 @@ impl Deck {
         }
     }
     
-    pub fn from_cards(cards: vec) -> Self {
-        // Create a deck from a vec of cards
-        // TODO from_cards
+    pub fn from_cards(cards: Vec<card::Card>) -> Self {
+        Deck {
+            cards
+        }
     }
 
     pub fn starting_deck() -> Self {
-        // TODO starting_deck        
         Deck {
             cards: vec![
-                Card::copper() * 3,
-                Card::estate() * 7
+                card::dominion::copper() * 3,
+                card::dominion::estate() * 7
             ]
         }
     }
 
-    pub fn add_card(card: Card) {
-        // Add a card to the deck
-        // TODO add_card
+    pub fn add_card(&self, card: &mut Card) {
+        self.cards.append(card)
     }
 
     pub fn value(&self) -> u32 {

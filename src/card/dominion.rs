@@ -1,3 +1,5 @@
+use super::CardType;
+
 
 
 pub fn copper() -> Card {
@@ -5,7 +7,7 @@ pub fn copper() -> Card {
         name: String::from("Copper"),
         description: None,
         cost: 0,
-        steps: None
+        steps: None,
     }
 }
 pub fn silver() -> Card {
@@ -33,7 +35,10 @@ pub fn village() -> Card {
         steps: Some(vec![
             Step::PlusCard(1),
             Step::PlusAction(2)
-        ])
+        ]),
+        types: vec![
+            CardType::Action
+        ]
     }
 }
 
@@ -42,7 +47,10 @@ pub fn estate() -> Card {
         name: String::from("Estate"),
         description: None,
         cost: 2,
-        steps: None
+        steps: None,
+        types: vec![
+            CardType::Victory(1)
+        ]
     }
 }
 
@@ -51,6 +59,21 @@ pub fn duchy() -> Card {
         name: String::from("Duchy"),
         description: None,
         cost: 2,
-        steps: None
+        steps: None,
+        types: vec![
+            CardType::Victory(3)
+        ]
+    }
+}
+
+pub fn province() -> Card {
+    Card {
+        name: String::from("Province"),
+        description: None,
+        cost: 8,
+        steps: None,
+        types: vec![
+            CardType::Victory(6)
+        ]
     }
 }
