@@ -1,10 +1,9 @@
 mod card;
+mod player;
 mod hand;
 mod deck;
 mod step;
 mod game;
-mod player;
-mod archetypes;
 
 use card;
 
@@ -19,7 +18,7 @@ fn main() {
     game.add_player(&mut player1);
     game.add_player(&mut player2);
 
-    // Play a turn
+    // Play some turns
     game.play_turns(2);
 
     // Stats can be grabbed at any time
@@ -31,7 +30,5 @@ fn main() {
 
     let game_stats = game.get_game_stats();
     let player_stats = game.get_player_stats();
-
-
 
 }

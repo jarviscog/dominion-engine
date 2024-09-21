@@ -34,7 +34,7 @@ impl Hand {
     // TODO victory_points
   }
 
-  pub fn actions(&self) -> ? {
+  pub fn actions(&self) {
     // Return all of the action cards
   }
 
