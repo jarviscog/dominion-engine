@@ -1,13 +1,12 @@
 
-use crate::{card, deck};
-use crate::hand::Hand;
-use crate::deck::Deck;
+use crate::{card, hand, deck};
+use crate::game_step::{self, GameStep};
 
 #[derive(Debug)]
 pub struct Player {
     name: String,
-    hand: Hand,
-    deck: Deck
+    hand: hand::Hand,
+    deck: deck::Deck
 }
 
 impl Player {
@@ -20,13 +19,13 @@ impl Player {
         }
     }
 
-    pub fn play_action_phase(&self) -> Option<Vec<Step>> {
+    pub fn play_action_phase(&self) -> Option<Vec<GameStep>> {
         None
     }
 
-    pub fn play_buy_phase(&self) -> Option<Vec<Card>> {
+    pub fn play_buy_phase(&self) -> Option<Vec<GameStep>> {
         // Return a list of cards to buy
-        Some(vec![card::dominion::copper()])
+        Some(vec![GameStep::BuyCard(card::dominion::copper())])
     }
 
     pub fn victory_points(&self) -> u32 {
@@ -34,9 +33,8 @@ impl Player {
         self.hand.victory_points()
     }
 
-    pub fn to_string(&self) -> &str {
-        // TODO to_string
-        &format!("Player: {:?}", self.name)
+    pub fn to_string(&self) -> String {
+        String::from(format!("Player: {}", self.name))
     }
 
 }

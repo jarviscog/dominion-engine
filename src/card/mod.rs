@@ -1,5 +1,8 @@
+use crate::game_step::GameStep;
+
 pub mod dominion;
 
+#[derive(Debug, Clone)]
 pub enum CardType {
 
     // Basic
@@ -15,21 +18,26 @@ pub enum CardType {
 }
 
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Card {
     name: String,
     description: Option<String>,
     cost: u8,
-    steps: Option<Vec<Step>>,
+    steps: Option<Vec<GameStep>>,
     types: Vec<CardType>,
 }
 
 impl Card {
 
-    pub fn new(name: &str, description: Option<str>, cost: u8, steps: Option<Vec<Step>>, types: Vec<CardType>) -> Self {
+    pub fn new(name: &str, description: Option<&str>, cost: u8, steps: Option<Vec<GameStep>>, types: Vec<CardType>) -> Self {
+        let mut desc: Option<String>;
+        desc = match description {
+            Some(pulled_desc) => Some(String::from(pulled_desc)),
+            None => None
+        };
         Card {
             name: name.to_owned(),
-            description: Some(description.to_string()),
+            description: desc,
             cost,
             steps,
             types,

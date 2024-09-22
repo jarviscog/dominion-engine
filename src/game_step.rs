@@ -1,6 +1,7 @@
+use crate::card;
 
-
-pub enum Step {
+#[derive(Debug, Clone)]
+pub enum GameStep {
     // Global events
     NextTurn(u8), // Player number 
 
@@ -9,6 +10,7 @@ pub enum Step {
 
     PlayCard(String), // Name of the card
 
+    BuyCard(card::Card),
     // Housekeeping
     DrawToCardLimit(),
 

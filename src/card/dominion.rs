@@ -1,6 +1,6 @@
 use super::CardType;
-
-
+use super::Card;
+use crate::game_step::GameStep;
 
 pub fn copper() -> Card {
     Card {
@@ -8,6 +8,9 @@ pub fn copper() -> Card {
         description: None,
         cost: 0,
         steps: None,
+        types: vec![
+            CardType::Treasure(1)
+        ]
     }
 }
 pub fn silver() -> Card {
@@ -15,7 +18,10 @@ pub fn silver() -> Card {
         name: String::from("Silver"),
         description: None,
         cost: 3,
-        steps: None
+        steps: None,
+        types: vec![
+            CardType::Treasure(2)
+        ]
     }
 }
 pub fn gold() -> Card {
@@ -23,7 +29,10 @@ pub fn gold() -> Card {
         name: String::from("Gold"),
         description: None,
         cost: 6,
-        steps: None
+        steps: None,
+        types: vec![
+            CardType::Treasure(3)
+        ]
     }
 }
 
@@ -33,8 +42,8 @@ pub fn village() -> Card {
         description: None,
         cost: 3,
         steps: Some(vec![
-            Step::PlusCard(1),
-            Step::PlusAction(2)
+            GameStep::PlusCard(1),
+            GameStep::PlusAction(2)
         ]),
         types: vec![
             CardType::Action

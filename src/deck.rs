@@ -21,21 +21,23 @@ impl Deck {
     }
 
     pub fn starting_deck() -> Self {
+        let mut card_vec = vec![card::dominion::copper(); 7];
+        card_vec.push(card::dominion::village());
+        card_vec.push(card::dominion::village());
+        card_vec.push(card::dominion::village());
         Deck {
-            cards: vec![
-                card::dominion::copper() * 7,
-                card::dominion::estate() * 3
-            ]
+            cards: card_vec
         }
+
     }
 
-    pub fn add_card(&self, card: &mut Card) {
-        self.cards.append(card)
+    pub fn add_card(&mut self, card: card::Card) {
+        self.cards.push(card)
     }
 
     pub fn victory_points(&self) -> u32 {
         let mut sum = 0;
-        for card in self.cards {
+        for card in &self.cards {
             if let Some(amount) = card.victory_points() {
                 sum += u32::from(amount);
             }
@@ -45,7 +47,7 @@ impl Deck {
 
     pub fn value(&self) -> u32 {
         let mut sum = 0;
-        for card in self.cards {
+        for card in &self.cards {
             if let Some(amount) = card.value() {
                 sum += u32::from(amount);
             }

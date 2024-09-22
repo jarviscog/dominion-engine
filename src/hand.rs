@@ -13,21 +13,21 @@ impl Hand {
         }
     }
 
-    pub fn from_cards(cards: vec) -> Self {
+    pub fn from_cards(cards: Vec<Card>) -> Self {
         // Create a deck from a vec of cards
         Hand {
             cards
         }
     }
 
-    pub fn add_card(&self, card: Card) {
+    pub fn add_card(&mut self, card: Card) {
         // Add a card to the deck
         self.cards.push(card)
     }
 
     pub fn value(&self) -> u32 {
         let mut sum = 0;
-        for card in self.cards {
+        for card in &self.cards {
             if let Some(amount) = card.value() {
                 sum += u32::from(amount);
             }
@@ -37,7 +37,7 @@ impl Hand {
 
     pub fn victory_points(&self) -> u32 {
         let mut sum = 0;
-        for card in self.cards {
+        for card in &self.cards {
             if let Some(amount) = card.victory_points() {
                 sum += u32::from(amount);
             }
