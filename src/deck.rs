@@ -23,8 +23,8 @@ impl Deck {
     pub fn starting_deck() -> Self {
         Deck {
             cards: vec![
-                card::dominion::copper() * 3,
-                card::dominion::estate() * 7
+                card::dominion::copper() * 7,
+                card::dominion::estate() * 3
             ]
         }
     }
@@ -33,13 +33,24 @@ impl Deck {
         self.cards.append(card)
     }
 
-    pub fn value(&self) -> u32 {
-        // Get the value of all of the cards
-        // TODO value
+    pub fn victory_points(&self) -> u32 {
+        let mut sum = 0;
+        for card in self.cards {
+            if let Some(amount) = card.victory_points() {
+                sum += u32::from(amount);
+            }
+        }
+        sum
     }
 
-    pub fn victory_points(&self) -> u32 {
-        // TODO value
+    pub fn value(&self) -> u32 {
+        let mut sum = 0;
+        for card in self.cards {
+            if let Some(amount) = card.value() {
+                sum += u32::from(amount);
+            }
+        }
+        sum
     }
     
     pub fn shuffle(&self) {

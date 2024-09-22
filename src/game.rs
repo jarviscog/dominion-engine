@@ -38,7 +38,7 @@ impl Game {
 
     pub fn play_turn(&self, num_of_turns: u32) {
         for i in 0..num_of_turns {
-            self.eventq.append(Step::NextTurn(i));
+            self.eventq.append(Step::NextTurn(self.next_player_turn));
 
             self.eventq.append(Step::ActionPhase());
             for step in self.players.get(self.next_player_turn).unwrap().play_action_phase() {
@@ -60,16 +60,25 @@ impl Game {
         self.play_turn(self.players.count())
     }
 
-    pub fn play_to_end(&self, &self, &self, &self, &self, &self, &self, &self, num_of_turns: u32) {
+    pub fn play_to_end(&self) {
         // TODO play_to_end
     }
 
     pub fn get_game_stats(&self) -> &str {
-        // TODO get_game_stats
-
+        // TODO finish get_game_stats
+        let mut ret_string = String::from("=== Game Stats ===");
+        ret_string.push_str(&format!("Number of players: {:?}", self.number_of_players));
+        ret_string.push_str(&format!("Current tyrn: {:?}", self.turn_number));
+        
+        &ret_string
     }
     pub fn get_player_stats(&self) -> &str {
-        // TODO get_player_stats
+        // TODO finish get_player_stats
+        let mut ret_string = String::new();
+        ret_string.push_str(&format!("=== Players: ({:?} ===", self.number_of_players));
+        
+        &ret_string
+        
     }
 
 

@@ -1,5 +1,5 @@
 
-use crate::card;
+use crate::{card, deck};
 use crate::hand::Hand;
 use crate::deck::Deck;
 
@@ -16,7 +16,7 @@ impl Player {
         Player {
             name: name.to_owned(),
             hand: hand::Hand::new(),
-            deck: deck::Deck::new(),
+            deck: deck::Deck::starting_deck()
         }
     }
 
@@ -25,6 +25,7 @@ impl Player {
     }
 
     pub fn play_buy_phase(&self) -> Option<Vec<Card>> {
+        // Return a list of cards to buy
         Some(vec![card::dominion::copper()])
     }
 

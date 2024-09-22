@@ -3,9 +3,8 @@ mod player;
 mod hand;
 mod deck;
 mod step;
-mod game;
 
-use card;
+use game::Game;
 
 fn main() {
 
@@ -13,8 +12,8 @@ fn main() {
     let game = Game::new();
 
     // Add players
-    let player1 = player::archetypes::Money::new();
-    let player2 = player::archetypes::Engine::new();
+    let player1 = player::Player::new("Player 1");
+    let player2 = player::Player::new("Player 2");
     game.add_player(&mut player1);
     game.add_player(&mut player2);
 
