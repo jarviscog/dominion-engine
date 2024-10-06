@@ -1,6 +1,6 @@
 use crate::game_step::GameStep;
 
-pub mod dominion;
+pub mod base_game;
 
 #[derive(Debug, Clone)]
 pub enum CardType {
@@ -42,6 +42,10 @@ impl Card {
             steps,
             types,
         }
+    }
+
+    pub fn name(&self) -> &str {
+        &self.name
     }
 
     pub fn cost(&self) -> u8 {

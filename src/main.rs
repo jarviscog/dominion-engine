@@ -4,6 +4,7 @@ mod player;
 mod hand;
 mod deck;
 mod game_step;
+mod bank;
 
 mod game;
 

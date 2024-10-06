@@ -2,6 +2,7 @@ use crate::card;
 
 #[derive(Debug, Clone)]
 pub enum GameStep {
+
     // Global events
     NextTurn(u8), // Player number 
 
@@ -22,8 +23,9 @@ pub enum GameStep {
     TrashCard(u8),
     DiscardCard(u8),
 
-    SearchDeck(u8) // Search through the top n cards of a deck, with some potentially being returned
+    SearchDeck(u8), // Search through the top n cards of a deck, with some potentially being returned
 
+    GameEnd(),
 
     // Deferred actions
 
