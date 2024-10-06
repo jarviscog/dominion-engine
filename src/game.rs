@@ -32,7 +32,7 @@ impl Game {
             next_player_turn: 0,
             number_of_players: 0, 
             players: Vec::new(),
-            bank: Bank::base_game(),
+            bank: Bank::first_game(),
             eventq: Vec::new(),
         }
     }
