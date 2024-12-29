@@ -35,3 +35,4 @@ pub fn duchy() -> Card {
 pub fn province() -> Card {
     Card::new("Province", None, 8, None, vec![CardType::Victory(6)])
 }
+

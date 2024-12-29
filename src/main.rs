@@ -11,7 +11,7 @@ mod game;
 fn main() {
 
     // Create game
-    let mut game = game::Game::new();
+    let mut game = game::Game::base_game();
 
     // Add players
     let player1 = player::Player::new("John");
@@ -31,6 +31,19 @@ fn main() {
 
     game.print_game_stats();
     game.print_player_stats();
-    game.print_event_q();
 
 }
+
+
+// GRAVEYARD
+//
+// The game gets sent a Decision
+// The game validates this, then sets it's state to the next
+// state. This will set the next players turn, and what sort of desision they need to make
+//
+// Types of decisions:
+// Actions - Play some list of actions, ending in either a card that needs to make a decision, or
+// and EndAction
+// Buy - The player chooses to buy a certain number of cards. The game validates this, and then
+// buys the cards
+// Discard cards - The player must discard a number of cards

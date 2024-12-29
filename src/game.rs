@@ -2,9 +2,21 @@ use std::usize;
 
 use crate::{hand::Hand, game_step::GameStep, player::Player, bank::Bank};
 
+/// This is a decision that a player needs to make. 
+/// e.g. 
+/// ActionPhase -> What cards to play
+/// DiscardFromHand -> What cards to discard
+enum Decision {
+    ActionPhase,
+    BuyPhase,
+    DiscardFromHand(u32, Location), // number of cards to discard
+}
 
-enum GameError {
-    GameStarted,
+enum Location {
+    Hand,
+    Deck,
+    Discard,
+    Trash,
 }
 
 #[derive(Debug)]
@@ -41,6 +53,14 @@ impl Game {
         // TODO Stop adding players after game start
         self.number_of_players += 1;
         self.players.push(p);
+    }
+
+    pub fn get_decision_type() {
+        // TODO 
+    }
+
+    pub fn try_actions {
+        // TODO
     }
 
     pub fn play_turns(&mut self, num_of_turns: u32) {

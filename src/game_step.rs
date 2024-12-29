@@ -1,32 +1,21 @@
+// NOTE: Keeping this around for now for legacy reasons, but this code is dead now in favor of the
+// ECS
+
 use crate::card;
 
 #[derive(Debug, Clone)]
 pub enum GameStep {
 
-    // Global events
-    NextTurn(u8), // Player number 
 
-    ActionPhase(),
-    BuyPhase(),
-
-    PlayCard(String), // Name of the card
-
-    BuyCard(card::Card),
-    // Housekeeping
-    DrawToCardLimit(),
-
-    // Player events
-    PlusCard(u8),
-    PlusAction(u8),
-    PlusBuy(u8),
-
-    TrashCard(u8),
-    DiscardCard(u8),
-
-    SearchDeck(u8), // Search through the top n cards of a deck, with some potentially being returned
-
-    GameEnd(),
-
+    // Got a good idea for this:
+    // Make some sort of system where a step has a 'target', conditions, and a destination 
+    // Target is the place to target:
+    //   this could be your deck, the other players deck, the other players hand, the top 3 cards of
+    //   your deck...etc.
+    // Conditions
+    //   the conditions of the operation. this could be minimum(2) or 
+    // Destination: 
+    //   where to put the cards after the operation is done
     // Deferred actions
 
 }

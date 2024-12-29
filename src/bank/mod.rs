@@ -45,7 +45,7 @@ impl Bank {
         bank
     }
 
-    pub fn buy_card(&self) -> {
+    pub fn buy_card(&self, c: Card) -> {
         // TODO buy_card()
     }
 

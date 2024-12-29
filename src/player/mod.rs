@@ -2,6 +2,7 @@
 use crate::{card, hand, deck};
 use crate::game_step::{self, GameStep};
 
+
 #[derive(Debug)]
 pub struct Player {
     name: String,
@@ -20,12 +21,11 @@ impl Player {
     }
 
     pub fn play_action_phase(&self) -> Option<Vec<GameStep>> {
-        None
+        // TODO
     }
 
     pub fn play_buy_phase(&self) -> Option<Vec<GameStep>> {
-        // Return a list of cards to buy
-        Some(vec![GameStep::BuyCard(card::dominion::copper())])
+        // TODO
     }
 
     pub fn victory_points(&self) -> u32 {
