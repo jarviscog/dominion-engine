@@ -1,4 +1,5 @@
 
+use std::fmt;
 
 pub mod location;
 use location::Location;
@@ -44,5 +45,33 @@ pub enum Step {
         RuntimeValue // Count
     ), 
 
+    //// Operators
+    //And(Box<Step>, Box<Step>),
+    //Or(Box<Step>, Box<Step>),
+//
+//
+    //DrawTo(number::Number),
+    //DiscardTo(number::Number),
+//
+    //LimitCardCount(Box<Step>, number::Number),
+    //LimitCardName(Box<Step>, number::Number),
+    //LimitCardValue(Box<Step>, number::Number),
 
 }
+
+
+impl fmt::Display for Step {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            Self::PlusBuy(x) => write!(f, "+{} Buy", x),
+            Self::DrawCard(x) => write!(f, "+{} Card", x),
+            Self::PlusAction(x) => write!(f, "+{} Action", x),
+            Self::PlusCoin(x) => write!(f, "+{} 🪙", x),
+            _ => write!(f, "{:?}", self),
+
+        }
+    }
+            //write!(f, "{:?}", self)
+}
+
+

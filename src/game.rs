@@ -48,7 +48,7 @@ impl Game {
     pub fn run_steps(&self, steps: Vec<Step>) {
         println!("Running steps: ");
         for step in steps {
-            println!("  {:?}", step);
+            println!("  {}", step)
         }
 
     }
