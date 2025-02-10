@@ -1,5 +1,5 @@
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Expansion {
     BaseGame,
     Intrigue,
