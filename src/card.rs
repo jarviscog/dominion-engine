@@ -142,7 +142,7 @@
                      Box::new(
                          Step::OptionalMoveXCards(
                              EffectedPlayers::You, 
-                             CardFilter::Name(&"Copper"), 
+                             CardFilter::Name("Copper".to_owned()), 
                              Location::Hand,
                              Location::Trash,
                              RuntimeValue::FixedValue(1),
@@ -161,10 +161,10 @@
              name: "Witch".to_owned(),
              expansion: Expansion::BaseGame,
              action_steps: Some(vec![
-                 Step::DrawCard(2),
+                 Step::DrawCard(RuntimeValue::FixedValue(2)),
                  Step::ForceMoveXCards(
                      EffectedPlayers::AllOthers, 
-                     CardFilter::Name(&"Curse"), 
+                     CardFilter::Name("Curse".to_owned()), 
                      Location::Supply,
                      Location::Discard,
                      RuntimeValue::FixedValue(1),
@@ -189,6 +189,26 @@
                      Location::Hand,
                      Location::Trash,
                      RuntimeValue::FixedValue(4),
+                 )
+             ]),
+             cost: Cost::Coin(2),
+             card_type: vec![CardType::Action],
+         }
+     }
+
+     pub fn council_room() -> Card {
+         Card {
+             name: "Council Room".to_owned(),
+             expansion: Expansion::BaseGame,
+             action_steps: Some(vec![
+                 Step::DrawCard(RuntimeValue::FixedValue(4)),
+                 Step::PlusBuy(RuntimeValue::FixedValue(1)),
+                 Step::ForceMoveXCards(
+                     EffectedPlayers::AllOthers, 
+                     CardFilter::All,
+                     Location::Deck, 
+                     Location::Hand,
+                     RuntimeValue::FixedValue(1),
                  )
              ]),
              cost: Cost::Coin(2),
