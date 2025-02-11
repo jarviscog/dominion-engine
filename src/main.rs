@@ -38,13 +38,18 @@ fn main() {
         new_game.run_steps(steps);
     }
 
-    println!("\nVillage:");
-    if let Some(steps) = card::Card::village().get_steps() {
+    println!("\nCellar:");
+    if let Some(steps) = card::Card::cellar().get_steps() {
         new_game.run_steps(steps);
     }
 
     println!("\nMoneylender:");
     if let Some(steps) = card::Card::moneylender().get_steps() {
+        new_game.run_steps(steps);
+    }
+
+    println!("\nVassal:");
+    if let Some(steps) = card::Card::vassal().get_steps() {
         new_game.run_steps(steps);
     }
 
