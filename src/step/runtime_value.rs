@@ -1,6 +1,6 @@
 use std::fmt;
 
-// These are values that potentially get resolved at runtime. Always return a integer
+// These are values that potentially get resolved at runtime
 #[derive(Debug, Clone)]
 pub enum RuntimeValue {
     Any,
