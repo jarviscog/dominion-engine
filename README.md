@@ -11,31 +11,32 @@ No external dependencies are required. Just run `cargo run`
 
 Example code:
 ```rust
-// Create game
-let mut game = game::Game::base_game();
+// Create a new game
+let mut new_game = game::Game::new();
 
 // Add players
-let player1 = player::Player::new("John");
-let player2 = player::Player::new("Cindy");
-game.add_player(player1);
-game.add_player(player2);
+new_game.add_terminal_player("Jarvis".to_owned());
+new_game.add_bot("Bot".to_owned());
+// Set up the bank to be the "First Game" preset
+new_game.set_bank(bank::Bank::first_game());
 
-// Play some turns
-game.play_turns(2);
+// Start the game
+new_game.start_game();
 
-// Stats can be grabbed at any time
-game.print_game_stats();
-game.print_player_stats();
+while !new_game.is_finished() {
+    new_game.get_next_step();
+    new_game.print_status();
+}
 
-// Play the rest of the game
-game.play_to_end();
+let player_names = new_game.get_player_names();
+println!("Players: ");
+println!("  {:#?}", player_names);
 
-game.print_game_stats();
-game.print_player_stats();
+println!("\nMarket:");
+if let Some(steps) = card::Card::market().get_steps() {
+    new_game.run_steps(steps);
+}
 ```
 
-`Player` encapsulates all logic for what a player should do in a given situation.
-Two important functions are used. `play_action_phase()` `play_buy_phase()`, which will both return a `Option<Vec<GameStep>>`
-These functions can either use a `RuleSet` to decide on what actions to take, or get it from a different source (human input, websocket connection, etc.)
+`Player` encapsulates all logic for what a player should do in a given situation.  
 
-All events that happen in a game will be held in an event queue. This queue holds all information about what steps were taken throughout a game. This includes events like `BuyCard()`, `BuyPhase()` or `EndGame()`
