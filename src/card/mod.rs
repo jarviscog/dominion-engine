@@ -15,6 +15,7 @@ use crate::step::runtime_value::RuntimeValue;
 
 // functions to generate cards
 mod dominion;
+mod seaside;
 
 #[derive(Debug, Clone)]
 pub struct Card {
