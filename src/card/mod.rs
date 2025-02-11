@@ -1,65 +1,101 @@
-use crate::game_step::GameStep;
+use std::str::FromStr;
 
-pub mod base_game;
-pub mod action;
-pub mod components;
-pub mod action_type;
-pub mod filters;
 
+use crate::cost::Cost;
+use crate::expansion::Expansion;
+use super::card_type::CardType;
+
+use crate::step::*;
+
+// functions to generate cards
+pub mod dominion;
+pub mod intrigue;
+pub mod seaside;
 
 #[derive(Debug, Clone)]
 pub struct Card {
     name: String,
-    description: Option<String>,
-    cost: u8,
-    steps: Option<Vec<GameStep>>,
-    components: Vec<CardComponent>,
+    expansion: Expansion,
+    card_type: Vec<CardType>,
+    on_gain: Option<Step>, // If steps are required when you gain the card
+    cost: Cost,
 }
 
 impl Card {
 
-    pub fn new(name: &str, description: Option<&str>, cost: u8, steps: Option<Vec<GameStep>>, components: Vec<CardComponent>) -> Self {
-        let mut desc: Option<String>;
-        desc = match description {
-            Some(pulled_desc) => Some(String::from(pulled_desc)),
-            None => None
-        };
+    pub fn get_steps(&self) -> Option<Vec<Step>> {
+        for c_type in &self.card_type {
+            return match c_type {
+                CardType::Action(steps) => {Some(steps.clone())}
+                _ => None
+            }
+        }
+        None
+    }
+
+    pub fn copper() -> Card {
         Card {
-            name: name.to_owned(),
-            description: desc,
-            cost,
-            steps,
-            components,
+            name: "Copper".to_owned(),
+            expansion: Expansion::Dominion,
+            card_type: vec![CardType::Treasure(RuntimeValue::FixedValue(1))],
+            cost: Cost::Coin(0),
+            on_gain: None,
         }
     }
 
-    pub fn name(&self) -> &str {
-        &self.name
+    pub fn silver() -> Card {
+        Card {
+            name: "Silver".to_owned(),
+            expansion: Expansion::Dominion,
+            card_type: vec![CardType::Treasure(RuntimeValue::FixedValue(2))],
+            cost: Cost::Coin(3),
+            on_gain: None,
+        }
     }
 
-    pub fn cost(&self) -> u8 {
-        self.cost
+    pub fn gold() -> Card {
+        Card {
+            name: "Gold".to_owned(),
+            on_gain: None,
+            expansion: Expansion::Dominion,
+            card_type: vec![CardType::Treasure(RuntimeValue::FixedValue(3))],
+            cost: Cost::Coin(6),
+        }
     }
 
-    pub fn victory_points(&self) -> Option<u8> {
-        self.components.iter().filter_map(|c| match c {
-            CardComponent::Victory(points) => Some(points),
-            _ => None
-        }).next().copied()
+    pub fn estate() -> Card {
+        Card {
+            name: "Estate".to_owned(),
+            expansion: Expansion::Dominion,
+            card_type: vec![CardType::Victory(RuntimeValue::FixedValue(1))],
+            cost: Cost::Coin(2),
+            on_gain: None,
+        }
     }
 
-    pub fn value(&self) -> Option<u8> {
-        self.components.iter().filter_map(|c| match c {
-            CardComponent::Treasure(value) => Some(value),
-            _ => None
-        }).next().copied()
+    pub fn duchy() -> Card {
+        Card {
+            name: "Duchy".to_owned(),
+            expansion: Expansion::Dominion,
+            card_type: vec![CardType::Victory(RuntimeValue::FixedValue(3))],
+            cost: Cost::Coin(5),
+            on_gain: None,
+        }
     }
 
-    pub fn to_string(&self) -> &str {
-        &self.name
+    pub fn province() -> Card {
+        Card {
+            name: "Province".to_owned(),
+            expansion: Expansion::Dominion,
+            card_type: vec![CardType::Victory(RuntimeValue::FixedValue(6))],
+            cost: Cost::Coin(8),
+            on_gain: None,
+        }
     }
-
-
 
 
 }
+
+
+
+

@@ -1,49 +1,71 @@
 #![allow(unused)]
-mod card;
-mod player;
-mod hand;
-mod deck;
-mod game_step;
-mod bank;
+
+use std::io::*;
+use std::io;
+use std::str::FromStr;
 
 mod game;
+mod bank;
+mod player;
+
+mod expansion;
+
+mod card;
+mod card_type;
+mod step;
+use step::Step;
+
+mod cost;
+
+mod pile;
 
 fn main() {
 
-    // Create game
-    let mut game = game::Game::base_game();
+    let mut new_game = game::Game::new();
 
-    // Add players
-    let player1 = player::Player::new("John");
-    let player2 = player::Player::new("Cindy");
-    game.add_player(player1);
-    game.add_player(player2);
+    new_game.add_terminal_player("Jarvis".to_owned());
+    new_game.add_bot("Bot".to_owned());
 
-    // Play some turns
-    game.play_turns(2);
+    new_game.set_bank(bank::Bank::first_game());
+    new_game.start_game();
 
-    // Stats can be grabbed at any time
-    game.print_game_stats();
-    game.print_player_stats();
+    let player_names = new_game.get_player_names();
+    println!("Players: ");
+    println!("  {:#?}", player_names);
 
-    // Play the rest of the game
-    game.play_to_end();
+    println!("\nMarket:");
+    if let Some(steps) = card::Card::market().get_steps() {
+        new_game.run_steps(steps);
+    }
 
-    game.print_game_stats();
-    game.print_player_stats();
+    println!("\nCellar:");
+    if let Some(steps) = card::Card::cellar().get_steps() {
+        new_game.run_steps(steps);
+    }
+
+    println!("\nMoneylender:");
+    if let Some(steps) = card::Card::moneylender().get_steps() {
+        new_game.run_steps(steps);
+    }
+
+    println!("\nVassal:");
+    if let Some(steps) = card::Card::vassal().get_steps() {
+        new_game.run_steps(steps);
+    }
+
+    //println!("{:#?}", card::Card::copper());
+
 
 }
 
 
-// GRAVEYARD
-//
-// The game gets sent a Decision
-// The game validates this, then sets it's state to the next
-// state. This will set the next players turn, and what sort of desision they need to make
-//
-// Types of decisions:
-// Actions - Play some list of actions, ending in either a card that needs to make a decision, or
-// and EndAction
-// Buy - The player chooses to buy a certain number of cards. The game validates this, and then
-// buys the cards
-// Discard cards - The player must discard a number of cards
+
+
+
+
+
+
+
+
+
+

@@ -1,147 +1,103 @@
-use std::usize;
 
-use crate::{hand::Hand, game_step::GameStep, player::Player, bank::Bank};
+use crate::player::Player;
+use crate::step::Step;
+use crate::bank::Bank;
+use crate::player;
 
-/// This is a decision that a player needs to make. 
-/// e.g. 
-/// ActionPhase -> What cards to play
-/// DiscardFromHand -> What cards to discard
-enum Decision {
+/// The game may need to wait until
+pub enum CurrentState {
+    GameNotStarted,
     ActionPhase,
-    BuyPhase,
-    DiscardFromHand(u32, Location), // number of cards to discard
+    RunningStep,
+    GameFinished,
 }
 
-enum Location {
-    Hand,
-    Deck,
-    Discard,
-    Trash,
-}
-
-#[derive(Debug)]
 pub struct Game {
-    // Game
-    game_started: bool,
-    turn_number: u32,
-    next_player_turn: u8, // The index of the player who's turn is next up
-
-    // Players
-    number_of_players: u8,
-    players: Vec<Player>,
-
-    // Gamestate
+    players: Vec<player::Player>,
     bank: Bank,
-    eventq: Vec<GameStep>
+    turn_number: u8,
+    current_state: CurrentState
 }
 
 impl Game {
 
-    pub fn new() -> Self {
-        Game { 
-            game_started: false,
-            turn_number: 0, 
-            next_player_turn: 0,
-            number_of_players: 0, 
+    pub fn new() -> Game {
+        Game {
             players: Vec::new(),
-            bank: Bank::first_game(),
-            eventq: Vec::new(),
+            bank: Bank::new(),
+            current_state: CurrentState::GameNotStarted,
+            turn_number: 0,
         }
     }
 
-    pub fn add_player(&mut self, p: Player) {
-        // TODO Stop adding players after game start
-        self.number_of_players += 1;
-        self.players.push(p);
+    pub fn add_terminal_player(&mut self, player_name: String) {
+        self.players.push(Player::terminal(player_name));
+    }
+    
+    pub fn add_bot(&mut self, bot_name: String) {
+        self.players.push(Player::bot(bot_name));
     }
 
-    pub fn get_decision_type() {
-        // TODO 
-    }
-
-    pub fn try_actions {
-        // TODO
-    }
-
-    pub fn play_turns(&mut self, num_of_turns: u32) {
-        for i in 0..num_of_turns {
-
-            if self.check_game_end() { return }
-
-            self.eventq.push(GameStep::NextTurn(self.next_player_turn));
-
-            self.eventq.push(GameStep::ActionPhase());
-            let player: &Player = &self.players[self.next_player_turn as usize];
-            if let Some(steps) = player.play_action_phase() {
-                for step in steps {
-                    self.eventq.push(step.clone());
-                }
-            }
-
-            self.eventq.push(GameStep::BuyPhase());
-            let player: &Player = &self.players[self.next_player_turn as usize];
-            if let Some(steps) = player.play_buy_phase() {
-                for step in steps {
-                    self.eventq.push(step);
-                }
-            }
-
-            self.next_player_turn = (self.next_player_turn + 1) % self.players.len() as u8;
-
-
-        }
-
-    }
-
-    // Plays one time around the table, giving every player a turn
-    pub fn play_rounds(&mut self, num_of_turns: u32) {
-        self.play_turns(self.players.len() as u32);
-    }
-
-    pub fn play_to_end(&self) {
-        // TODO play_to_end
-        self.play_turns(u32::max_value());
-    }
-
-    fn check_game_end(&self) -> bool {
-        // TODO: Update this for other game modes with other win conditions
-        
-            
-
-
-    }
-
-    pub fn print_game_stats(&self) {
-        // TODO finish get_game_stats
-        println!("=== Game Stats ===");
-        println!("Number of players: {:?}", self.number_of_players);
-        println!("Turn number: {:?}", self.turn_number);
-        println!("Current tyrn: {:?}", self.turn_number);
-    }
-
-    pub fn print_player_stats(&self) {
-        // TODO finish get_player_stats
-        println!("=== Players: ({:?}) ===", self.number_of_players);
-        for (i, player) in self.players.iter().enumerate() {
-            println!("{:?}  {:?}", i, &player.to_string());
-        }
-        
-    }
-
-    pub fn print_event_q(&self) {
-        for event in &self.eventq {
-            match event {
-                GameStep::NextTurn(turn) => println!("{:?}", event),
-
-                GameStep::ActionPhase() => println!("  {:?}", event),
-                GameStep::BuyPhase() => println!("  {:?}", event),
-
-                GameStep::BuyCard(card) => println!("    BuyCard: {}", card.name()),
-                _ => println!("    {:?}", event)
-
-            }
+    /// Sets the bank
+    pub fn set_bank(&mut self, in_bank: Bank) {
+        match self.current_state {
+            CurrentState::GameNotStarted => {self.bank = in_bank},
+            _ => {println!("WARNING: Game already started. Cannot set the bank")}
         }
     }
 
+    /// Starts the game, locking out the ability to add new players
+    pub fn start_game(&mut self) {
+        self.bank.finish_population(self.players.len());
+        self.current_state = CurrentState::ActionPhase;
+    }
+
+    /// Runs steps contained on a card
+    pub fn run_steps(&self, steps: Vec<Step>) {
+        println!("Running steps: ");
+        for step in steps {
+            println!("  {}", step);
+            self.run_step(step);
+        }
+    }
+    
+    pub fn run_step(&self, step: Step) {
+
+    }
+
+    pub fn get_player_names(&self) -> Vec<String> {
+        let mut ret_vec: Vec<String> = Vec::new();
+
+        for player in &self.players {
+            ret_vec.push(player.get_name().clone())
+        }
+        ret_vec
+    }
+
+    /// Returns the player at the given index
+    pub fn get_player(&self, index: usize) -> Option<&Player> {
+        self.players.get(index)
+    }
+
+    pub fn is_finished(&self) -> bool {
+        match self.current_state {
+            CurrentState::GameFinished => true,
+            _ => false,
+        }
+    }
+
+    pub fn print_status(&self) {
+        // TODO print_status()
+    }
 
 }
+
+
+
+
+
+
+
+
+
+
