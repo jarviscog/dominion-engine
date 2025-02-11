@@ -1,7 +1,11 @@
 
 #[derive(Debug, Clone)]
 pub enum Expansion {
-    BaseGame,
+    Dominion,
     Intrigue,
-    Seaside
+    Seaside,
+    Alchemy,
+    Prosperity,
+    Renaissance,
+    Custom,
 }
