@@ -60,10 +60,19 @@ impl Bank {
         }
     }
 
+    /// Finish populating the bank based off of the number of players, and the type of game being
+    /// played (add the key if playing Renaissance, etc.)
+    pub fn finish_population(&mut self, player_count: usize) {
+        // TODO
+        // Gardens should contain 12 cards, not 10
+        // 10 curses per player in the game
+        // Number of harems in the game
+    }
+
     pub fn first_game() -> Bank {
         let mut ret_bank = Bank::dominion();
-         //ret_bank.push_supply_pile(Card::cellar());
-         ret_bank.push_supply_pile(Card::market());
+         ret_bank.push_supply_pile(Card::cellar());
+         //ret_bank.push_supply_pile(Card::market());
          //ret_bank.push_supply_pile(Card::merchant());
          //ret_bank.push_supply_pile(Card::militia());
          //ret_bank.push_supply_pile(Card::mine());
@@ -81,11 +90,11 @@ impl Bank {
          //ret_bank.push_supply_pile(Card::bandit());
          //ret_bank.push_supply_pile(Card::bureaucrat());
          //ret_bank.push_supply_pile(Card::chapel());
-         ret_bank.push_supply_pile(Card::festival());
+         //ret_bank.push_supply_pile(Card::festival());
          //ret_bank.push_supply_pile(Card::gardens());
          //ret_bank.push_supply_pile(Card::sentry());
          //ret_bank.push_supply_pile(Card::throne_room());
-         //ret_bank.push_supply_pile(Card::witch());
+         ret_bank.push_supply_pile(Card::witch());
          //ret_bank.push_supply_pile(Card::workshop());
         ret_bank
     }
