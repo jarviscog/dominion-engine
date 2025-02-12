@@ -93,6 +93,18 @@ impl Card {
         }
     }
 
+    pub fn garden() -> Card {
+        Card {
+            name: "Garden".to_owned(),
+            expansion: Expansion::Dominion,
+            card_type: vec![
+                CardType::Victory(RuntimeValue::NumberOfCardsInDeck)
+            ],
+            cost: Cost::Coin(8),
+            on_gain: None,
+        }
+    }
+
 
 }
 
