@@ -124,31 +124,44 @@ impl Card {
         }
     }
 
-    //pub fn mine() -> Card {
-        //Card {
-            //name: "Mine TODO".to_owned(),
-            //expansion: Expansion::Dominion,
-            //action_steps: Some(vec![
-                //Step::ForEach(
-                    //ForEachType::CoinValue, 
-                    //Box::new(Step::OptionalMoveXCards(
-                        //EffectedPlayers::You, 
-                        //CardFilter::Type(CardType::Treasure),
-                        //Location::Hand,
-                        //Location::Discard,
-                        //RuntimeValue::FixedValue(1),
-                    //)),
-                    //Box::new(Step::GainCard( 
-                        //CardFilter::UpToXMoreValue(RuntimeValue::FixedValue(3), RuntimeValue::FromAbove))
-                    //),
-                //)
-            //]),
-            //on_gain: None,
-            //treasure_value: 0,
-            //cost: Cost::Coin(3),
-            //card_type: vec![CardType::Action],
-        //}
-    //}
+    pub fn mine() -> Card {
+        Card {
+            name: "Mine".to_owned(),
+            expansion: Expansion::Dominion,
+            on_gain: None,
+            cost: Cost::Coin(5),
+            card_type: vec![CardType::Action(vec![
+                Step::TransferCards(
+                    false, 
+                    EffectedPlayers::You, 
+                    Some(vec![CardFilter::Type(CardType::Treasure(RuntimeValue::Any))]), 
+                    Location::Hand, 
+                    Location::InternalBuffer,
+                ),
+                Step::ExtractValue(
+                    ExtractedValueType::CoinValue, 
+                    Location::InternalBuffer, 
+                    Box::new(Step::GainCardToHand(vec![
+                        CardFilter::CoinCostUpto(
+                            RuntimeValue::Add(
+                                Box::new(RuntimeValue::FromAbove),
+                                Box::new(RuntimeValue::FixedValue(3)),
+                            )
+                        ),
+                        CardFilter::Type(CardType::Treasure(RuntimeValue::Any))
+                    ])),
+                ),
+                Step::TransferCards(
+                    true, 
+                    EffectedPlayers::You, 
+                    None, 
+                    Location::InternalBuffer, 
+                    Location::Trash,
+                ),
+
+            ])],
+        }
+    }
 
     pub fn chapel() -> Card {
         Card {
@@ -273,7 +286,7 @@ impl Card {
                         EffectedPlayers::You, 
                         None, 
                         Location::InternalBuffer,
-                        Location::Discard, 
+                        Location::Trash, 
                     )
                 ])
             ],

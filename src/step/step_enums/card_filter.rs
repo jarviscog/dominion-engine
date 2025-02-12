@@ -1,3 +1,7 @@
+
+
+use std::fmt::{self, Write};
+
 use crate::card_type::CardType;
 
 use super::*;
@@ -36,3 +40,22 @@ pub enum CardFilter {
     // TODO This makes less sense here. Maybe move it?
     NextCardPlayed, // Throne Room
 }
+
+impl fmt::Display for CardFilter {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            Self::All => write!(f, ""),
+            Self::CoinCostUpto(x) => write!(f, "Cost <= {}", x),
+            Self::CoinCostEquals(x) => write!(f, "Cost == {}", x),
+            Self::ThisCard => write!(f, "This card"),
+            Self::Type(x) => write!(f, "Type == {}", x),
+            Self::NotType(x) => write!(f, "Type != {}", x),
+            Self::Name(x) => write!(f, "Name == {}", x),
+            _ => write!(f, "{:?}", self),
+        }
+    }
+}
+
+
+
+

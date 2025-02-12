@@ -21,6 +21,9 @@ pub enum Step {
     /// Gain a card from the supply piles
     /// `Vec<CardFilter>` limit the options that the player can choose from
     GainCard(Vec<CardFilter>),
+    /// Gain a card to your hand from the supply piles
+    /// `Vec<CardFilter>` limit the options that the player can choose from
+    GainCardToHand(Vec<CardFilter>),
     
     /// For each of one step, do another step. This could be based on the number of cards you use,
     /// the amount, or something else
@@ -100,7 +103,20 @@ impl fmt::Display for Step {
             Self::PlusBuy(x) => write!(f, "+{} Buy", x),
             Self::DrawCard(x) => write!(f, "+{} Card", x),
             Self::PlusAction(x) => write!(f, "+{} Action", x),
-            Self::GainCard(x) => write!(f, "Gain card with filters: {:?}", x),
+            Self::GainCard(x) => {
+                write!(
+                    f, 
+                    "Gain card with filters: {}", 
+                    x.iter().map(|item| format!("{}", item)).collect::<Vec<String>>().join(", ")
+                )
+            },
+            Self::GainCardToHand(x) => {
+                write!(
+                    f, 
+                    "Gain card to your hand with filters: {}", 
+                    x.iter().map(|item| format!("{}", item)).collect::<Vec<String>>().join(", ")
+                )
+            },
             Self::DiscardCard(x) => write!(f, "Discard card with filters: {:?}", x),
             Self::PlusCoin(x) => write!(f, "+{} 🪙", x),
             Self::Or(step1, step2) => write!(f, "Choose:\n\r{}\n\r{}", step1, step2),
@@ -126,11 +142,21 @@ impl fmt::Display for Step {
                 }
                 output_string.push_str(&format!(" card(s) from {} to {}", from, to));
                 if let Some(filters) = optional_filters {
-                    output_string.push_str(&format!(" with the following filters: {:?}", filters));
+                    output_string.push_str(
+                        &format!(" with the following filters: {}", 
+                            filters.iter().map(|item| format!("{}", item)).collect::<Vec<String>>().join(", ")
+                        )
+                    );
                 } 
                 
                 write!(f, "{}", output_string)
 
+            }
+            Self::ExtractValue(value_to_extract, location_to_extract_from, step_to_play) => {
+                let mut output_string = String::from(format!("{}", step_to_play));
+                let function = format!("{:?}({})", value_to_extract, location_to_extract_from);
+                output_string = output_string.replace("FromAbove", &function);
+                write!(f, "  {}", output_string)
             }
             _ => write!(f, "{:?}", self),
 
