@@ -1,4 +1,6 @@
 
+use std::fmt;
+
 use crate::step::Step;
 use crate::step::RuntimeValue;
 
@@ -11,4 +13,13 @@ pub enum CardType {
     Curse,
     Attack(Vec<Step>), // Steps to follow for the attack
     Reaction(Vec<Step>), // Steps to follow for the reaction
+}
+
+impl fmt::Display for CardType {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            //Self::Action(x) => write!(f, "{}", x),
+            _ => write!(f, "{:?}", self),
+        }
+    }
 }

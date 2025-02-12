@@ -21,8 +21,8 @@ impl fmt::Display for RuntimeValue {
             Self::NumberOfCardsInDeck => write!(f, "NumberOfCardsInDeck"),
             Self::FromAbove => write!(f, "FromAbove"),
             Self::NumberOfEmptySupplyPiles => write!(f, "NumberOfEmptySupplyPiles"),
-            Self::Add(x, y) => write!(f, "{} + {}", x, y),
-            Self::Mult(x, y) => write!(f, "{} * {}", x, y),
+            Self::Add(x, y) => write!(f, "({} + {})", x, y),
+            Self::Mult(x, y) => write!(f, "({} * {})", x, y),
         }
     }
             //write!(f, "{:?}", self)

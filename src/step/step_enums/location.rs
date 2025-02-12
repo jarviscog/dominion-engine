@@ -25,7 +25,7 @@ impl fmt::Display for Location {
             Self::Discard => write!(f, "discard pile"),
             Self::DeckTop => write!(f, "the top of the deck"),
             Self::InPlay => write!(f, "in play"),
-            Self::Trash => write!(f, "trash mat"),
+            Self::Trash => write!(f, "the trash mat"),
             Self::InternalBuffer => write!(f, "<BUFFER>"),
             Self::Supply => write!(f, "the supply"),
             Self::SearchDeck => write!(f, "search your deck"),
