@@ -7,12 +7,18 @@ pub struct Pile {
     cards: Vec<Card>
 }
 
+// TODO Handle split piles
+// TODO Hnadle pile rotation
 impl Pile {
 
     pub fn new() -> Pile {
         Pile {
             cards: Vec::new()
         }
+    }
+
+    pub fn size(&self) -> usize {
+        self.cards.len()
     }
 
     /// Creates a new pile from a card and a count of the given card
