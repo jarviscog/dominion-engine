@@ -12,6 +12,7 @@ use crate::cost::Cost;
 pub enum CardFilter {
     All,
     Name(String),
+    NotName(String),
     Type(CardType),
     NotType(CardType),
 
