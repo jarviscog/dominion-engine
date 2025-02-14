@@ -15,6 +15,8 @@ pub enum Location {
 
     // Buffer internal to the lifetime of the Card playing it
     // This location MUST be empty once the card is done being played
+    // NOTE: This buffer is per-player, so transfers that effect all players each have their own
+    // buffer
     InternalBuffer,
 }
 
