@@ -33,6 +33,27 @@ impl Card {
         None
     }
 
+    pub fn get_victory_points(&self) -> Option<RuntimeValue> {
+        for c_type in &self.card_type {
+            return match c_type {
+                CardType::Victory(vps) => {Some(vps.clone())}
+                _ => None
+            }
+        }
+        None
+    }
+
+    pub fn get_value(&self) -> Option<RuntimeValue> {
+        // TODO this function should return the value in either potions or coins.
+        for c_type in &self.card_type {
+            return match c_type {
+                CardType::Treasure(value) => {Some(value.clone())}
+                _ => None
+            }
+        }
+        None
+    }
+
     pub fn copper() -> Card {
         Card {
             name: "Copper".to_owned(),
@@ -93,9 +114,9 @@ impl Card {
         }
     }
 
-    pub fn garden() -> Card {
+    pub fn gardens() -> Card {
         Card {
-            name: "Garden".to_owned(),
+            name: "Gardens".to_owned(),
             expansion: Expansion::Dominion,
             card_type: vec![
                 CardType::Victory(RuntimeValue::NumberOfCardsInDeck)
