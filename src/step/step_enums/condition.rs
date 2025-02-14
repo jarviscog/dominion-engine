@@ -1,7 +1,11 @@
 
 use super::*;
 
+/// Condition used for `Step::RepeatUntil`
 #[derive(Debug, Clone)]
 pub enum Condition {
-    StackSize(Location, RuntimeValue) // Check if a stack contains a certain number of cards
+    /// Repeat for a fixed number of times, calculated at runtime
+    NumberOfTimes(RuntimeValue),
+    /// Check if a stack contains a certain number of cards
+    StackSize(Location, RuntimeValue) 
 }
