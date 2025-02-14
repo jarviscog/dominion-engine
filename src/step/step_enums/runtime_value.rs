@@ -4,7 +4,7 @@ use std::fmt;
 #[derive(Debug, Clone)]
 pub enum RuntimeValue {
     Any,
-    FixedValue(u8),
+    FixedValue(u32),
     NumberOfEmptySupplyPiles, // For Poacher
     NumberOfCardsInDeck, // For Gardens
     FromAbove,
