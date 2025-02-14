@@ -18,7 +18,7 @@ pub struct Bank {
 }
 
 impl Bank {
-    
+
     pub fn new() -> Bank {
         Bank {
             copper: Pile::new(),
@@ -69,33 +69,94 @@ impl Bank {
         // Number of harems in the game
     }
 
+    // https://wiki.dominionstrategy.com/index.php/Recommended_Kingdoms/Dominion#Dominion_alone
     pub fn first_game() -> Bank {
         let mut ret_bank = Bank::dominion();
-         ret_bank.push_supply_pile(Card::cellar());
-         //ret_bank.push_supply_pile(Card::market());
-         //ret_bank.push_supply_pile(Card::merchant());
-         //ret_bank.push_supply_pile(Card::militia());
-         //ret_bank.push_supply_pile(Card::mine());
-         //ret_bank.push_supply_pile(Card::moat());
-         //ret_bank.push_supply_pile(Card::remodel());
-         //ret_bank.push_supply_pile(Card::smithy());
-         ret_bank.push_supply_pile(Card::village());
-         //ret_bank.push_supply_pile(Card::workshop());
+        ret_bank.push_supply_pile(Card::cellar());
+        ret_bank.push_supply_pile(Card::market());
+        //ret_bank.push_supply_pile(Card::merchant());
+        //ret_bank.push_supply_pile(Card::militia());
+        ret_bank.push_supply_pile(Card::mine());
+        ret_bank.push_supply_pile(Card::moat());
+        ret_bank.push_supply_pile(Card::remodel());
+        ret_bank.push_supply_pile(Card::smithy());
+        ret_bank.push_supply_pile(Card::village());
+        ret_bank.push_supply_pile(Card::workshop());
         ret_bank
     }
 
     pub fn size_distortion() -> Bank {
         let mut ret_bank = Bank::dominion();
-         //ret_bank.push_supply_pile(Card::artisan());
-         //ret_bank.push_supply_pile(Card::bandit());
-         //ret_bank.push_supply_pile(Card::bureaucrat());
-         //ret_bank.push_supply_pile(Card::chapel());
-         //ret_bank.push_supply_pile(Card::festival());
-         //ret_bank.push_supply_pile(Card::gardens());
-         //ret_bank.push_supply_pile(Card::sentry());
-         //ret_bank.push_supply_pile(Card::throne_room());
-         ret_bank.push_supply_pile(Card::witch());
-         //ret_bank.push_supply_pile(Card::workshop());
+        ret_bank.push_supply_pile(Card::artisan());
+        //ret_bank.push_supply_pile(Card::bandit());
+        ret_bank.push_supply_pile(Card::bureaucrat());
+        ret_bank.push_supply_pile(Card::chapel());
+        ret_bank.push_supply_pile(Card::festival());
+        ret_bank.push_supply_pile(Card::gardens());
+        ret_bank.push_supply_pile(Card::sentry());
+        ret_bank.push_supply_pile(Card::throne_room());
+        ret_bank.push_supply_pile(Card::witch());
+        ret_bank.push_supply_pile(Card::workshop());
+        ret_bank
+    }
+
+    pub fn deck_top() -> Bank {
+        let mut ret_bank = Bank::dominion();
+        ret_bank.push_supply_pile(Card::artisan());
+        ret_bank.push_supply_pile(Card::bureaucrat());
+        ret_bank.push_supply_pile(Card::council_room());
+        ret_bank.push_supply_pile(Card::festival());
+        ret_bank.push_supply_pile(Card::harbinger());
+        ret_bank.push_supply_pile(Card::laboratory());
+        ret_bank.push_supply_pile(Card::moneylender());
+        ret_bank.push_supply_pile(Card::sentry());
+        ret_bank.push_supply_pile(Card::vassal());
+        ret_bank.push_supply_pile(Card::village());
+        ret_bank
+    }
+
+    pub fn sleight_of_hand() -> Bank {
+        let mut ret_bank = Bank::dominion();
+        ret_bank.push_supply_pile(Card::cellar());
+        ret_bank.push_supply_pile(Card::council_room());
+        ret_bank.push_supply_pile(Card::festival());
+        ret_bank.push_supply_pile(Card::gardens());
+        ret_bank.push_supply_pile(Card::harbinger());
+        //ret_bank.push_supply_pile(Card::library());
+        //ret_bank.push_supply_pile(Card::militia());
+        ret_bank.push_supply_pile(Card::poacher());
+        ret_bank.push_supply_pile(Card::smithy());
+        ret_bank.push_supply_pile(Card::throne_room());
+        ret_bank
+    }
+
+    pub fn improvements() -> Bank {
+        let mut ret_bank = Bank::dominion();
+        ret_bank.push_supply_pile(Card::artisan());
+        ret_bank.push_supply_pile(Card::cellar());
+        ret_bank.push_supply_pile(Card::market());
+        //ret_bank.push_supply_pile(Card::merchant());
+        ret_bank.push_supply_pile(Card::mine());
+        ret_bank.push_supply_pile(Card::moat());
+        ret_bank.push_supply_pile(Card::moneylender());
+        ret_bank.push_supply_pile(Card::poacher());
+        ret_bank.push_supply_pile(Card::remodel());
+        ret_bank.push_supply_pile(Card::witch());
+        ret_bank
+    }
+
+    pub fn silver_and_gold() -> Bank {
+        let mut ret_bank = Bank::dominion();
+        ret_bank.push_supply_pile(Card::bandit());
+        ret_bank.push_supply_pile(Card::bureaucrat());
+        ret_bank.push_supply_pile(Card::chapel());
+        ret_bank.push_supply_pile(Card::harbinger());
+        ret_bank.push_supply_pile(Card::laboratory());
+        //ret_bank.push_supply_pile(Card::merchant());
+        ret_bank.push_supply_pile(Card::mine());
+        ret_bank.push_supply_pile(Card::moneylender());
+        ret_bank.push_supply_pile(Card::throne_room());
+        ret_bank.push_supply_pile(Card::vassal());
         ret_bank
     }
 }
