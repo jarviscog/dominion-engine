@@ -602,5 +602,20 @@ impl Card {
         }
     }
 
+    pub fn woodcutter() -> Card {
+        Card {
+            name: "Woodcutter".to_owned(),
+            expansion: Expansion::Dominion,
+            cost: Cost::Coin(4),
+            on_gain: None,
+            card_type: vec![
+                CardType::Action(vec![
+                    Step::PlusBuy(RuntimeValue::FixedValue(1)),
+                    Step::PlusCoin(RuntimeValue::FixedValue(2)),
+                ]),
+            ]
+        }
+    }
+
 
 }
