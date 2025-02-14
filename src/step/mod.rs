@@ -38,7 +38,7 @@ pub enum Step {
     /// Transfer cards from one location to another
     /// Defaults to transferring one card, but can be set to more/less using filters
     /// `bool` Forced -> true, Optional -> false
-    /// `EffectedPlayers` The players effected by the transfer,
+    /// `EffectedPlayers` The players effected by the transfer
     /// `Option<Vec<CardFilter>>` Optional Filters for what cards need to be transferred,
     /// `Location`, From
     /// `Location`, To
@@ -84,7 +84,9 @@ pub enum Step {
     ExtractValue(ExtractedValueType, Location, Box<Step>),
 
     /// https://wiki.dominionstrategy.com/index.php/Throne_Room_variant
-    PlayCardXTimes(RuntimeValue, CardFilter),
+    /// `RuntimeValue`, number of times to play the card
+    /// `Vec<CardFilter>` List of filters for the card to be played
+    PlayCardXTimes(RuntimeValue, Vec<CardFilter>),
     // You may play an Action card from your hand twice.
     //      PlayCardXTimes(2, Type(Action))
 
@@ -93,6 +95,8 @@ pub enum Step {
     //And(Box<Step>, Box<Step>),
     /// Choose between two steps
     Or(Box<Step>, Box<Step>),
+
+    IgnoreAttacks,
 
 }
 
@@ -137,10 +141,11 @@ impl fmt::Display for Step {
                 }
 
                 if let Some(filters) = optional_filters {
+                    output_string.push_str(" card(s) ");
                 } else {
-                    output_string.push_str(&format!(" a"));
+                    output_string.push_str(&format!(" a card "));
                 }
-                output_string.push_str(&format!(" card(s) from {} to {}", from, to));
+                output_string.push_str(&format!("from {} to {}", from, to));
                 if let Some(filters) = optional_filters {
                     output_string.push_str(
                         &format!(" with the following filters: {}", 
