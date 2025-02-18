@@ -127,7 +127,6 @@ impl Player {
     }
 
     pub fn print_state(&self) {
-        // TODO print debt
         println!("");
         println!("{:=^58}", self.get_name());
         println!("Deck: {:<8} Hand: {:<8} Discard: {:<8} In Play: {:<8}", 
