@@ -8,7 +8,7 @@ impl Card {
         Card {
             name: "Warehouse".to_owned(),
             expansion: Expansion::Seaside,
-            cost: Cost::Coin(3),
+            cost: vec![Cost::Coin(3)],
             card_type: vec![
                 CardType::Action(vec![
                     Step::DrawCard(RuntimeValue::FixedValue(3)),

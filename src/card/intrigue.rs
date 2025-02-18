@@ -13,7 +13,7 @@ impl Card {
                 CardType::Treasure(RuntimeValue::FixedValue(2)),
                 CardType::Victory(RuntimeValue::FixedValue(2))
             ],
-            cost: Cost::Coin(6),
+            cost: vec![Cost::Coin(6)],
             on_gain: None,
         }
     }
@@ -34,7 +34,7 @@ impl Card {
                     )
                 ])
             ],
-            cost: Cost::Coin(6),
+            cost: vec![Cost::Coin(6)],
             on_gain: None,
         }
     }

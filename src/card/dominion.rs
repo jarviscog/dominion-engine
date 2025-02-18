@@ -7,7 +7,7 @@ impl Card {
             name: "Artisan".to_owned(),
             expansion: Expansion::Dominion,
             on_gain: None,
-            cost: Cost::Coin(6),
+            cost: vec![Cost::Coin(6)],
             card_type: vec![
                 CardType::Action(vec![
                     Step::GainCard(vec![
@@ -32,7 +32,7 @@ impl Card {
             name: "Bureaucrat".to_owned(),
             expansion: Expansion::Dominion,
             on_gain: None,
-            cost: Cost::Coin(4),
+            cost: vec![Cost::Coin(4)],
             card_type: vec![
                 CardType::Action(vec![
 
@@ -61,7 +61,7 @@ impl Card {
         Card {
             name: "Militia".to_owned(),
             expansion: Expansion::Dominion,
-            cost: Cost::Coin(4),
+            cost: vec![Cost::Coin(4)],
             on_gain: None,
             card_type: vec![
                 CardType::Action(vec![
@@ -111,7 +111,7 @@ impl Card {
                 ])
             ],
             on_gain: None,
-            cost: Cost::Coin(2),
+            cost: vec![Cost::Coin(2)],
         }
     }
 
@@ -120,7 +120,7 @@ impl Card {
             name: "Festival".to_owned(),
             expansion: Expansion::Dominion,
             on_gain: None,
-            cost: Cost::Coin(5),
+            cost: vec![Cost::Coin(5)],
             card_type: vec![
                 CardType::Action(
                     vec![
@@ -138,7 +138,7 @@ impl Card {
             name: "Smithy".to_owned(),
             expansion: Expansion::Dominion,
             on_gain: None,
-            cost: Cost::Coin(5),
+            cost: vec![Cost::Coin(4)],
             card_type: vec![
                 CardType::Action(vec![
                     Step::DrawCard(RuntimeValue::FixedValue(3)),
@@ -152,7 +152,7 @@ impl Card {
             name: "Bandit".to_owned(),
             expansion: Expansion::Dominion,
             on_gain: None,
-            cost: Cost::Coin(5),
+            cost: vec![Cost::Coin(5)],
             card_type: vec![
                 CardType::Action(vec![
                     Step::GainCard(vec![CardFilter::Name("Gold".to_owned())]),
@@ -195,7 +195,7 @@ impl Card {
             name: "Moat".to_owned(),
             expansion: Expansion::Dominion,
             on_gain: None,
-            cost: Cost::Coin(2),
+            cost: vec![Cost::Coin(2)],
             card_type: vec![
                 CardType::Action(vec![
                     Step::DrawCard(RuntimeValue::FixedValue(2)),
@@ -211,7 +211,7 @@ impl Card {
             name: "Laboratory ".to_owned(),
             expansion: Expansion::Dominion,
             on_gain: None,
-            cost: Cost::Coin(5),
+            cost: vec![Cost::Coin(5)],
             card_type: vec![
                 CardType::Action(vec![
                     Step::DrawCard(RuntimeValue::FixedValue(2)),
@@ -226,7 +226,7 @@ impl Card {
             name: "Village".to_owned(),
             expansion: Expansion::Dominion,
             on_gain: None,
-            cost: Cost::Coin(5),
+            cost: vec![Cost::Coin(5)],
             card_type: vec![
                 CardType::Action(vec![
                     Step::DrawCard(RuntimeValue::FixedValue(1)),
@@ -241,7 +241,7 @@ impl Card {
             name: "Harbinger".to_owned(),
             expansion: Expansion::Dominion,
             on_gain: None,
-            cost: Cost::Coin(3),
+            cost: vec![Cost::Coin(3)],
             card_type: vec![
                 CardType::Action(vec![
                     Step::DrawCard(RuntimeValue::FixedValue(1)),
@@ -263,7 +263,7 @@ impl Card {
             name: "Sentry".to_owned(),
             expansion: Expansion::Dominion,
             on_gain: None,
-            cost: Cost::Coin(5),
+            cost: vec![Cost::Coin(5)],
             card_type: vec![
                 CardType::Action(vec![
                     Step::DrawCard(RuntimeValue::FixedValue(1)),
@@ -306,7 +306,7 @@ impl Card {
             name: "Poacher".to_owned(),
             expansion: Expansion::Dominion,
             on_gain: None,
-            cost: Cost::Coin(4),
+            cost: vec![Cost::Coin(4)],
             card_type: vec![
                 CardType::Action(vec![
                     Step::DrawCard(RuntimeValue::FixedValue(1)),
@@ -323,7 +323,7 @@ impl Card {
             name: "Throne Room".to_owned(),
             expansion: Expansion::Dominion,
             on_gain: None,
-            cost: Cost::Coin(4),
+            cost: vec![Cost::Coin(4)],
             card_type: vec![
                 CardType::Action(vec![
                     Step::PlayCardXTimes(
@@ -340,7 +340,7 @@ impl Card {
             name: "Remodel".to_owned(),
             expansion: Expansion::Dominion,
             on_gain: None,
-            cost: Cost::Coin(4),
+            cost: vec![Cost::Coin(4)],
             card_type: vec![
                 CardType::Action(vec![
                     Step::TransferCards(
@@ -380,7 +380,7 @@ impl Card {
         Card {
             name: "Chapel".to_owned(),
             expansion: Expansion::Dominion,
-            cost: Cost::Coin(2),
+            cost: vec![Cost::Coin(2)],
             on_gain: None,
             card_type: vec![CardType::Action(vec![
                 Step::TransferCards(
@@ -400,7 +400,7 @@ impl Card {
         Card {
             name: "Council Room".to_owned(),
             expansion: Expansion::Dominion,
-            cost: Cost::Coin(2),
+            cost: vec![Cost::Coin(5)],
             on_gain: None,
             card_type: vec![
                 CardType::Action(vec![
@@ -440,7 +440,7 @@ impl Card {
             name: "Mine".to_owned(),
             expansion: Expansion::Dominion,
             on_gain: None,
-            cost: Cost::Coin(5),
+            cost: vec![Cost::Coin(5)],
             card_type: vec![CardType::Action(vec![
                 Step::TransferCards(
                     false, 
@@ -479,7 +479,7 @@ impl Card {
             name: "Market".to_owned(),
             expansion: Expansion::Dominion,
             on_gain: None,
-            cost: Cost::Coin(5),
+            cost: vec![Cost::Coin(5)],
             card_type: vec![
                 CardType::Action(vec![
                     Step::DrawCard(RuntimeValue::FixedValue(1)),
@@ -495,7 +495,7 @@ impl Card {
         Card {
             name: "Moneylender".to_owned(),
             expansion: Expansion::Dominion,
-            cost: Cost::Coin(4),
+            cost: vec![Cost::Coin(4)],
             on_gain: None,
             card_type: vec![
                 CardType::Action(vec![
@@ -534,7 +534,7 @@ impl Card {
         Card {
             name: "Vassal".to_owned(),
             expansion: Expansion::Dominion,
-            cost: Cost::Coin(3),
+            cost: vec![Cost::Coin(3)],
             on_gain: None,
             card_type: vec![
                 CardType::Action(vec![
@@ -569,7 +569,7 @@ impl Card {
         Card {
             name: "Workshop".to_owned(),
             expansion: Expansion::Dominion,
-            cost: Cost::Coin(3),
+            cost: vec![Cost::Coin(3)],
             on_gain: None,
             card_type: vec![CardType::Action(vec![
                 Step::GainCard(vec![
@@ -583,7 +583,7 @@ impl Card {
         Card {
             name: "Witch".to_owned(),
             expansion: Expansion::Dominion,
-            cost: Cost::Coin(5),
+            cost: vec![Cost::Coin(5)],
             on_gain: None,
             card_type: vec![
                 CardType::Action(vec![
@@ -606,7 +606,7 @@ impl Card {
         Card {
             name: "Woodcutter".to_owned(),
             expansion: Expansion::Dominion,
-            cost: Cost::Coin(4),
+            cost: vec![Cost::Coin(4)],
             on_gain: None,
             card_type: vec![
                 CardType::Action(vec![

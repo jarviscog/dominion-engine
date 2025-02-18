@@ -18,7 +18,7 @@ pub struct Card {
     expansion: Expansion,
     card_type: Vec<CardType>,
     on_gain: Option<Step>, // If steps are required when you gain the card
-    cost: Cost,
+    cost: Vec<Cost>,
 }
 
 impl Card {
