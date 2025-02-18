@@ -2,6 +2,79 @@ use super::*;
 
 impl Card {
 
+    pub fn copper() -> Card {
+        Card {
+            name: "Copper".to_owned(),
+            expansion: Expansion::Dominion,
+            card_type: vec![CardType::Treasure(RuntimeValue::FixedValue(1))],
+            cost: vec![Cost::Coin(0)],
+            on_gain: None,
+        }
+    }
+
+    pub fn silver() -> Card {
+        Card {
+            name: "Silver".to_owned(),
+            expansion: Expansion::Dominion,
+            card_type: vec![CardType::Treasure(RuntimeValue::FixedValue(2))],
+            cost: vec![Cost::Coin(3)],
+            on_gain: None,
+        }
+    }
+
+    pub fn gold() -> Card {
+        Card {
+            name: "Gold".to_owned(),
+            on_gain: None,
+            expansion: Expansion::Dominion,
+            card_type: vec![CardType::Treasure(RuntimeValue::FixedValue(3))],
+            cost: vec![Cost::Coin(6)],
+        }
+    }
+
+    pub fn estate() -> Card {
+        Card {
+            name: "Estate".to_owned(),
+            expansion: Expansion::Dominion,
+            card_type: vec![CardType::Victory(RuntimeValue::FixedValue(1))],
+            cost: vec![Cost::Coin(2)],
+            on_gain: None,
+        }
+    }
+
+    pub fn duchy() -> Card {
+        Card {
+            name: "Duchy".to_owned(),
+            expansion: Expansion::Dominion,
+            card_type: vec![CardType::Victory(RuntimeValue::FixedValue(3))],
+            cost: vec![Cost::Coin(5)],
+            on_gain: None,
+        }
+    }
+
+    pub fn province() -> Card {
+        Card {
+            name: "Province".to_owned(),
+            expansion: Expansion::Dominion,
+            card_type: vec![CardType::Victory(RuntimeValue::FixedValue(6))],
+            cost: vec![Cost::Coin(8)],
+            on_gain: None,
+        }
+    }
+
+    pub fn gardens() -> Card {
+        Card {
+            name: "Gardens".to_owned(),
+            expansion: Expansion::Dominion,
+            card_type: vec![
+                CardType::Victory(RuntimeValue::NumberOfCardsInDeck)
+            ],
+            cost: vec![Cost::Coin(4)],
+            on_gain: None,
+        }
+    }
+
+
     pub fn artisan() -> Card {
         Card {
             name: "Artisan".to_owned(),

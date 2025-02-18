@@ -4,6 +4,7 @@ use std::str::FromStr;
 use crate::cost::Cost;
 use crate::expansion::Expansion;
 use super::card_type::CardType;
+use std::fmt::{self, Write};
 
 use crate::step::*;
 
@@ -23,10 +24,24 @@ pub struct Card {
 
 impl Card {
 
-    pub fn get_steps(&self) -> Option<Vec<Step>> {
+    pub fn get_name(&self) -> String {
+        self.name.clone()
+    }
+
+    pub fn get_action_steps(&self) -> Option<Vec<Step>> {
         for c_type in &self.card_type {
             return match c_type {
                 CardType::Action(steps) => {Some(steps.clone())}
+                _ => None
+            }
+        }
+        None
+    }
+
+    pub fn get_attack_steps(&self) -> Option<Vec<Step>> {
+        for c_type in &self.card_type {
+            return match c_type {
+                CardType::Attack(steps) => {Some(steps.clone())}
                 _ => None
             }
         }
@@ -54,80 +69,51 @@ impl Card {
         None
     }
 
-    pub fn copper() -> Card {
-        Card {
-            name: "Copper".to_owned(),
-            expansion: Expansion::Dominion,
-            card_type: vec![CardType::Treasure(RuntimeValue::FixedValue(1))],
-            cost: Cost::Coin(0),
-            on_gain: None,
+    pub fn get_coin_cost(&self) -> u32 {
+        for cost in &self.cost {
+            match cost {
+                Cost::Coin(x) => {return x.clone()}
+                _ => {}
+            }
         }
+        0
     }
 
-    pub fn silver() -> Card {
-        Card {
-            name: "Silver".to_owned(),
-            expansion: Expansion::Dominion,
-            card_type: vec![CardType::Treasure(RuntimeValue::FixedValue(2))],
-            cost: Cost::Coin(3),
-            on_gain: None,
+    pub fn get_debt_cost(&self) -> u32 {
+        for cost in &self.cost {
+            match cost {
+                Cost::Debt(x) => {return x.clone()}
+                _ => {}
+            }
         }
+        0
     }
-
-    pub fn gold() -> Card {
-        Card {
-            name: "Gold".to_owned(),
-            on_gain: None,
-            expansion: Expansion::Dominion,
-            card_type: vec![CardType::Treasure(RuntimeValue::FixedValue(3))],
-            cost: Cost::Coin(6),
-        }
-    }
-
-    pub fn estate() -> Card {
-        Card {
-            name: "Estate".to_owned(),
-            expansion: Expansion::Dominion,
-            card_type: vec![CardType::Victory(RuntimeValue::FixedValue(1))],
-            cost: Cost::Coin(2),
-            on_gain: None,
-        }
-    }
-
-    pub fn duchy() -> Card {
-        Card {
-            name: "Duchy".to_owned(),
-            expansion: Expansion::Dominion,
-            card_type: vec![CardType::Victory(RuntimeValue::FixedValue(3))],
-            cost: Cost::Coin(5),
-            on_gain: None,
-        }
-    }
-
-    pub fn province() -> Card {
-        Card {
-            name: "Province".to_owned(),
-            expansion: Expansion::Dominion,
-            card_type: vec![CardType::Victory(RuntimeValue::FixedValue(6))],
-            cost: Cost::Coin(8),
-            on_gain: None,
-        }
-    }
-
-    pub fn gardens() -> Card {
-        Card {
-            name: "Gardens".to_owned(),
-            expansion: Expansion::Dominion,
-            card_type: vec![
-                CardType::Victory(RuntimeValue::NumberOfCardsInDeck)
-            ],
-            cost: Cost::Coin(8),
-            on_gain: None,
-        }
-    }
-
 
 }
+
+impl fmt::Display for Card {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let mut out_string: String = String::from("{");
+        out_string.push_str(&format!("\n\t\tname:{}", self.name));
+        //out_string.push_str(&format!(" expansion:{:?}", self.expansion));
+        out_string.push_str(&format!("\n\t\tcost:{:?}", self.cost));
+        out_string.push_str(&format!("\n\t\ton_gain:{:?}", self.on_gain));
+
+        out_string.push_str(&format!("\n\t\tcard_types:",));
+        for c_type in &self.card_type {
+            out_string.push_str(&format!("\n\t\t\t{}, ", c_type));
+        }
+        //out_string.push_str(&format!("\n\t\t]",));
+
+        out_string.push_str("\n\t\t}");
+        
+        write!(f, "{}", out_string)
+
+    }
+}
+
+
+
 
 
 
