@@ -2,6 +2,7 @@
 //use colored::Colorize;
 use crate::pile::Pile;
 use crate::cost::Cost;
+use super::*;
 
 #[derive(Debug)]
 enum PlayerType {
@@ -121,6 +122,10 @@ impl Player {
         self.debt += val
     }
 
+    pub fn get_hand(&self) -> Vec<Card> {
+        self.hand.to_card_vec()
+    }
+
     pub fn print_state(&self) {
         // TODO print debt
         println!("");
@@ -131,7 +136,11 @@ impl Player {
             self.discard.size(),
             self.in_play.size(),
         );
-        println!("Actions: {:<8} Buys: {:<8} Coins: {:<8}", self.actions, self.buys, self.coins);
+        println!("Actions: {:<8} Buys: {:<8} Coins: {:<8} Debt: {:<8}", 
+            self.actions, 
+            self.buys, 
+            self.coins, 
+            self.debt);
         println!("");
     }
 
