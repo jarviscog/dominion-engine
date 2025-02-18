@@ -14,6 +14,8 @@ pub struct Bank {
 
     trash: Pile,
 
+
+    //https://wiki.dominionstrategy.com/index.php/Supply#Non-Supply
     supply_piles: Vec<Pile>
 }
 
@@ -58,6 +60,35 @@ impl Bank {
             trash: Pile::new(),
             supply_piles: Vec::new()
         }
+    }
+
+    /// Attempt to take a card from the supply. 
+    /// If the card is removed, will return ()
+    /// If not, will return Err
+    pub fn take_card(&mut self, card: &Card) -> Option<Card> {
+
+        // Check the basic supply piles
+        if let Some(card) = match card.get_name().as_ref() {
+            "Copper" => self.copper.pop_card(),
+            "Silver" => self.silver.pop_card(),
+            "Gold" => self.gold.pop_card(),
+
+            "Estate" => self.estate.pop_card(),
+            "Duchy" => self.duchy.pop_card(),
+            "Province" => self.province.pop_card(),
+            _ => None
+        } { return Some(card) } 
+
+        for pile in self.supply_piles.iter_mut() {
+            if let Some(pile_name) = pile.top_card_name() {
+                if pile_name == card.get_name() {
+                    pile.pop_card();
+                    return pile.pop_card()
+                }
+            }
+        }
+        None
+        
     }
 
     /// Finish populating the bank based off of the number of players, and the type of game being
