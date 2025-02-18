@@ -65,13 +65,37 @@ impl Player {
         self.name.clone()
     }
 
+    pub fn get_actions(&self) -> u32 {
+        self.actions
+    }
+
+    pub fn get_buys(&self) -> u32 {
+        self.buys
+    }
+
+    pub fn get_coins(&self) -> u32 {
+        self.coins
+    }
+
+    pub fn sub_coins(&mut self, val: u32) -> Result<(), String> {
+        if val > self.coins {
+            return Err("Not enough coins".to_owned())
+        } 
+        self.coins -= val;
+        Ok(())
+    }
+
+    pub fn get_debt(&self) -> u32 {
+        self.debt
+    }
+
     pub fn add_actions(&mut self, val: u32) {
         self.actions += val
     }
 
-    pub fn sub_actions(&mut self, val: u32) -> Result<(), &'static str> {
+    pub fn sub_actions(&mut self, val: u32) -> Result<(), String> {
         if val > self.actions {
-            return Err("Not enough actions")
+            return Err("Not enough actions".to_owned())
         } 
         self.actions -= val;
         Ok(())
@@ -81,9 +105,9 @@ impl Player {
         self.buys += val
     }
 
-    pub fn sub_buys(&mut self, val: u32) -> Result<(), &'static str> {
+    pub fn sub_buys(&mut self, val: u32) -> Result<(), String> {
         if val > self.buys {
-            return Err("Not enough buys")
+            return Err("Not enough buys".to_owned())
         } 
         self.buys -= val;
         Ok(())
