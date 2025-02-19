@@ -51,5 +51,30 @@ impl Pile {
 
     }
 
+    /// Pops a card from the top of the pile
+    pub fn pop_card(&mut self) -> Option<Card> {
+        self.cards.pop()
+    }
+
+    pub fn top_card_name(&self) -> Option<String> {
+        if let Some(c) = self.cards.last() {
+            return Some(c.get_name())
+        } else {
+            None
+        }
+
+    }
+
+    /// Returns a vec of cards, ignoring rotation and items on top
+    pub fn to_card_vec(&self) -> Vec<Card> {
+        return self.cards.clone()
+    }
+
+    pub fn print(&self) {
+        for card in &self.cards {
+            println!("{:?}", card);
+        }
+    }
+
 
 }
