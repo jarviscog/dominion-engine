@@ -1,6 +1,7 @@
 
 use crate::pile::Pile;
 use crate::card::Card;
+use crate::player;
 
 pub struct Bank {
 
@@ -12,8 +13,9 @@ pub struct Bank {
     duchy: Pile,
     province: Pile,
 
-    trash: Pile,
+    curses: Pile,
 
+    trash: Pile,
 
     //https://wiki.dominionstrategy.com/index.php/Supply#Non-Supply
     supply_piles: Vec<Pile>
@@ -29,6 +31,7 @@ impl Bank {
             estate: Pile::new(),
             duchy: Pile::new(),
             province: Pile::new(),
+            curses: Pile::new(),
             trash: Pile::new(),
             supply_piles: Vec::new(),
         }
@@ -57,14 +60,15 @@ impl Bank {
             duchy: Pile::from(12, Card::duchy()),
             province: Pile::from(12, Card::province()),
 
+            curses: Pile::new(),
             trash: Pile::new(),
             supply_piles: Vec::new()
         }
     }
 
     /// Attempt to take a card from the supply. 
-    /// If the card is removed, will return ()
-    /// If not, will return Err
+    /// If the card is removed, will return the Card
+    /// If not, will return None
     pub fn take_card(&mut self, card: &Card) -> Option<Card> {
 
         // Check the basic supply piles
@@ -91,13 +95,45 @@ impl Bank {
         
     }
 
+    /// Check to see if one of the top cards of a supply pile is a given card
+    /// Will compare using the name of the card
+    pub fn supply_contains_card(&self, in_card: Card) -> bool {
+        for pile in &self.supply_piles {
+            if let Some(card_name) = pile.top_card_name() {
+                if card_name == in_card.get_name() {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     /// Finish populating the bank based off of the number of players, and the type of game being
     /// played (add the key if playing Renaissance, etc.)
     pub fn finish_population(&mut self, player_count: usize) {
+        // TODO check if there are any reasons that other info might need to get passed into this
+        // function other than player count
+        
+        // https://wiki.dominionstrategy.com/index.php/Setup
+
+        // Victory piles
+        if player_count <= 2 {
+            self.province = Pile::from(8, Card::province());
+            self.duchy = Pile::from(8, Card::duchy());
+            self.estate = Pile::from(8, Card::estate());
+        }
+        
+        // Set up curses
+        self.curses = Pile::from(((player_count-1) * 10) as u8, Card::curse());
+        
+        // Gardens
+        if self.supply_contains_card(Card::gardens()) {
+
+        }
+
         // TODO
         // Gardens should contain 12 cards, not 10
-        // 10 curses per player in the game
-        // Number of harems in the game
+        // Number of Farms in the game
     }
 
     // https://wiki.dominionstrategy.com/index.php/Recommended_Kingdoms/Dominion#Dominion_alone
