@@ -4,12 +4,13 @@ use std::fmt;
 #[derive(Debug, Clone)]
 pub enum RuntimeValue {
     Any,
-    FixedValue(u32),
+    FixedValue(i32),
     NumberOfEmptySupplyPiles, // For Poacher
     NumberOfCardsInDeck, // For Gardens
     FromAbove,
     Add(Box<RuntimeValue>, Box<RuntimeValue>),
     Mult(Box<RuntimeValue>, Box<RuntimeValue>),
+    CurrentPlayer,
 }
 
 
@@ -23,6 +24,7 @@ impl fmt::Display for RuntimeValue {
             Self::NumberOfEmptySupplyPiles => write!(f, "NumberOfEmptySupplyPiles"),
             Self::Add(x, y) => write!(f, "({} + {})", x, y),
             Self::Mult(x, y) => write!(f, "({} * {})", x, y),
+            Self::CurrentPlayer => write!(f, "CurrentPlayer")
         }
     }
             //write!(f, "{:?}", self)
