@@ -71,6 +71,7 @@ impl Bank {
     /// If not, will return None
     pub fn take_card(&mut self, card: &Card) -> Option<Card> {
 
+        // TODO This is very confusing syntax
         // Check the basic supply piles
         if let Some(card) = match card.get_name().as_ref() {
             "Copper" => self.copper.pop_card(),
