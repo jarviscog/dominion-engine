@@ -1,24 +1,29 @@
 use std::str::FromStr;
+use std::fmt::{self, Write};
 
+
+pub mod card_type;
+use card_type::*;
 
 use crate::cost::Cost;
 use crate::expansion::Expansion;
-use super::card_type::CardType;
-use std::fmt::{self, Write};
+pub use super::node::*;
 
-use crate::step::*;
+pub use crate::runtime_value::RuntimeValue;
 
-// functions to generate cards
+// Functions to generate cards
 pub mod dominion;
 pub mod intrigue;
 pub mod seaside;
+
+
 
 #[derive(Debug, Clone)]
 pub struct Card {
     name: String,
     expansion: Expansion,
     card_type: Vec<CardType>,
-    on_gain: Option<Step>, // If steps are required when you gain the card
+    on_gain: Option<StepNodeType>, // If steps are required when you gain the card
     cost: Vec<Cost>,
 }
 
@@ -28,7 +33,7 @@ impl Card {
         self.name.clone()
     }
 
-    pub fn get_action_steps(&self) -> Option<Vec<Step>> {
+    pub fn get_action_steps(&self) -> Option<Vec<StepNodeType>> {
         for c_type in &self.card_type {
             return match c_type {
                 CardType::Action(steps) => {Some(steps.clone())}
@@ -38,7 +43,7 @@ impl Card {
         None
     }
 
-    pub fn get_attack_steps(&self) -> Option<Vec<Step>> {
+    pub fn get_attack_steps(&self) -> Option<Vec<StepNodeType>> {
         for c_type in &self.card_type {
             return match c_type {
                 CardType::Attack(steps) => {Some(steps.clone())}

@@ -1,7 +1,5 @@
 
-
 use super::*;
-
 
 impl Card {
 
@@ -24,8 +22,8 @@ impl Card {
             expansion: Expansion::Intrigue,
             card_type: vec![
                 CardType::Action(vec![
-                    Step::DrawCard(RuntimeValue::FixedValue(3)),
-                    Step::TransferCards(
+                    StepNodeType::DrawCard(RuntimeValue::FixedValue(3)),
+                    StepNodeType::TransferCards(
                         true, 
                         EffectedPlayers::You, 
                         None, 

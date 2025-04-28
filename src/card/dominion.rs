@@ -32,6 +32,16 @@ impl Card {
         }
     }
 
+    pub fn curse() -> Card {
+        Card {
+            name: "Curse".to_owned(),
+            expansion: Expansion::Dominion,
+            card_type: vec![CardType::Victory(RuntimeValue::FixedValue(-1))],
+            cost: vec![Cost::Coin(0)],
+            on_gain: None
+        }
+    }
+
     pub fn estate() -> Card {
         Card {
             name: "Estate".to_owned(),
@@ -83,10 +93,10 @@ impl Card {
             cost: vec![Cost::Coin(6)],
             card_type: vec![
                 CardType::Action(vec![
-                    Step::GainCard(vec![
+                    StepNodeType::GainCard(vec![
                         CardFilter::CoinCostUpto(RuntimeValue::FixedValue(5))
                     ]),
-                    Step::TransferCards(
+                    StepNodeType::TransferCards(
                         true, 
                         EffectedPlayers::You, 
                         None, 
@@ -109,14 +119,14 @@ impl Card {
             card_type: vec![
                 CardType::Action(vec![
 
-                    Step::TransferCards(
+                    StepNodeType::TransferCards(
                         true, 
                         EffectedPlayers::You, 
                         Some(vec![CardFilter::Name("Silver".to_owned())]), 
                         Location::Supply, 
                         Location::DeckTop,
                     ),
-                    Step::TransferCards(
+                    StepNodeType::TransferCards(
                         true, 
                         EffectedPlayers::AllOthers, 
                         Some(vec![CardFilter::Type(CardType::Victory(RuntimeValue::Any))]), 
@@ -130,6 +140,31 @@ impl Card {
         }
     }
 
+    pub fn merchant() -> Card {
+        let new_event_listener = EventListener::new(
+            RuntimeValue::CurrentPlayer,
+            EventListenerFireCondition::WhenYouPlayCard(vec![CardFilter::Name("Silver".to_owned())]),
+            EventListenerDestructCondition::EndOfThisTurn,
+            vec![StepNodeType::PlusCoin(RuntimeValue::FixedValue(1))],
+            true
+        );
+        Card {
+            name: "Merchant".to_owned(),
+            expansion: Expansion::Dominion,
+            cost: vec![Cost::Coin(3)],
+            on_gain: None,
+            card_type: vec![
+                CardType::Action(vec![
+                    StepNodeType::PlayCard(RuntimeValue::FixedValue(1)),
+                    StepNodeType::PlusAction(RuntimeValue::FixedValue(1)),
+                    StepNodeType::AddEventListener(
+                        new_event_listener
+                    )
+                ])
+            ]
+        }
+    }
+
     pub fn militia() -> Card {
         Card {
             name: "Militia".to_owned(),
@@ -138,8 +173,8 @@ impl Card {
             on_gain: None,
             card_type: vec![
                 CardType::Action(vec![
-                    Step::PlusCoin(RuntimeValue::FixedValue(2)),
-                    Step::TransferCards(
+                    StepNodeType::PlusCoin(RuntimeValue::FixedValue(2)),
+                    StepNodeType::TransferCards(
                         true, 
                         EffectedPlayers::AllOthers, 
                         Some(vec![
@@ -159,21 +194,21 @@ impl Card {
             expansion: Expansion::Dominion,
             card_type: vec![
                 CardType::Action(vec![
-                    Step::PlusAction(RuntimeValue::FixedValue(1)),
+                    StepNodeType::PlusAction(RuntimeValue::FixedValue(1)),
                     
-                    Step::TransferCards(
+                    StepNodeType::TransferCards(
                         false,
                         EffectedPlayers::You,
                         None,
                         Location::Hand,
                         Location::InternalBuffer,
                     ),
-                    Step::ExtractValue(
+                    StepNodeType::ExtractValue(
                         ExtractedValueType::CardCount, 
                         Location::InternalBuffer, 
-                        Box::new(Step::DrawCard(RuntimeValue::FromAbove))
+                        Box::new(StepNodeType::DrawCard(RuntimeValue::FromAbove))
                     ),
-                    Step::TransferCards(
+                    StepNodeType::TransferCards(
                         true, 
                         EffectedPlayers::You, 
                         None, 
@@ -197,9 +232,9 @@ impl Card {
             card_type: vec![
                 CardType::Action(
                     vec![
-                        Step::PlusAction(RuntimeValue::FixedValue(2)),
-                        Step::PlusBuy(RuntimeValue::FixedValue(1)),
-                        Step::PlusCoin(RuntimeValue::FixedValue(2)),
+                        StepNodeType::PlusAction(RuntimeValue::FixedValue(2)),
+                        StepNodeType::PlusBuy(RuntimeValue::FixedValue(1)),
+                        StepNodeType::PlusCoin(RuntimeValue::FixedValue(2)),
                     ]
                 )
             ],
@@ -214,7 +249,7 @@ impl Card {
             cost: vec![Cost::Coin(4)],
             card_type: vec![
                 CardType::Action(vec![
-                    Step::DrawCard(RuntimeValue::FixedValue(3)),
+                    StepNodeType::DrawCard(RuntimeValue::FixedValue(3)),
                 ])
             ],
         }
@@ -228,10 +263,10 @@ impl Card {
             cost: vec![Cost::Coin(5)],
             card_type: vec![
                 CardType::Action(vec![
-                    Step::GainCard(vec![CardFilter::Name("Gold".to_owned())]),
+                    StepNodeType::GainCard(vec![CardFilter::Name("Gold".to_owned())]),
                 ]),
                 CardType::Attack(vec![
-                    Step::TransferCards(
+                    StepNodeType::TransferCards(
                         true, 
                         EffectedPlayers::AllOthers, 
                         Some(vec![
@@ -240,7 +275,7 @@ impl Card {
                         Location::DeckTop, 
                         Location::InternalBuffer,
                     ),
-                    Step::TransferCards(
+                    StepNodeType::TransferCards(
                         true, 
                         EffectedPlayers::AllOthers, 
                         Some(vec![
@@ -250,7 +285,7 @@ impl Card {
                         Location::InternalBuffer, 
                         Location::Trash,
                     ),
-                    Step::TransferCards(
+                    StepNodeType::TransferCards(
                         true, 
                         EffectedPlayers::AllOthers, 
                         None, 
@@ -271,10 +306,10 @@ impl Card {
             cost: vec![Cost::Coin(2)],
             card_type: vec![
                 CardType::Action(vec![
-                    Step::DrawCard(RuntimeValue::FixedValue(2)),
+                    StepNodeType::DrawCard(RuntimeValue::FixedValue(2)),
                 ]),
                 CardType::Reaction(vec![
-                    Step::IgnoreAttacks,
+                    StepNodeType::IgnoreAttacks,
                 ]),
             ],
         }
@@ -287,8 +322,8 @@ impl Card {
             cost: vec![Cost::Coin(5)],
             card_type: vec![
                 CardType::Action(vec![
-                    Step::DrawCard(RuntimeValue::FixedValue(2)),
-                    Step::PlusAction(RuntimeValue::FixedValue(1)),
+                    StepNodeType::DrawCard(RuntimeValue::FixedValue(2)),
+                    StepNodeType::PlusAction(RuntimeValue::FixedValue(1)),
                 ])
             ],
         }
@@ -302,8 +337,8 @@ impl Card {
             cost: vec![Cost::Coin(5)],
             card_type: vec![
                 CardType::Action(vec![
-                    Step::DrawCard(RuntimeValue::FixedValue(1)),
-                    Step::PlusAction(RuntimeValue::FixedValue(2)),
+                    StepNodeType::DrawCard(RuntimeValue::FixedValue(1)),
+                    StepNodeType::PlusAction(RuntimeValue::FixedValue(2)),
                 ])
             ],
         }
@@ -317,9 +352,9 @@ impl Card {
             cost: vec![Cost::Coin(3)],
             card_type: vec![
                 CardType::Action(vec![
-                    Step::DrawCard(RuntimeValue::FixedValue(1)),
-                    Step::PlusAction(RuntimeValue::FixedValue(1)),
-                    Step::TransferCards(
+                    StepNodeType::DrawCard(RuntimeValue::FixedValue(1)),
+                    StepNodeType::PlusAction(RuntimeValue::FixedValue(1)),
+                    StepNodeType::TransferCards(
                         false, 
                         EffectedPlayers::You, 
                         None, 
@@ -339,30 +374,30 @@ impl Card {
             cost: vec![Cost::Coin(5)],
             card_type: vec![
                 CardType::Action(vec![
-                    Step::DrawCard(RuntimeValue::FixedValue(1)),
-                    Step::PlusAction(RuntimeValue::FixedValue(1)),
-                    Step::TransferCards(
+                    StepNodeType::DrawCard(RuntimeValue::FixedValue(1)),
+                    StepNodeType::PlusAction(RuntimeValue::FixedValue(1)),
+                    StepNodeType::TransferCards(
                         true, 
                         EffectedPlayers::You, 
                         Some(vec![CardFilter::CardCountEquals(RuntimeValue::FixedValue(2))]),
                         Location::DeckTop, 
                         Location::InternalBuffer
                     ),
-                    Step::TransferCards(
+                    StepNodeType::TransferCards(
                         false, 
                         EffectedPlayers::You,
                         None,
                         Location::InternalBuffer,
                         Location::Trash
                     ),
-                    Step::TransferCards(
+                    StepNodeType::TransferCards(
                         false, 
                         EffectedPlayers::You,
                         None,
                         Location::InternalBuffer,
                         Location::Discard
                     ),
-                    Step::TransferCards(
+                    StepNodeType::TransferCards(
                         true, 
                         EffectedPlayers::You, 
                         None,
@@ -382,10 +417,10 @@ impl Card {
             cost: vec![Cost::Coin(4)],
             card_type: vec![
                 CardType::Action(vec![
-                    Step::DrawCard(RuntimeValue::FixedValue(1)),
-                    Step::PlusAction(RuntimeValue::FixedValue(1)),
-                    Step::PlusCoin(RuntimeValue::FixedValue(1)),
-                    Step::DiscardCard(RuntimeValue::NumberOfEmptySupplyPiles)
+                    StepNodeType::DrawCard(RuntimeValue::FixedValue(1)),
+                    StepNodeType::PlusAction(RuntimeValue::FixedValue(1)),
+                    StepNodeType::PlusCoin(RuntimeValue::FixedValue(1)),
+                    StepNodeType::DiscardCard(RuntimeValue::NumberOfEmptySupplyPiles)
                 ])
             ],
         }
@@ -399,7 +434,7 @@ impl Card {
             cost: vec![Cost::Coin(4)],
             card_type: vec![
                 CardType::Action(vec![
-                    Step::PlayCardXTimes(
+                    StepNodeType::PlayCardXTimes(
                         RuntimeValue::FixedValue(2), 
                         vec![CardFilter::NextCardPlayed],
                     )
@@ -416,17 +451,17 @@ impl Card {
             cost: vec![Cost::Coin(4)],
             card_type: vec![
                 CardType::Action(vec![
-                    Step::TransferCards(
+                    StepNodeType::TransferCards(
                         true, 
                         EffectedPlayers::You, 
                         None,
                         Location::Hand, 
                         Location::InternalBuffer,
                     ),
-                    Step::ExtractValue(
+                    StepNodeType::ExtractValue(
                         ExtractedValueType::CoinValue, 
                         Location::InternalBuffer, 
-                        Box::new(Step::GainCard(vec![
+                        Box::new(StepNodeType::GainCard(vec![
                             CardFilter::CoinCostUpto(
                                 RuntimeValue::Add(
                                     Box::new(RuntimeValue::FromAbove),
@@ -435,7 +470,7 @@ impl Card {
                             )]
                         )),
                     ),
-                    Step::TransferCards(
+                    StepNodeType::TransferCards(
                         true, 
                         EffectedPlayers::You, 
                         None,
@@ -456,7 +491,7 @@ impl Card {
             cost: vec![Cost::Coin(2)],
             on_gain: None,
             card_type: vec![CardType::Action(vec![
-                Step::TransferCards(
+                StepNodeType::TransferCards(
                     false, 
                     EffectedPlayers::You, 
                     Some(vec![CardFilter::CardCountUpto(RuntimeValue::FixedValue(4))]), 
@@ -477,9 +512,9 @@ impl Card {
             on_gain: None,
             card_type: vec![
                 CardType::Action(vec![
-                    Step::DrawCard(RuntimeValue::FixedValue(4)),
-                    Step::PlusBuy(RuntimeValue::FixedValue(1)),
-                    Step::TransferCards(
+                    StepNodeType::DrawCard(RuntimeValue::FixedValue(4)),
+                    StepNodeType::PlusBuy(RuntimeValue::FixedValue(1)),
+                    StepNodeType::TransferCards(
                         true, 
                         EffectedPlayers::AllOthers, 
                         None, 
@@ -515,17 +550,17 @@ impl Card {
             on_gain: None,
             cost: vec![Cost::Coin(5)],
             card_type: vec![CardType::Action(vec![
-                Step::TransferCards(
+                StepNodeType::TransferCards(
                     false, 
                     EffectedPlayers::You, 
                     Some(vec![CardFilter::Type(CardType::Treasure(RuntimeValue::Any))]), 
                     Location::Hand, 
                     Location::InternalBuffer,
                 ),
-                Step::ExtractValue(
+                StepNodeType::ExtractValue(
                     ExtractedValueType::CoinValue, 
                     Location::InternalBuffer, 
-                    Box::new(Step::GainCardToHand(vec![
+                    Box::new(StepNodeType::GainCardToHand(vec![
                         CardFilter::CoinCostUpto(
                             RuntimeValue::Add(
                                 Box::new(RuntimeValue::FromAbove),
@@ -535,7 +570,7 @@ impl Card {
                         CardFilter::Type(CardType::Treasure(RuntimeValue::Any))
                     ])),
                 ),
-                Step::TransferCards(
+                StepNodeType::TransferCards(
                     true, 
                     EffectedPlayers::You, 
                     None, 
@@ -555,10 +590,10 @@ impl Card {
             cost: vec![Cost::Coin(5)],
             card_type: vec![
                 CardType::Action(vec![
-                    Step::DrawCard(RuntimeValue::FixedValue(1)),
-                    Step::PlusAction(RuntimeValue::FixedValue(1)),
-                    Step::PlusBuy(RuntimeValue::FixedValue(1)),
-                    Step::PlusCoin(RuntimeValue::FixedValue(1)),
+                    StepNodeType::DrawCard(RuntimeValue::FixedValue(1)),
+                    StepNodeType::PlusAction(RuntimeValue::FixedValue(1)),
+                    StepNodeType::PlusBuy(RuntimeValue::FixedValue(1)),
+                    StepNodeType::PlusCoin(RuntimeValue::FixedValue(1)),
                 ])
             ],
         }
@@ -572,24 +607,24 @@ impl Card {
             on_gain: None,
             card_type: vec![
                 CardType::Action(vec![
-                    Step::TransferCards(
+                    StepNodeType::TransferCards(
                         false,
                         EffectedPlayers::You,
                         Some(vec![CardFilter::Name("Copper".to_owned())]),
                         Location::Hand,
                         Location::InternalBuffer,
                     ),
-                    Step::ExtractValue(
+                    StepNodeType::ExtractValue(
                         ExtractedValueType::CardName, 
                         Location::InternalBuffer, 
-                        Box::new(Step::PlusCoin(
+                        Box::new(StepNodeType::PlusCoin(
                             RuntimeValue::Mult(
                                 Box::new(RuntimeValue::FromAbove), 
                                 Box::new(RuntimeValue::FixedValue(3))
                             )
                         )),
                     ),
-                    Step::TransferCards(
+                    StepNodeType::TransferCards(
                         true, 
                         EffectedPlayers::You, 
                         None, 
@@ -609,23 +644,30 @@ impl Card {
             expansion: Expansion::Dominion,
             cost: vec![Cost::Coin(3)],
             on_gain: None,
+            // TODO OptionalPlayAction has been removed. Use Or(Box<Step>, Box<Step>) where one is
+            // None
             card_type: vec![
                 CardType::Action(vec![
-                    Step::PlusCoin(RuntimeValue::FixedValue(2)),
+                    StepNodeType::PlusCoin(RuntimeValue::FixedValue(2)),
 
-                    Step::TransferCards(
+                    StepNodeType::TransferCards(
                         true,
                         EffectedPlayers::You,
                         None,
                         Location::DeckTop,
                         Location::InternalBuffer,
                     ),
-                    Step::ExtractValue(
+                    StepNodeType::ExtractValue(
                         ExtractedValueType::CardName, 
                         Location::InternalBuffer, 
-                        Box::new(Step::OptionalPlayAction(RuntimeValue::FromAbove, None)),
+                        //Box::new(Step::OptionalPlayAction(RuntimeValue::FromAbove, None)),
+                        Box::new(
+                            StepNodeType::Or(
+                                Box::new(StepNodeType::None), 
+                                Box::new(StepNodeType::PlayCard(RuntimeValue::FromAbove)))
+                            ),
                     ),
-                    Step::TransferCards(
+                    StepNodeType::TransferCards(
                         true, 
                         EffectedPlayers::You, 
                         None, 
@@ -645,7 +687,7 @@ impl Card {
             cost: vec![Cost::Coin(3)],
             on_gain: None,
             card_type: vec![CardType::Action(vec![
-                Step::GainCard(vec![
+                StepNodeType::GainCard(vec![
                     CardFilter::CoinCostUpto(RuntimeValue::FixedValue(4))
                 ])
             ])],
@@ -660,10 +702,10 @@ impl Card {
             on_gain: None,
             card_type: vec![
                 CardType::Action(vec![
-                    Step::DrawCard(RuntimeValue::FixedValue(2)),
+                    StepNodeType::DrawCard(RuntimeValue::FixedValue(2)),
                 ]),
                 CardType::Attack(vec![
-                    Step::TransferCards(
+                    StepNodeType::TransferCards(
                         true, 
                         EffectedPlayers::AllOthers,
                         Some(vec![CardFilter::Name("Curse".to_owned())]), 
@@ -683,8 +725,8 @@ impl Card {
             on_gain: None,
             card_type: vec![
                 CardType::Action(vec![
-                    Step::PlusBuy(RuntimeValue::FixedValue(1)),
-                    Step::PlusCoin(RuntimeValue::FixedValue(2)),
+                    StepNodeType::PlusBuy(RuntimeValue::FixedValue(1)),
+                    StepNodeType::PlusCoin(RuntimeValue::FixedValue(2)),
                 ]),
             ]
         }
