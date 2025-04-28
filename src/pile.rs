@@ -65,6 +65,10 @@ impl Pile {
 
     }
 
+    pub fn get_all_cards(&self) -> Vec<Card> {
+        self.cards.clone()
+    }
+
     /// Returns a vec of cards, ignoring rotation and items on top
     pub fn to_card_vec(&self) -> Vec<Card> {
         return self.cards.clone()
