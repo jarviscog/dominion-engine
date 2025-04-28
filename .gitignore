@@ -1,2 +1,4 @@
-/target
-extra-tools/
+.dbeaver/
+target/
+tools/
+
