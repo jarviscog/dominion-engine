@@ -122,6 +122,27 @@ impl Player {
         self.debt += val
     }
 
+    fn get_all_cards(&self) -> Vec<Card> {
+        let mut all_cards: Vec<Card> = Vec::new();
+        all_cards.append(&mut self.hand.get_all_cards());
+        all_cards.append(&mut self.deck.get_all_cards());
+        all_cards.append(&mut self.discard.get_all_cards());
+        all_cards.append(&mut self.in_play.get_all_cards());
+        all_cards
+    }
+
+    /// Get the total cards the player has, including deck, discard, hand
+    /// Used to calculate VPs for Gardens
+    pub fn total_cards(&self) -> u32 {
+        // TODO This may be unsafe
+        (
+            self.hand.size() +
+            self.deck.size() +
+            self.discard.size() +
+            self.in_play.size()
+        ) as u32
+    }
+
     pub fn get_hand(&self) -> Vec<Card> {
         self.hand.to_card_vec()
     }
