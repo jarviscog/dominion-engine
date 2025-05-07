@@ -10,9 +10,7 @@ pub struct Pile {
 // TODO Hnadle pile rotation
 impl Pile {
     pub fn new() -> Pile {
-        Pile {
-            cards: Vec::new()
-        }
+        Pile { cards: Vec::new() }
     }
 
     pub fn size(&self) -> usize {
@@ -25,9 +23,7 @@ impl Pile {
         for i in 0..count {
             res_cards.push(in_card.clone())
         }
-        Pile {
-            cards: res_cards
-        }
+        Pile { cards: res_cards }
     }
 
     pub fn starter_deck() -> Pile {
