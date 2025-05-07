@@ -1,7 +1,5 @@
-
-
-use std::io::stdin;
 use crate::*;
+use std::io::stdin;
 
 /// Prompt the user to choose a card
 pub fn prompt_for_card(filters: Option<CardFilter>) -> Card {

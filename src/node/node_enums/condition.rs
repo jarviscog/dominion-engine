@@ -1,4 +1,3 @@
-
 use super::*;
 use crate::RuntimeValue;
 
@@ -8,5 +7,5 @@ pub enum Condition {
     /// Repeat for a fixed number of times, calculated at runtime
     NumberOfTimes(RuntimeValue),
     /// Check if a stack contains a certain number of cards
-    StackSize(Location, RuntimeValue) 
+    StackSize(Location, RuntimeValue),
 }

@@ -1,4 +1,3 @@
-
 use std::fmt::{self, Write};
 
 #[derive(Debug, Clone)]
@@ -32,7 +31,6 @@ impl fmt::Display for Location {
             Self::Supply => write!(f, "the supply"),
             Self::SearchDeck => write!(f, "search your deck"),
             //_ => write!(f, "{:?}"),
-
         }
     }
     //write!(f, "{:?}", self)

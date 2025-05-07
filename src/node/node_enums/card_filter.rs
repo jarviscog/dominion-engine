@@ -1,5 +1,3 @@
-
-
 use std::fmt::{self, Write};
 
 use crate::card_type::CardType;
@@ -15,7 +13,6 @@ pub enum CardFilter {
     NotName(String),
     Type(CardType),
     NotType(CardType),
-
 
     CoinCostUpto(RuntimeValue),
     CoinCostEquals(RuntimeValue),
@@ -34,7 +31,7 @@ pub enum CardFilter {
 
     // This is commented out for a reason. Please add values elsewhere
     //UpToXMoreValue(RuntimeValue, RuntimeValue), // (x, y) Up to x more value than y card
-    
+
     // Used in steps to get the card passed down from above. For example, a for each
     // will pass the value from the previous step
     FromAbove, // TODO what value do we grab from above? Is it a cost, count, or something else
@@ -56,7 +53,3 @@ impl fmt::Display for CardFilter {
         }
     }
 }
-
-
-
-

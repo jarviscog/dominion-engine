@@ -1,11 +1,6 @@
 use crate::card::RuntimeValue;
 
-use super::{
-    EventListenerFireCondition,
-    EventListenerDestructCondition,
-    StepNode,
-    StepNodeType,
-};
+use super::{EventListenerDestructCondition, EventListenerFireCondition, Node, NodeType};
 
 /// Any event that does not happen right as a card is played.
 #[derive(Debug, Clone)]
