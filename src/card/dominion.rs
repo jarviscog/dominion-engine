@@ -1,7 +1,6 @@
 use super::*;
 
 impl Card {
-
     pub fn copper() -> Card {
         Card {
             name: "Copper".to_owned(),
@@ -38,7 +37,7 @@ impl Card {
             expansion: Expansion::Dominion,
             card_type: vec![CardType::Victory(RuntimeValue::FixedValue(-1))],
             cost: vec![Cost::Coin(0)],
-            on_gain: None
+            on_gain: None,
         }
     }
 
@@ -76,9 +75,7 @@ impl Card {
         Card {
             name: "Gardens".to_owned(),
             expansion: Expansion::Dominion,
-            card_type: vec![
-                CardType::Victory(RuntimeValue::NumberOfCardsInDeck)
-            ],
+            card_type: vec![CardType::Victory(RuntimeValue::NumberOfCardsInDeck)],
             cost: vec![Cost::Coin(4)],
             on_gain: None,
         }
@@ -107,7 +104,6 @@ impl Card {
             ]
 
         }
-
     }
 
     pub fn bureaucrat() -> Card {
@@ -731,6 +727,4 @@ impl Card {
             ]
         }
     }
-
-
 }

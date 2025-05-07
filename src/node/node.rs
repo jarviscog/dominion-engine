@@ -70,14 +70,3 @@ impl fmt::Display for StepNode {
     }
     //write!(f, "{:?}", self)
 }
-
-
-//#[derive(Debug, Clone)]
-//pub struct EventListener {
-//    // TODO implement these enums
-//    duration: Duration,
-//    scope: Scope,
-//    effected_players: EffectedPlayers,
-//    steps: Vec<Step>,
-//
-//}

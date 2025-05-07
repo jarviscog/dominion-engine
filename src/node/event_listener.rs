@@ -14,13 +14,13 @@ pub struct EventListener {
 
 impl EventListener {
     pub fn new(
-        played_by: RuntimeValue, 
+        played_by: RuntimeValue,
         fire_condition: EventListenerFireCondition,
         destruct_condition: EventListenerDestructCondition,
         steps: Vec<StepNodeType>,
         destruct_on_fire: bool,
     ) -> EventListener {
-        EventListener { 
+        EventListener {
             played_by,
             fire_condition,
             destruct_condition,

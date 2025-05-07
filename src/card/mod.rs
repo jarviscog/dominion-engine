@@ -1,13 +1,12 @@
-use std::str::FromStr;
 use std::fmt::{self, Write};
-
+use std::str::FromStr;
 
 pub mod card_type;
 use card_type::*;
 
+pub use super::node::*;
 use crate::cost::Cost;
 use crate::expansion::Expansion;
-pub use super::node::*;
 
 pub use crate::runtime_value::RuntimeValue;
 
@@ -15,8 +14,6 @@ pub use crate::runtime_value::RuntimeValue;
 pub mod dominion;
 pub mod intrigue;
 pub mod seaside;
-
-
 
 #[derive(Debug, Clone)]
 pub struct Card {
@@ -111,8 +108,7 @@ impl fmt::Display for Card {
         //out_string.push_str(&format!("\n\t\t]",));
 
         out_string.push_str("\n\t\t}");
-        
-        write!(f, "{}", out_string)
 
+        write!(f, "{}", out_string)
     }
 }

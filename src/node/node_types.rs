@@ -68,12 +68,12 @@ pub enum StepNodeType {
         Location,
         Location,
     ),
-    
+
     /// Apply some step based on some condition in a pile
     /// `ExtractedValueType` The value to extract. This could be number of cards, value of cards, etc.
     /// `Location` The location to extract the value from
     /// `StepNode` The step that will use the resulting value. This will use RuntimeValue::FromAbove
-    /// e.x. 
+    /// e.x.
     ///     (Number of cards in deck)/10 -> VP for gardens
     ///     (number of cards in InternalBuffer) -> +# Card for Cellar
     ///     (cost of cards in InternalBuffer)+3 -> +# Card for Mine
@@ -86,13 +86,11 @@ pub enum StepNodeType {
 
     // You may play an Action card from your hand twice.
     //      PlayCardXTimes(2, Type(Action))
-
     /// Repeat a step until a condition is met
     RepeatUntil(Condition, Box<StepNodeType>),
-    
     /// Transfer cards from one location to 2 other locations depending on filters
     /// Defaults to transferring one card, but can be set to more/less using filters
-    /// 
+    ///
     /// `bool` `True` The transfer is forced to move to fork 1
     ///        `False` The transfer is optional. The player decides between fork1 and 2 for each
     ///        card
@@ -101,7 +99,7 @@ pub enum StepNodeType {
     /// `Option<Vec<CardFilter>>` Optional Filters to limit cards coming FROM
     /// `Location`, From
     /// `Option<Vec<CardFilter>>` Optional Filters to limit cards going TO. All other cards will go
-    /// to 
+    /// to
     /// `Location`, Fork1
     /// `Location`, Fork2
     ForkTransferCards(
@@ -114,7 +112,7 @@ pub enum StepNodeType {
     ),
 
     IgnoreAttacks,
-    
+
     //TrashCard,
     //GainActions,
     //PromptPlayer,
@@ -187,9 +185,7 @@ impl fmt::Display for StepNodeType {
                 write!(f, "  {}", output_string)
             }
             _ => write!(f, "{:?}", self),
-
         }
     }
     //write!(f, "{:?}", self)
 }
-

@@ -146,17 +146,17 @@ impl Player {
     pub fn print_state(&self) {
         println!("");
         println!("{:=^58}", self.get_name());
-        println!("Deck: {:<8} Hand: {:<8} Discard: {:<8} In Play: {:<8}", 
-            self.deck.size(), 
+        println!(
+            "Deck: {:<8} Hand: {:<8} Discard: {:<8} In Play: {:<8}",
+            self.deck.size(),
             self.hand.size(),
             self.discard.size(),
             self.in_play.size(),
         );
-        println!("Actions: {:<8} Buys: {:<8} Coins: {:<8} Debt: {:<8}", 
-            self.actions, 
-            self.buys, 
-            self.coins, 
-            self.debt);
+        println!(
+            "Actions: {:<8} Buys: {:<8} Coins: {:<8} Debt: {:<8}",
+            self.actions, self.buys, self.coins, self.debt
+        );
         println!("");
     }
 }

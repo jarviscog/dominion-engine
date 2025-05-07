@@ -34,6 +34,4 @@ impl Card {
             on_gain: None,
         }
     }
-
-
 }
