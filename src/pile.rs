@@ -13,8 +13,12 @@ impl Pile {
         Pile { cards: Vec::new() }
     }
 
-    pub fn size(&self) -> usize {
-        self.cards.len()
+    pub fn size(&self) -> u32 {
+        if self.cards.len() > u32::MAX as usize {
+            u32::MAX
+        } else {
+            self.cards.len() as u32
+        }
     }
 
     /// Creates a new pile from a card and a count of the given card
