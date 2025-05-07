@@ -1,7 +1,6 @@
-
 use super::node_enums::CardFilter;
 
-// Comment 
+// Comment
 // https://wiki.dominionstrategy.com/index.php/Triggered_effects
 #[derive(Debug, Clone)]
 pub enum EventListenerFireCondition {
@@ -13,8 +12,3 @@ pub enum EventListenerFireCondition {
     WhenYouGainThisCard,
     WhenYouPlayCard(Vec<CardFilter>),
 }
-
-
-
-
-

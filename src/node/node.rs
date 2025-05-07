@@ -66,7 +66,6 @@ impl fmt::Display for StepNode {
             StepNodeType::DrawCard(x) => write!(f, "+{} Card", x),
             StepNodeType::PlusAction(x) => write!(f, "+{} Action", x),
             _ => write!(f, "{:?}", self),
-
         }
     }
     //write!(f, "{:?}", self)

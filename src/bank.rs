@@ -1,10 +1,8 @@
-
-use crate::pile::Pile;
 use crate::card::Card;
+use crate::pile::Pile;
 use crate::player;
 
 pub struct Bank {
-
     copper: Pile,
     silver: Pile,
     gold: Pile,
@@ -18,11 +16,10 @@ pub struct Bank {
     trash: Pile,
 
     //https://wiki.dominionstrategy.com/index.php/Supply#Non-Supply
-    supply_piles: Vec<Pile>
+    supply_piles: Vec<Pile>,
 }
 
 impl Bank {
-
     pub fn new() -> Bank {
         Bank {
             copper: Pile::new(),
@@ -62,15 +59,14 @@ impl Bank {
 
             curses: Pile::new(),
             trash: Pile::new(),
-            supply_piles: Vec::new()
+            supply_piles: Vec::new(),
         }
     }
 
-    /// Attempt to take a card from the supply. 
+    /// Attempt to take a card from the supply.
     /// If the card is removed, will return the Card
     /// If not, will return None
     pub fn take_card(&mut self, card: &Card) -> Option<Card> {
-
         // TODO This is very confusing syntax
         // Check the basic supply piles
         if let Some(card) = match card.get_name().as_ref() {
@@ -81,19 +77,20 @@ impl Bank {
             "Estate" => self.estate.pop_card(),
             "Duchy" => self.duchy.pop_card(),
             "Province" => self.province.pop_card(),
-            _ => None
-        } { return Some(card) } 
+            _ => None,
+        } {
+            return Some(card);
+        }
 
         for pile in self.supply_piles.iter_mut() {
             if let Some(pile_name) = pile.top_card_name() {
                 if pile_name == card.get_name() {
                     pile.pop_card();
-                    return pile.pop_card()
+                    return pile.pop_card();
                 }
             }
         }
         None
-        
     }
 
     /// Check to see if one of the top cards of a supply pile is a given card
@@ -114,7 +111,7 @@ impl Bank {
     pub fn finish_population(&mut self, player_count: usize) {
         // TODO check if there are any reasons that other info might need to get passed into this
         // function other than player count
-        
+
         // https://wiki.dominionstrategy.com/index.php/Setup
 
         // Victory piles
@@ -123,7 +120,7 @@ impl Bank {
             self.duchy = Pile::from(8, Card::duchy());
             self.estate = Pile::from(8, Card::estate());
         }
-        
+
         // Set up curses
         self.curses = Pile::from(((player_count-1) * 10) as u8, Card::curse());
         
@@ -228,11 +225,3 @@ impl Bank {
         ret_bank
     }
 }
-
-
-
-
-
-
-
-

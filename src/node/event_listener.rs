@@ -32,6 +32,5 @@ impl EventListener {
             steps,
             destruct_on_fire,
         }
-
     }
 }

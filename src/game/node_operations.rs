@@ -1,11 +1,10 @@
 use super::*;
 
 impl Game {
-
     /// Allow a player to buy a card
     /// The player must have the funds, and it must be in the bank
     /// `player_index` The index of the player that would like to buy the card
-    /// `card_to_buy` 
+    /// `card_to_buy`
     /// `buy_anyways` If the card is not in the supply, or the player does not have enough funds,
     /// this allows them to gain the card anyways
     pub fn buy_card(&mut self, player_index: usize, card_to_buy: &Card, buy_anyways: bool) -> Result<(), String> {
@@ -16,9 +15,9 @@ impl Game {
             can_afford = false;
         }
         if !can_afford && !buy_anyways {
-            return Err("Can't afford card".to_owned())
+            return Err("Can't afford card".to_owned());
         }
-        
+
         // If they do, move_card()
         match self.transfer_card(
             player_index, 
@@ -32,15 +31,15 @@ impl Game {
                 mut_player.sub_coins(card_to_buy.get_coin_cost());
                 Ok(())
             }
-            Err(e) => return Err(e)
+            Err(e) => return Err(e),
         }
     }
 
     pub fn transfer_card(
-        &mut self, 
+        &mut self,
         player_index: usize,
-        card_to_move: &Card, 
-        from: Location, 
+        card_to_move: &Card,
+        from: Location,
         to: Location,
         move_anyways: bool,
     ) -> Result<(), String> {
@@ -66,5 +65,4 @@ impl Game {
 
         Ok(())
     }
-
 }

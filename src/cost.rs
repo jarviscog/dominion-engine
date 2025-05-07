@@ -1,4 +1,3 @@
-
 use std::fmt::{self, Write};
 
 // TODO The cost of a coin/debt should be a RuntimeValue

@@ -1,16 +1,14 @@
 use crate::card::Card;
 
-
 /// A pile of cards. This could be a hand, deck, discard, or supply pile
 #[derive(Debug)]
 pub struct Pile {
-    cards: Vec<Card>
+    cards: Vec<Card>,
 }
 
 // TODO Handle split piles
 // TODO Hnadle pile rotation
 impl Pile {
-
     pub fn new() -> Pile {
         Pile {
             cards: Vec::new()
@@ -46,9 +44,8 @@ impl Pile {
                 Card::estate(),
                 Card::estate(),
                 Card::estate(),
-            ]
+            ],
         }
-
     }
 
     /// Pops a card from the top of the pile
@@ -58,11 +55,10 @@ impl Pile {
 
     pub fn top_card_name(&self) -> Option<String> {
         if let Some(c) = self.cards.last() {
-            return Some(c.get_name())
+            return Some(c.get_name());
         } else {
             None
         }
-
     }
 
     pub fn get_all_cards(&self) -> Vec<Card> {
@@ -71,7 +67,7 @@ impl Pile {
 
     /// Returns a vec of cards, ignoring rotation and items on top
     pub fn to_card_vec(&self) -> Vec<Card> {
-        return self.cards.clone()
+        return self.cards.clone();
     }
 
     pub fn print(&self) {
@@ -79,6 +75,4 @@ impl Pile {
             println!("{:?}", card);
         }
     }
-
-
 }

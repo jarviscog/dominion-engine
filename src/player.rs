@@ -1,15 +1,13 @@
-
 //use colored::Colorize;
-use crate::pile::Pile;
-use crate::cost::Cost;
 use super::*;
+use crate::cost::Cost;
+use crate::pile::Pile;
 
 #[derive(Debug)]
 enum PlayerType {
     Bot,
     Terminal,
 }
-
 
 #[derive(Debug)]
 pub struct Player {
@@ -30,7 +28,6 @@ pub struct Player {
 }
 
 impl Player {
-
     pub fn bot(name: String) -> Player {
         Player {
             name,
@@ -44,7 +41,6 @@ impl Player {
             coins: 0,
             debt: 0,
         }
-
     }
 
     pub fn terminal(name: String) -> Player {
@@ -163,5 +159,4 @@ impl Player {
             self.debt);
         println!("");
     }
-
 }

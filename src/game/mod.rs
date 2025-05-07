@@ -1,25 +1,25 @@
-
-use std::ops::IndexMut;
+use std::cell::RefCell;
 use std::fmt::{self, Write};
-
+use std::iter;
+use std::ops::IndexMut;
+use std::rc::Rc;
 
 mod choice;
 mod current_game_state;
 mod decision;
 
 pub use choice::Choice;
-pub use decision::Decision;
 pub use current_game_state::CurrentGameState;
+pub use decision::Decision;
 
-
-use crate::player::*;
 use crate::bank::Bank;
 use crate::card::Card;
-use crate::RuntimeValue;
-pub use crate::node::*;
-use node_types;
-use crate::node::node::StepNode;
 use crate::node::event_listener::EventListener;
+use crate::node::node::Node;
+pub use crate::node::*;
+use crate::RuntimeValue;
+use crate::{player::*, runtime_value};
+use node_types;
 
 pub mod node_operations;
 
@@ -323,7 +323,7 @@ impl Game {
     }
 
     pub fn get_player_victory_points(&self, player: &Player) -> u32 {
-        // TODO 
+        // TODO
         0
     }
 
@@ -335,15 +335,4 @@ impl Game {
             println!("Player: {} Score: {}", player.get_name(), self.get_player_victory_points(player));
         }
     }
-
 }
-
-
-
-
-
-
-
-
-
-

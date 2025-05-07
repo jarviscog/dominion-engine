@@ -1,12 +1,11 @@
 use super::*;
 
-
-///// Any choice a player needs to make
+/// Any choice a player needs to make
 pub enum Choice {
-    /// The game is currently in the action phase 
+    /// The game is currently in the action phase
     /// Choose to play a card, or enter buy phase
     ActionPhase,
-    /// The game is currently in the buy phase 
+    /// The game is currently in the buy phase
     /// Choose to play a card, or enter buy phase
     BuyPhase,
     /// Choose a list of cards to transfer from one location to another
@@ -16,8 +15,5 @@ pub enum Choice {
         Location, // From
         Location, // To
     ),
-    NameACard(
-        Option<CardFilter>,
-    )
-
+    NameACard(Option<CardFilter>),
 }
