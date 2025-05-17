@@ -3,43 +3,29 @@ use std::fmt;
 use super::*;
 use crate::RuntimeValue;
 
+/// A node that has not yet been created
 #[derive(Debug, Clone)]
-pub enum GameNodeType {
-    Setup, 
+pub enum NodeTemplate {
+    // ROOT NODE
+    Root,
+    // GAME NODE TYPES
+    Setup,
     Turn,
     ScoreCount,
-}
-
-impl fmt::Display for GameNodeType {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match &self {
-            GameNodeType::Turn => write!(f, "Turn"),
-            GameNodeType::Setup => write!(f, "Setup"),
-            GameNodeType::ScoreCount => write!(f, "ScoreCount"),
-            _ => write!(f, "{:?}", self),
-
-        }
-    }
-    //write!(f, "{:?}", self)
-}
-
-#[derive(Debug, Clone)]
-pub enum PhaseNodeType {
+    // PHASE NODE TYPES
     Action,
     Buy,
     Night,
-}
-
-
-#[derive(Debug, Clone)]
-pub enum StepNodeType {
+    // CHOICE NODE TYPES
+    ActionPhaseChoice,
+    BuyPhaseChoice,
+    // STEP NODE TYPES
     None,
     PlusCoin(RuntimeValue),
     PlusAction(RuntimeValue),
     PlusBuy(RuntimeValue),
-
     /// Choose between two step paths
-    Or(Box<StepNodeType>, Box<StepNodeType>),
+    Or(Box<NodeTemplate>, Box<NodeTemplate>),
 
     /// `RuntimeValue` name of the card to be played
     PlayCard(RuntimeValue), // Play a card without modifying location of the card
@@ -54,6 +40,7 @@ pub enum StepNodeType {
     /// `Vec<CardFilter>` limit the options that the player can choose from
     GainCardToHand(Vec<CardFilter>),
 
+    GotoActionPhase,
     /// Transfer cards from one location to another
     /// Defaults to transferring one card, but can be set to more/less using filters
     /// `bool` Forced -> true, Optional -> false
@@ -77,7 +64,7 @@ pub enum StepNodeType {
     ///     (Number of cards in deck)/10 -> VP for gardens
     ///     (number of cards in InternalBuffer) -> +# Card for Cellar
     ///     (cost of cards in InternalBuffer)+3 -> +# Card for Mine
-    ExtractValue(ExtractedValueType, Location, Box<StepNodeType>),
+    ExtractValue(ExtractedValueType, Location, Box<NodeTemplate>),
 
     /// https://wiki.dominionstrategy.com/index.php/Throne_Room_variant
     /// `RuntimeValue`, number of times to play the card
@@ -87,7 +74,8 @@ pub enum StepNodeType {
     // You may play an Action card from your hand twice.
     //      PlayCardXTimes(2, Type(Action))
     /// Repeat a step until a condition is met
-    RepeatUntil(Condition, Box<StepNodeType>),
+    RepeatUntil(Condition, Box<NodeTemplate>),
+
     /// Transfer cards from one location to 2 other locations depending on filters
     /// Defaults to transferring one card, but can be set to more/less using filters
     ///
@@ -111,18 +99,21 @@ pub enum StepNodeType {
         Location,
     ),
 
+    Conditional {
+        condition: Condition,
+        then_branch: Vec<NodeTemplate>,
+        else_branch: Vec<NodeTemplate>,
+    },
+
     IgnoreAttacks,
 
     //TrashCard,
     //GainActions,
     //PromptPlayer,
-
-    AddEventListener(EventListener)
-
-    //ProcessionEffect,
+    AddEventListener(EventListener), //ProcessionEffect,
 }
 
-impl fmt::Display for StepNodeType {
+impl fmt::Display for NodeTemplate {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Self::PlusBuy(x) => write!(f, "+{} Buy", x),
@@ -130,18 +121,24 @@ impl fmt::Display for StepNodeType {
             Self::PlusAction(x) => write!(f, "+{} Action", x),
             Self::GainCard(x) => {
                 write!(
-                    f, 
-                    "Gain card with filters: {}", 
-                    x.iter().map(|item| format!("{}", item)).collect::<Vec<String>>().join(", ")
+                    f,
+                    "Gain card with filters: {}",
+                    x.iter()
+                        .map(|item| format!("{}", item))
+                        .collect::<Vec<String>>()
+                        .join(", ")
                 )
-            },
+            }
             Self::GainCardToHand(x) => {
                 write!(
-                    f, 
-                    "Gain card to your hand with filters: {}", 
-                    x.iter().map(|item| format!("{}", item)).collect::<Vec<String>>().join(", ")
+                    f,
+                    "Gain card to your hand with filters: {}",
+                    x.iter()
+                        .map(|item| format!("{}", item))
+                        .collect::<Vec<String>>()
+                        .join(", ")
                 )
-            },
+            }
             Self::DiscardCard(x) => write!(f, "Discard card with filters: {:?}", x),
             Self::PlusCoin(x) => write!(f, "+{} 🪙", x),
             Self::Or(step1, step2) => write!(f, "Choose:\n\r{}\n\r{}", step1, step2),
@@ -168,15 +165,17 @@ impl fmt::Display for StepNodeType {
                 }
                 output_string.push_str(&format!("from {} to {}", from, to));
                 if let Some(filters) = optional_filters {
-                    output_string.push_str(
-                        &format!(" with the following filters: {}", 
-                            filters.iter().map(|item| format!("{}", item)).collect::<Vec<String>>().join(", ")
-                        )
-                    );
-                } 
-                
-                write!(f, "{}", output_string)
+                    output_string.push_str(&format!(
+                        " with the following filters: {}",
+                        filters
+                            .iter()
+                            .map(|item| format!("{}", item))
+                            .collect::<Vec<String>>()
+                            .join(", ")
+                    ));
+                }
 
+                write!(f, "{}", output_string)
             }
             Self::ExtractValue(value_to_extract, location_to_extract_from, step_to_play) => {
                 let mut output_string = String::from(format!("{}", step_to_play));

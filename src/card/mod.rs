@@ -14,38 +14,42 @@ pub use crate::runtime_value::RuntimeValue;
 pub mod dominion;
 pub mod intrigue;
 pub mod seaside;
+pub mod prosperity;
+pub mod empires;
+pub mod dark_ages;
+pub mod test_cards;
+
 
 #[derive(Debug, Clone)]
 pub struct Card {
     name: String,
     expansion: Expansion,
     card_type: Vec<CardType>,
-    on_gain: Option<StepNodeType>, // If steps are required when you gain the card
+    on_gain: Option<NodeTemplate>, // If steps are required when you gain the card
     cost: Vec<Cost>,
 }
 
 impl Card {
-
     pub fn get_name(&self) -> String {
         self.name.clone()
     }
 
-    pub fn get_action_steps(&self) -> Option<Vec<StepNodeType>> {
+    pub fn get_action_steps(&self) -> Option<Vec<NodeTemplate>> {
         for c_type in &self.card_type {
             return match c_type {
-                CardType::Action(steps) => {Some(steps.clone())}
-                _ => None
-            }
+                CardType::Action(steps) => Some(steps.clone()),
+                _ => None,
+            };
         }
         None
     }
 
-    pub fn get_attack_steps(&self) -> Option<Vec<StepNodeType>> {
+    pub fn get_attack_steps(&self) -> Option<Vec<NodeTemplate>> {
         for c_type in &self.card_type {
             return match c_type {
-                CardType::Attack(steps) => {Some(steps.clone())}
-                _ => None
-            }
+                CardType::Attack(steps) => Some(steps.clone()),
+                _ => None,
+            };
         }
         None
     }
@@ -53,9 +57,9 @@ impl Card {
     pub fn get_victory_points(&self) -> Option<RuntimeValue> {
         for c_type in &self.card_type {
             return match c_type {
-                CardType::Victory(vps) => {Some(vps.clone())}
-                _ => None
-            }
+                CardType::Victory(vps) => Some(vps.clone()),
+                _ => None,
+            };
         }
         None
     }
@@ -64,9 +68,9 @@ impl Card {
         // TODO this function should return the value in either potions or coins.
         for c_type in &self.card_type {
             return match c_type {
-                CardType::Treasure(value) => {Some(value.clone())}
-                _ => None
-            }
+                CardType::Treasure(value) => Some(value.clone()),
+                _ => None,
+            };
         }
         None
     }
@@ -74,7 +78,7 @@ impl Card {
     pub fn get_coin_cost(&self) -> u32 {
         for cost in &self.cost {
             match cost {
-                Cost::Coin(x) => {return x.clone()}
+                Cost::Coin(x) => return x.clone(),
                 _ => {}
             }
         }
@@ -84,13 +88,12 @@ impl Card {
     pub fn get_debt_cost(&self) -> u32 {
         for cost in &self.cost {
             match cost {
-                Cost::Debt(x) => {return x.clone()}
+                Cost::Debt(x) => return x.clone(),
                 _ => {}
             }
         }
         0
     }
-
 }
 
 impl fmt::Display for Card {

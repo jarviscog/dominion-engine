@@ -18,18 +18,16 @@ impl Card {
         Card {
             name: "Courtyard".to_owned(),
             expansion: Expansion::Intrigue,
-            card_type: vec![
-                CardType::Action(vec![
-                    StepNodeType::DrawCard(RuntimeValue::FixedValue(3)),
-                    StepNodeType::TransferCards(
-                        true, 
-                        EffectedPlayers::You, 
-                        None, 
-                        Location::Hand, 
-                        Location::DeckTop,
-                    )
-                ])
-            ],
+            card_type: vec![CardType::Action(vec![
+                NodeTemplate::DrawCard(RuntimeValue::FixedValue(3)),
+                NodeTemplate::TransferCards(
+                    true,
+                    EffectedPlayers::You,
+                    None,
+                    Location::Hand,
+                    Location::DeckTop,
+                ),
+            ])],
             cost: vec![Cost::Coin(6)],
             on_gain: None,
         }
