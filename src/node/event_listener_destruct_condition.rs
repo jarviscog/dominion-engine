@@ -4,7 +4,7 @@
 /// Eg. Merchant will be destructed once you play a silver, so the effect does not happen twice
 /// If you do not play a silver during your turn, then it will automatically be
 /// destructed at the end of your turn
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum EventListenerDestructCondition {
     EndOfGame,
     EndOfActionPhase,
