@@ -24,58 +24,28 @@ use node_template;
 
 pub mod node_operations;
 
-
-#[derive(Debug)]
-pub enum BuyPhaseStep {
-    PlayCard(Card),
-    BuyCard(Card),
-    StartNextPhase,
-}
-
-impl fmt::Display for BuyPhaseStep {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            Self::PlayCard(c) => {
-                let mut out_string: String = String::from("PlayCard\r");
-                out_string.push_str(&format!("\t{:?}\r", c));
-                write!(f, "{}", out_string)
-            }
-            Self::BuyCard(c) => {
-                let mut out_string: String = String::from("BuyCard\r");
-                out_string.push_str(&format!("\t{:?}\r", c));
-                write!(f, "{}", out_string)
-            }
-            Self::StartNextPhase => {write!(f, "\nNextPhase\n")}
-            //_ => write!(f, "{:?}", self),
-        }
-    }
-}
-
 pub struct Game {
     players: Vec<Player>,
     bank: Bank,
     turn_number: u8,
     current_state: CurrentGameState,
     current_player_index: usize,
-    game_state: Vec<GameNode>,
+    game_state: Rc<RefCell<Node>>,
+    current_node: Rc<RefCell<Node>>,
     event_listeners: Vec<EventListener>,
 }
 
 impl Game {
-
     pub fn new() -> Game {
-        let new_game_node = GameNode::new(
-            GameNodeType::Setup,
-            0,
-            Vec::new(),
-        );
+        let root_node = Rc::new(RefCell::new(Node::new(NodeType::Root, 0)));
         Game {
             players: Vec::new(),
             bank: Bank::new(),
             current_state: CurrentGameState::GameNotStarted,
             turn_number: 0,
             current_player_index: 0,
-            game_state: vec![new_game_node],
+            game_state: Rc::clone(&root_node),
+            current_node: Rc::clone(&root_node),
             event_listeners: Vec::new(),
         }
     }
@@ -88,11 +58,12 @@ impl Game {
         self.players.push(Player::bot(bot_name));
     }
 
-    /// Sets the bank
     pub fn set_bank(&mut self, in_bank: Bank) {
         match self.current_state {
-            CurrentGameState::GameNotStarted => {self.bank = in_bank},
-            _ => {println!("WARNING: Game already started. Cannot set the bank")}
+            CurrentGameState::GameNotStarted => self.bank = in_bank,
+            _ => {
+                println!("WARNING: Game already started. Cannot set the bank")
+            }
         }
     }
 

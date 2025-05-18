@@ -5,69 +5,73 @@ use std::rc::Rc;
 use super::*;
 
 #[derive(Debug, Clone)]
-pub struct GameNode {
-    pub node_type: GameNodeType,
-    pub player_id: u32,
-    pub children: Vec<PhaseNode>,
-}
-
-impl GameNode {
-    pub fn new(node_type: GameNodeType, player_id: u32, children: Vec<PhaseNode>) -> GameNode {
-        GameNode {
-            node_type,
-            player_id,
-            children,
-        }
-    }
-}
-
-#[derive(Debug, Clone)]
-pub struct PhaseNode {
-    pub node_type: PhaseNodeType,
-    pub player_id: u32,
-    pub children: Vec<StepNode>,
-}
-
-impl PhaseNode {
-    pub fn new(node_type: PhaseNodeType, player_id: u32, children: Vec<StepNode>) -> PhaseNode {
-        PhaseNode {
-            node_type,
-            player_id,
-            children,
-        }
-    }
-}
-
-
-#[derive(Debug, Clone)]
-pub struct StepNode {
-    node_type: StepNodeType,
+pub struct Node {
+    pub node_type: NodeType,
     /// The player that played the card
-    player_id: u32, 
-    is_duration: bool,
-    children: Vec<StepNode>,
+    pub player_id: usize,
+    pub children: Vec<Rc<RefCell<Node>>>,
+    pub visited: bool,
 }
 
-impl StepNode {
-    pub fn new(node_type: StepNodeType, player_id: u32, is_duration: bool) -> StepNode {
-        StepNode {
+impl Node {
+    pub fn new(node_type: NodeType, player_id: usize) -> Node {
+        Node {
             node_type,
             player_id,
-            is_duration,
             children: Vec::new(),
+            visited: false,
         }
     }
 
-    fn add_child(mut self, child: StepNode) {
-        self.children.push(child);
+    pub fn new_full(
+        node_type: NodeType,
+        player_id: usize,
+        children: Vec<Rc<RefCell<Node>>>,
+    ) -> Node {
+        Node {
+            node_type,
+            player_id,
+            children,
+            visited: false,
+        }
+    }
+
+    pub fn add_child(&mut self, child: Node) {
+        self.children.push(Rc::new(RefCell::new(child)));
+    }
+
+    /// Return the first child found that has not been visited
+    pub fn get_first_unvisited_child(&self) -> Option<Rc<RefCell<Node>>> {
+        for child in &self.children {
+            let child_borrow = child.borrow();
+
+            // If a child is not visited, grab it
+            if !child_borrow.visited {
+                return Some(child.clone());
+            }
+
+            if let Some(subchild) = child_borrow.get_first_unvisited_child() {
+                return Some(subchild);
+            }
+        }
+
+        None
     }
 }
-impl fmt::Display for StepNode {
+
+impl fmt::Display for Node {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match &self.node_type {
-            StepNodeType::PlusBuy(x) => write!(f, "+{} Buy", x),
-            StepNodeType::DrawCard(x) => write!(f, "+{} Card", x),
-            StepNodeType::PlusAction(x) => write!(f, "+{} Action", x),
+            NodeType::Root => write!(f, "Root"),
+            NodeType::Root => write!(f, "Root"),
+            NodeType::Setup => write!(f, "Setup"),
+            NodeType::Action => write!(f, "Action Phase for player: {}", self.player_id),
+            NodeType::Buy => write!(f, "Buy Phase for player: {}", self.player_id),
+            NodeType::Night => write!(f, "Night Phase for player: {}", self.player_id),
+            NodeType::PlusCoin(x) => write!(f, "+{} 🪙", x),
+            NodeType::PlusBuy(x) => write!(f, "+{} Buy", x),
+            NodeType::DrawCard(x) => write!(f, "+{} Card", x),
+            NodeType::PlusAction(x) => write!(f, "+{} Action", x),
             _ => write!(f, "{:?}", self),
         }
     }
