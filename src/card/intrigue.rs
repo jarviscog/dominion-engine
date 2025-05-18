@@ -28,13 +28,10 @@ pub fn register() -> Vec<(&'static str, fn() -> Card)> {
         //("Trading Post", Card::tradingpost),
         //("Upgrade", Card::upgrade),
         //("Wishing Well", Card::wishing_well),
-
     ]
 }
 
 impl Card {
-
-
     pub fn duke() -> Card {
         Card {
             name: "Duke".to_owned(),

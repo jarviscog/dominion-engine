@@ -19,7 +19,6 @@ pub mod prosperity;
 pub mod seaside;
 pub mod test_cards;
 
-
 use std::collections::HashMap;
 use std::sync::OnceLock;
 
@@ -37,7 +36,6 @@ fn init_card_registry() {
     CARD_REGISTRY.set(build_registry()).unwrap();
 }
 
-
 #[derive(Debug, Clone)]
 pub struct Card {
     name: String,
@@ -47,9 +45,7 @@ pub struct Card {
     cost: Vec<Cost>,
 }
 
-
 impl Card {
-
     pub fn get_by_name(name: &str) -> Option<Card> {
         CARD_REGISTRY.get().unwrap().get(name).map(|f| f())
     }
