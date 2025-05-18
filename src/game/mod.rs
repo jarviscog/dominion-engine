@@ -1,7 +1,7 @@
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::fmt::{self, Write};
-use std::iter;
+use std::{iter, usize};
 use std::ops::IndexMut;
 use std::rc::Rc;
 
@@ -286,6 +286,26 @@ impl Game {
             }
             _ => todo!("resolve_template {:?}", node_template),
         }
+    }
+
+    // Returns indexes for the players that should be effected
+    fn resolve_effected_players(&self, effected_players: &EffectedPlayers) -> Vec<usize> {
+        let mut ret_vec = Vec::new();
+        match effected_players {
+            EffectedPlayers::You => {ret_vec.push(self.get_current_player_index())}
+            EffectedPlayers::All => {
+                for i in 0..self.players.len() {
+                    ret_vec.push(i)
+                }
+            }
+            EffectedPlayers::AllOthers => {
+                for i in 0..self.players.len() {
+                    ret_vec.push(i)
+                }
+                ret_vec.retain(|value| *value != self.get_current_player_index());
+            }
+        }
+        ret_vec
     }
 
     fn resolve_runtime_i32(&self, val: &RuntimeI32) -> i32 {
