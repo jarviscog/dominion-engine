@@ -48,8 +48,8 @@ if let Some(steps) = card::Card::market().get_steps() {
 
 ## High level overview
 
-#### Node
-The game history is represented as a tree of nodes. Nodes are operations That will happen in a game, and should be atomic and simple. An example tree may look something like this:
+### Node
+The game history is represented as a tree of nodes. Nodes are operations that will happen in a game, and should be atomic and simple. An example tree may look something like this:
 
 ```
 Root
@@ -82,7 +82,7 @@ Root
 Each node has a `NodeType` that explanin the operation that needs to happen
 The actual operation of the node happens when the node is visited. 
 
-#### NodeTemplate
+### NodeTemplate
 
 Steps on a card are stored as `NodeTemplate`s. These templates also defined as a tree
 
@@ -112,12 +112,12 @@ There are a few key ideas to keep things organized
     - No Player Decisions
 - All nodes should be reversible
 
-#### RuntimeI32, RuntimeCardName, RuntimeCardType
+### RuntimeI32, RuntimeCardName, RuntimeCardType
 
 There are many pieces of information that will not be known until the card has already been played. Cellar, for example doesn't know how many cards need to be drawn until the player has discarded a certain number of cards. This is stored as a RuntimeXXXXX, which gets resolved as it is needed using the game state. 
 
 
-#### Context
+### Context
 
 One of the hardest things about this system is that there are often times where information needs to be passed between nodes in the tree. 
 Remodel needs to know the cost of a card that was trashed, while Cellar needs to know the number of cards discarded. 
