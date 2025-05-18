@@ -14,7 +14,6 @@ pub enum NodeType {
 
     // === Basic effects ===
     PlusAction(RuntimeI32),
-    PlusCard(RuntimeI32),
     PlusBuy(RuntimeI32),
     PlusCoin(RuntimeI32),
 
@@ -32,8 +31,6 @@ pub enum NodeType {
         Location,
         Location,
     ),
-    DrawCard(RuntimeI32),
-    DiscardCard(RuntimeI32),
 
     GotoActionPhase,
     ThroneRoom,
@@ -46,7 +43,6 @@ impl fmt::Display for NodeType {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Self::PlusBuy(x) => write!(f, "+{} Buy", x),
-            Self::DrawCard(x) => write!(f, "+{} Card", x),
             Self::PlusAction(x) => write!(f, "+{} Action", x),
             Self::PlusCoin(x) => write!(f, "+{} 🪙", x),
 

@@ -11,7 +11,6 @@ pub enum NodeTemplate {
     Root,
     // GAME NODE TYPES
     Setup,
-    Turn,
     ScoreCount,
     // PHASE NODE TYPES
     Action,

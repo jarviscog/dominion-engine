@@ -73,7 +73,13 @@ fn test_game_1(game: &mut Game) {
                         Vec::new(),
                     ))),
                     Rc::new(RefCell::new(Node::new_full(
-                        NodeType::DrawCard(RuntimeI32::Const(2)),
+                        NodeType::TransferCards(
+                            true,
+                            EffectedPlayers::You,
+                            Some(vec![CardFilter::CardCountEquals(RuntimeI32::Const(2))]),
+                            Location::DeckTop,
+                            Location::Hand,
+                        ),
                         0,
                         Vec::new(),
                     ))),

@@ -70,7 +70,6 @@ impl fmt::Display for Node {
             NodeType::Night => write!(f, "Night Phase for player: {}", self.player_id),
             NodeType::PlusCoin(x) => write!(f, "+{} 🪙", x),
             NodeType::PlusBuy(x) => write!(f, "+{} Buy", x),
-            NodeType::DrawCard(x) => write!(f, "+{} Card", x),
             NodeType::PlusAction(x) => write!(f, "+{} Action", x),
             _ => write!(f, "{:?}", self),
         }
