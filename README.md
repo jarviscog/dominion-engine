@@ -91,10 +91,10 @@ To add nodes to the tree, they must be converted from a `NodeTemplate` to a `Nod
 An good example to understand would be Throne Room. 
 - The NodeTemplate for throne room is `NodeTemplate::RepeatCardXTimes(RuntimeI32, RuntimeCardName)`
 - When converting from `NodeTemplate` to `Node`
-    - The player chooses a card
-    - The card steps are retrieved
-    - Those steps are converted into nodes
-    - The nodes are inserted into the
+    - The player chooses an action card
+    - The card `NodeTemplate` is retrieved
+    - The `NodeTemplate` is converted into a Node
+    - The node are inserted into the game history, and ran
 ```
 ├─ Action (Player 2)
 │  ├─ ThroneRoom (Village) 
