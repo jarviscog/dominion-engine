@@ -51,63 +51,6 @@ fn test_run_card_steps(in_game: &mut Game) {
     //    }
 }
 
-fn test_game_1(game: &mut Game) {
-    let example_node = Node::new_full(
-        NodeType::Root,
-        0,
-        vec![
-            Rc::new(RefCell::new(Node::new_full(NodeType::Setup, 0, vec![]))),
-            Rc::new(RefCell::new(Node::new_full(NodeType::Setup, 1, vec![]))),
-            Rc::new(RefCell::new(Node::new_full(
-                NodeType::Action,
-                0,
-                vec![
-                    Rc::new(RefCell::new(Node::new_full(
-                        NodeType::PlusCoin(RuntimeI32::Const(1)),
-                        0,
-                        Vec::new(),
-                    ))),
-                    Rc::new(RefCell::new(Node::new_full(
-                        NodeType::PlusAction(RuntimeI32::Const(2)),
-                        0,
-                        Vec::new(),
-                    ))),
-                    Rc::new(RefCell::new(Node::new_full(
-                        NodeType::TransferCards(
-                            true,
-                            EffectedPlayers::You,
-                            Some(vec![CardFilter::CardCountEquals(RuntimeI32::Const(2))]),
-                            Location::DeckTop,
-                            Location::Hand,
-                        ),
-                        0,
-                        Vec::new(),
-                    ))),
-                ],
-            ))),
-            Rc::new(RefCell::new(Node::new_full(
-                NodeType::Buy,
-                0,
-                vec![Rc::new(RefCell::new(Node::new_full(
-                    NodeType::PlusCoin(RuntimeI32::Const(1)),
-                    0,
-                    Vec::new(),
-                )))],
-            ))),
-            Rc::new(RefCell::new(Node::new_full(
-                NodeType::Action,
-                1,
-                vec![Rc::new(RefCell::new(Node::new_full(
-                    NodeType::PlusCoin(RuntimeI32::Const(1)),
-                    1,
-                    Vec::new(),
-                )))],
-            ))),
-        ],
-    );
-    game.set_game_state(example_node);
-}
-
 fn main() {
     let mut new_game = Game::new();
     new_game.add_terminal_player("Jarvis".to_owned());
