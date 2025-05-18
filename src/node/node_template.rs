@@ -71,7 +71,7 @@ pub enum NodeTemplate {
     /// https://wiki.dominionstrategy.com/index.php/Throne_Room_variant
     /// `RuntimeValue`, number of times to play the card
     /// `Vec<CardFilter>` List of filters for the card to be played
-    PlayCardXTimes(RuntimeValue, Vec<CardFilter>),
+    PlayCardXTimes(RuntimeI32, Vec<CardFilter>),
 
     // You may play an Action card from your hand twice.
     //      PlayCardXTimes(2, Type(Action))
