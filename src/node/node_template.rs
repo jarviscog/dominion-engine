@@ -179,12 +179,6 @@ impl fmt::Display for NodeTemplate {
 
                 write!(f, "{}", output_string)
             }
-            Self::ExtractValue(value_to_extract, location_to_extract_from, step_to_play) => {
-                let mut output_string = String::from(format!("{}", step_to_play));
-                let function = format!("{:?}({})", value_to_extract, location_to_extract_from);
-                output_string = output_string.replace("FromAbove", &function);
-                write!(f, "  {}", output_string)
-            }
             _ => write!(f, "{:?}", self),
         }
     }
