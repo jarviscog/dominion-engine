@@ -74,48 +74,86 @@ impl Player {
         self.coins
     }
 
-    pub fn sub_coins(&mut self, val: u32) -> Result<(), String> {
-        if val > self.coins {
-            return Err("Not enough coins".to_owned())
-        } 
-        self.coins -= val;
-        Ok(())
-    }
-
     pub fn get_debt(&self) -> u32 {
         self.debt
     }
 
-    pub fn add_actions(&mut self, val: u32) {
-        self.actions += val
+    pub fn add_actions(&mut self, val: i32) {
+        if let Some(actions) = i32::try_from(self.actions).ok() {
+            let result = actions + val;
+            if result > 0 {
+                self.actions = result as u32
+            } else {
+                println!("Cannot set negative buys")
+            }
+        }
     }
 
-    pub fn sub_actions(&mut self, val: u32) -> Result<(), String> {
-        if val > self.actions {
-            return Err("Not enough actions".to_owned())
-        } 
-        self.actions -= val;
-        Ok(())
+    pub fn add_buys(&mut self, val: i32) {
+        if let Some(buys) = i32::try_from(self.buys).ok() {
+            let result = buys + val;
+            if result > 0 {
+                self.buys = result as u32
+            } else {
+                println!("Cannot set negative buys")
+            }
+        }
     }
 
-    pub fn add_buys(&mut self, val: u32) {
-        self.buys += val
+    pub fn add_coins(&mut self, val: i32) {
+        if let Some(coins) = i32::try_from(self.coins).ok() {
+            let result = coins + val;
+            if result > 0 {
+                self.coins = result as u32
+            } else {
+                println!("Cannot set negative coins")
+            }
+        }
     }
 
-    pub fn sub_buys(&mut self, val: u32) -> Result<(), String> {
-        if val > self.buys {
-            return Err("Not enough buys".to_owned())
-        } 
-        self.buys -= val;
-        Ok(())
+    pub fn add_debt(&mut self, val: i32) {
+        if let Some(debt) = i32::try_from(self.debt).ok() {
+            let result = debt + val;
+            if result > 0 {
+                self.debt = result as u32
+            } else {
+                println!("Cannot set negative debt")
+            }
+        }
     }
 
-    pub fn add_coins(&mut self, val: u32) {
-        self.coins += val
+    pub fn draw_cards(&mut self, number_of_cards: u32) {
+        println!("Drawing {} cards", number_of_cards);
+        let mut number_of_cards_drawn = 0;
+        while number_of_cards_drawn < number_of_cards {
+
+            if let Some(card) = self.deck.pop_card() {
+                self.hand.push_card(card);
+            } else {
+                // We need to shuffle the discards to draw another card
+                self.shuffle_discard_into_deck();
+                if let Some(card) = self.deck.pop_card() {
+                    self.hand.push_card(card);
+                } else {
+                    println!("INFO: No more cards to shuffle. All cards must be in your hand");
+                    return
+                }
+            }
+            number_of_cards_drawn += 1;
+        }
     }
 
-    pub fn add_debt(&mut self, val: u32) {
-        self.debt += val
+    pub fn remove_card(&mut self, location: Location, filters: Vec<CardFilter>) -> Option<Card> {
+        // TODO Pop Card(s) from a location that meet some filters
+        todo!()
+    }
+
+    pub fn shuffle_discard_into_deck(&mut self) {
+        let mut cards = self.discard.pop_all_cards();
+        // TODO actually do the shuffle
+        for card in cards {
+            self.deck.push_card(card);
+        }
     }
 
     fn get_all_cards(&self) -> Vec<Card> {
@@ -130,13 +168,11 @@ impl Player {
     /// Get the total cards the player has, including deck, discard, hand
     /// Used to calculate VPs for Gardens
     pub fn total_cards(&self) -> u32 {
-        // TODO This may be unsafe
-        (
-            self.hand.size() +
-            self.deck.size() +
-            self.discard.size() +
-            self.in_play.size()
-        ) as u32
+        self.hand.size().saturating_add(
+            self.deck
+                .size()
+                .saturating_add(self.discard.size().saturating_add(self.in_play.size())),
+        )
     }
 
     pub fn get_hand(&self) -> Vec<Card> {
@@ -157,6 +193,11 @@ impl Player {
             "Actions: {:<8} Buys: {:<8} Coins: {:<8} Debt: {:<8}",
             self.actions, self.buys, self.coins, self.debt
         );
+        print!("Cards in hand: ");
+        for card in self.hand.clone().into_iter() {
+            print!("{} ", card.get_name())
+        }
+        println!("");
         println!("");
     }
 }
