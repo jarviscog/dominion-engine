@@ -33,7 +33,22 @@ pub fn register() -> Vec<(&'static str, fn() -> Card)> {
 }
 
 impl Card {
-    pub fn harem() -> Card {
+
+
+    pub fn duke() -> Card {
+        Card {
+            name: "Duke".to_owned(),
+            expansion: Expansion::Intrigue,
+            card_type: vec![
+                CardType::Treasure(RuntimeI32::Const(2)),
+                CardType::Victory(RuntimeI32::Const(2)),
+            ],
+            cost: vec![Cost::Coin(6)],
+            on_gain: None,
+        }
+    }
+
+    pub fn farm() -> Card {
         Card {
             name: "Farm".to_owned(),
             expansion: Expansion::Intrigue,
