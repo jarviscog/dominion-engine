@@ -37,11 +37,6 @@ pub enum NodeType {
 
     GotoActionPhase,
     ThroneRoom,
-    Conditional {
-        condition: Condition,
-        then_branch: Vec<Node>,
-        else_branch: Vec<Node>,
-    },
     Choice {
         options: Vec<Node>, // e.g., "Choose one"
     },
