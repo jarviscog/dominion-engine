@@ -49,12 +49,14 @@ pub enum NodeTemplate {
     /// `Option<Vec<CardFilter>>` Optional Filters for what cards need to be transferred,
     /// `Location`, From
     /// `Location`, To
+    /// 'Option<String>' Store this operation in a key value pair to be used at a later date
     TransferCards(
         bool,
         EffectedPlayers,
         Option<Vec<CardFilter>>,
         Location,
         Location,
+        Option<String>,
     ),
 
     /// https://wiki.dominionstrategy.com/index.php/Throne_Room_variant
@@ -90,11 +92,7 @@ pub enum NodeTemplate {
         Location,
     ),
 
-    Conditional (
-        Condition,
-        Box<NodeTemplate>,
-        Box<NodeTemplate>,
-    ),
+    Conditional(Condition, Box<NodeTemplate>, Box<NodeTemplate>),
 
     IgnoreAttacks,
 
@@ -135,7 +133,14 @@ impl fmt::Display for NodeTemplate {
             Self::Or(step1, step2) => write!(f, "Choose:\n\r{}\n\r{}", step1, step2),
             Self::RepeatUntil(cond, s) => write!(f, "Repeat until {:?}:\n\t{}\n", cond, s),
 
-            Self::TransferCards(force, effected_players, optional_filters, from, to) => {
+            Self::TransferCards(
+                force,
+                effected_players,
+                optional_filters,
+                from,
+                to,
+                store_context,
+            ) => {
                 let mut output_string = String::new();
 
                 output_string.push_str(match effected_players {
