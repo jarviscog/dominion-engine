@@ -63,6 +63,10 @@ impl Bank {
         }
     }
 
+    pub fn get_trash(&self) -> Vec<Card> {
+        self.trash.to_card_vec()
+    }
+
     /// Attempt to take a card from the supply.
     /// If the card is removed, will return the Card
     /// If not, will return None

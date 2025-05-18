@@ -20,6 +20,7 @@ pub struct Player {
     discard: Pile,
     in_play: Pile,
 
+    internal_buffer: Pile,
     // Statevalues; Should be reset at end of turn
     actions: u32,
     buys: u32,
@@ -36,6 +37,7 @@ impl Player {
             deck: Pile::starter_deck(),
             discard: Pile::new(),
             in_play: Pile::new(),
+            internal_buffer: Pile::new(),
             actions: 1,
             buys: 1,
             coins: 0,
@@ -51,6 +53,7 @@ impl Player {
             deck: Pile::starter_deck(),
             discard: Pile::new(),
             in_play: Pile::new(),
+            internal_buffer: Pile::new(),
             actions: 1,
             buys: 1,
             coins: 0,
@@ -174,8 +177,20 @@ impl Player {
         )
     }
 
+    pub fn get_deck(&self) -> Vec<Card> {
+        self.deck.to_card_vec()
+    }
     pub fn get_hand(&self) -> Vec<Card> {
         self.hand.to_card_vec()
+    }
+    pub fn get_discard(&self) -> Vec<Card> {
+        self.discard.to_card_vec()
+    }
+    pub fn get_in_play(&self) -> Vec<Card> {
+        self.in_play.to_card_vec()
+    }
+    pub fn get_internal_buffer(&self) -> Vec<Card> {
+        self.internal_buffer.to_card_vec()
     }
 
     pub fn print_state(&self) {
