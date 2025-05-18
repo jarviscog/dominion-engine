@@ -14,6 +14,7 @@ pub use crate::runtime_values::*;
 pub mod dark_ages;
 pub mod dominion;
 pub mod empires;
+pub mod hinterlands;
 pub mod intrigue;
 pub mod prosperity;
 pub mod seaside;
@@ -29,6 +30,7 @@ fn build_registry() -> HashMap<&'static str, CardFactory> {
     dominion::register()
         .into_iter()
         .chain(intrigue::register())
+        .chain(prosperity::register())
         .collect()
 }
 #[ctor::ctor]
