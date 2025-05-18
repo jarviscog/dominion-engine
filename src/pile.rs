@@ -1,7 +1,7 @@
 use crate::card::Card;
 
 /// A pile of cards. This could be a hand, deck, discard, or supply pile
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Pile {
     cards: Vec<Card>,
 }
@@ -53,6 +53,17 @@ impl Pile {
         self.cards.pop()
     }
 
+    pub fn pop_all_cards(&mut self) -> Vec<Card> {
+        // TODO This could be a performance issue
+        let all_cards = self.cards.clone();
+        self.cards = Vec::new();
+        all_cards
+    }
+
+    pub fn push_card(&mut self, in_card: Card) {
+        self.cards.push(in_card)
+    }
+
     pub fn top_card_name(&self) -> Option<String> {
         if let Some(c) = self.cards.last() {
             return Some(c.get_name());
@@ -74,5 +85,30 @@ impl Pile {
         for card in &self.cards {
             println!("{:?}", card);
         }
+    }
+}
+
+// This struct will hold the state of the iteration
+pub struct PileIter {
+    inner: std::vec::IntoIter<Card>,
+}
+
+impl IntoIterator for Pile {
+    type Item = Card;
+    type IntoIter = PileIter;
+
+    fn into_iter(self) -> Self::IntoIter {
+        PileIter {
+            inner: self.cards.into_iter(),
+        }
+    }
+}
+
+// Implement `Iterator` for your custom iterator
+impl Iterator for PileIter {
+    type Item = Card;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.inner.next()
     }
 }
