@@ -122,12 +122,10 @@ impl Bank {
         }
 
         // Set up curses
-        self.curses = Pile::from(((player_count-1) * 10) as u8, Card::curse());
-        
-        // Gardens
-        if self.supply_contains_card(Card::gardens()) {
+        self.curses = Pile::from(((player_count - 1) * 10) as u8, Card::curse());
 
-        }
+        // Gardens
+        if self.supply_contains_card(Card::gardens()) {}
 
         // TODO
         // Gardens should contain 12 cards, not 10
