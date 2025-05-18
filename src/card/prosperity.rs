@@ -1,5 +1,37 @@
 use super::*;
 
+pub fn register() -> Vec<(&'static str, fn() -> Card)> {
+    vec![
+        ("Platinum", Card::platinum),
+        ("Colony", Card::colony),
+        //("Anvil", Card::anvil),
+        //("Watchtower", Card::watchtower),
+        //("Bishop", Card::bishop),
+        //("Clerk", Card::clerk),
+        //("Investment", Card::investment),
+        //("Monument", Card::monument),
+        //("Quarry", Card::quarry),
+        //("Tiara", Card::tiara),
+        ("Worker's Village", Card::workers_village),
+        //("Charlatan", Card::charlatan),
+        //("City", Card::city),
+        //("Collection", Card::collection),
+        //("Crystal Ball", Card::crystal_ball),
+        //("Magnate", Card::magnate),
+        //("Mint", Card::mint),
+        //("Rabble", Card::rabble),
+        //("Vault", Card::vault),
+        //("War Chest", Card::war_chest),
+        //("Hoard", Card::hoard),
+        //("Grand Market", Card::grand_market),
+        ("Bank", Card::bank),
+        //("Expand", Card::expand),
+        //("Forge", Card::forge),
+        //("King's Court", Card::kings_court),
+        //("Peddler", Card::peddler),
+    ]
+}
+
 impl Card {
     pub fn platinum() -> Card {
         Card {
