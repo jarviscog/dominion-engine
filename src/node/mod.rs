@@ -1,7 +1,9 @@
 pub mod node;
 pub use node::*;
-pub mod node_types;
-pub use node_types::*;
+pub mod node_template;
+pub use node_template::*;
+pub mod node_type;
+pub use node_type::*;
 pub mod node_enums;
 pub use node_enums::*;
 

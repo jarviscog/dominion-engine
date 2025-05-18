@@ -9,7 +9,6 @@ mod current_game_state;
 mod decision;
 use colored::Colorize;
 
-
 pub use choice::Choice;
 pub use current_game_state::CurrentGameState;
 pub use decision::Decision;
@@ -19,8 +18,8 @@ use crate::card::Card;
 use crate::node::event_listener::EventListener;
 use crate::node::node::Node;
 pub use crate::node::*;
-use crate::runtime_values::*;
 use crate::player::*;
+use crate::runtime_values::*;
 use node_template;
 
 pub mod node_operations;
