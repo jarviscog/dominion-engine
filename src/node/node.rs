@@ -36,6 +36,15 @@ impl Node {
         }
     }
 
+    pub fn none() -> Node {
+        Node {
+            node_type: NodeType::Null,
+            player_id: 0,
+            children: Vec::new(),
+            visited: true,
+        }
+    }
+
     pub fn add_child(&mut self, child: Node) {
         self.children.push(Rc::new(RefCell::new(child)));
     }
