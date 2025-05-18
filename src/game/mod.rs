@@ -324,7 +324,34 @@ impl Game {
     }
 
     fn resolve_condition(&self, condition: &Condition) -> bool {
-        todo!()
+        return match condition {
+            Condition::EqualI32(x, y) => {
+                self.resolve_runtime_i32(x) == self.resolve_runtime_i32(y)
+            }
+            Condition::EqualCardName(x, y) => {
+                self.resolve_runtime_card_name(x) == self.resolve_runtime_card_name(y)
+            }
+            Condition::ContextContainsCard(context) => {
+                self.context_map.contains_key(context)
+            }
+            Condition::EqualStackSize(location, runtime_size) => {
+                let index = self.get_current_player_index();
+                let pile_size = match location {
+                    Location::Hand => self.players.get(index).unwrap().get_hand().len(),
+                    Location::Discard => self.players.get(index).unwrap().get_discard().len(),
+                    Location::InPlay => self.players.get(index).unwrap().get_in_play().len(),
+                    Location::Trash => self.bank.get_trash().len(),
+                    Location::InternalBuffer => self.players.get(index).unwrap().get_internal_buffer().len(),
+                    Location::DeckTop => 1,
+                    Location::Supply => panic!("Tried to get size of supply"),
+                    Location::SearchDeck => panic!("Tried to get size of Location::SearchDeck"),
+                };
+                let size = self.resolve_runtime_i32(runtime_size);
+                return pile_size as i32 == size;
+            }
+            Condition::EqualCardType(x, y) => todo!( ),
+            Condition::NotInBuyPhase => todo!(),
+        };
     }
 
     pub fn get_current_player_hand(&self) -> Vec<Card> {
