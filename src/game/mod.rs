@@ -183,38 +183,11 @@ impl Game {
         }
     }
 
-    /// Using the current game context, convert a NodeTemplate into a real Node
-    pub fn convert_node_template_to_node(&self, node_template: NodeTemplate) -> Node {
-        // TODO This is currently not recursive, so all Sub NodeTemplates will be dropped
-        match node_template {
-            NodeTemplate::Root => {
-                panic!()
-            }
-            NodeTemplate::PlusCoin(value) => {
-                Node::new(NodeType::PlusCoin(value), self.get_current_player_index())
-            }
-            NodeTemplate::PlusAction(value) => {
-                Node::new(NodeType::PlusAction(value), self.get_current_player_index())
-            }
-            NodeTemplate::PlusBuy(value) => {
-                Node::new(NodeType::PlusBuy(value), self.get_current_player_index())
-            }
-            NodeTemplate::DrawCard(value) => {
-                Node::new(NodeType::DrawCard(value), self.get_current_player_index())
-            }
-            NodeTemplate::DiscardCard(value) => Node::new(
-                NodeType::DiscardCard(value),
-                self.get_current_player_index(),
-            ),
-            _ => todo!("convert_node_template_to_node {:?}", node_template),
-        }
-    }
-
     /// Insert steps from a card into the current node.
     /// This will convert them from NodeTemplate to a real Node
     pub fn insert_into_current_node(&mut self, node_steps: Vec<NodeTemplate>) {
         for step in node_steps {
-            let new_node = self.convert_node_template_to_node(step);
+            let new_node = self.resolve_template(step);
             self.current_node.borrow_mut().add_child(new_node);
         }
     }
@@ -239,10 +212,6 @@ impl Game {
             NodeType::PlusBuy(runtime_value) => {
                 let value = self.resolve_runtime_i32(runtime_value);
                 self.atomic_add_buys(node.player_id, value);
-            }
-            NodeType::DrawCard(runtime_value) => {
-                let value = self.resolve_runtime_i32(runtime_value);
-                self.atomic_draw_cards(node.player_id, value);
             }
             _ => todo!("apply_step: {}", &node), // ...
         }
@@ -285,6 +254,37 @@ impl Game {
             player.add_debt(amount);
         } else {
             println!("ERROR: Failed to index player_id: {player_id}")
+        }
+    }
+
+    fn resolve_template(&mut self, node_template: NodeTemplate) -> Node {
+        let current_player_index = self.get_current_player_index();
+        match node_template {
+            NodeTemplate::Root => Node::new(NodeType::Root, current_player_index),
+            NodeTemplate::Setup => Node::new(NodeType::Setup, current_player_index),
+            NodeTemplate::Action => Node::new(NodeType::Action, current_player_index),
+            NodeTemplate::Buy => Node::new(NodeType::Buy, current_player_index),
+            NodeTemplate::Night => Node::new(NodeType::Night, current_player_index),
+            NodeTemplate::PlusAction(runtime_i32) => {
+                Node::new(NodeType::PlusAction(runtime_i32), current_player_index)
+            }
+            NodeTemplate::PlusCoin(runtime_i32) => {
+                Node::new(NodeType::PlusCoin(runtime_i32), current_player_index)
+            }
+            NodeTemplate::PlusBuy(runtime_i32) => {
+                Node::new(NodeType::PlusBuy(runtime_i32), current_player_index)
+            }
+            NodeTemplate::DrawCard(runtime_i32) => {
+                Node::new(NodeType::TransferCards(
+                    true, 
+                    EffectedPlayers::You, 
+                    Some(vec![CardFilter::CardCountEquals(runtime_i32)]), 
+                    Location::DeckTop, 
+                    Location::Hand
+                )
+                , current_player_index)
+            }
+            _ => todo!("resolve_template {:?}", node_template),
         }
     }
 
