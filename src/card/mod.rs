@@ -54,6 +54,10 @@ impl Card {
         self.name.clone()
     }
 
+    pub fn get_card_types(&self) -> Vec<CardType> {
+        self.card_type.clone()
+    }
+
     pub fn get_action_steps(&self) -> Option<Vec<NodeTemplate>> {
         for c_type in &self.card_type {
             return match c_type {

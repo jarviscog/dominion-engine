@@ -1,4 +1,5 @@
 use std::cell::RefCell;
+use std::collections::HashMap;
 use std::fmt::{self, Write};
 use std::iter;
 use std::ops::IndexMut;
@@ -15,6 +16,7 @@ pub use decision::Decision;
 
 use crate::bank::Bank;
 use crate::card::Card;
+use crate::card_type::CardType;
 use crate::node::event_listener::EventListener;
 use crate::node::node::Node;
 pub use crate::node::*;
@@ -25,30 +27,32 @@ use node_template;
 pub mod node_operations;
 
 pub struct Game {
+    turn_number: u8,
+    next_node_id: usize,
     players: Vec<Player>,
     bank: Bank,
-    turn_number: u8,
     current_state: CurrentGameState,
     current_player_index: usize,
+    context_map: HashMap<String, Vec<Card>>,
     game_state: Rc<RefCell<Node>>,
     current_node: Rc<RefCell<Node>>,
     event_listeners: Vec<EventListener>,
-    next_node_id: usize,
 }
 
 impl Game {
     pub fn new() -> Game {
         let root_node = Rc::new(RefCell::new(Node::new(NodeType::Root, 0)));
         Game {
+            turn_number: 0,
+            next_node_id: 1,
             players: Vec::new(),
             bank: Bank::new(),
             current_state: CurrentGameState::GameNotStarted,
-            turn_number: 0,
             current_player_index: 0,
+            context_map: HashMap::new(),
             game_state: Rc::clone(&root_node),
             current_node: Rc::clone(&root_node),
             event_listeners: Vec::new(),
-            next_node_id: 1,
         }
     }
 
@@ -290,6 +294,32 @@ impl Game {
             RuntimeI32::Add(x, y) => self.resolve_runtime_i32(x) + self.resolve_runtime_i32(y),
             RuntimeI32::Mult(x, y) => self.resolve_runtime_i32(x) * self.resolve_runtime_i32(y),
             _ => todo!(),
+        };
+    }
+
+    fn resolve_runtime_card_name(&self, name: &RuntimeCardName) -> String {
+        return match name {
+            RuntimeCardName::Const(str_name) => str_name.to_string(),
+            RuntimeCardName::FromContext(context_str) => {
+                if let Some(card) = self.context_map.get(context_str) {
+                    card.first().unwrap().get_name()
+                } else {
+                    panic!("Could not find card in context! {context_str}")
+                }
+            }
+        };
+    }
+
+    fn resolve_runtime_card_type(&self, in_type: &RuntimeCardType) -> Vec<CardType> {
+        return match in_type {
+            RuntimeCardType::Const(const_type) => vec![const_type.clone()],
+            RuntimeCardType::FromContext(context_str) => {
+                if let Some(card) = self.context_map.get(context_str) {
+                    card.first().unwrap().get_card_types()
+                } else {
+                    panic!("Could not find card in context! {context_str}")
+                }
+            }
         };
     }
 
