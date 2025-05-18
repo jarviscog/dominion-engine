@@ -58,16 +58,6 @@ pub enum NodeTemplate {
         Location,
     ),
 
-    /// Apply some step based on some condition in a pile
-    /// `ExtractedValueType` The value to extract. This could be number of cards, value of cards, etc.
-    /// `Location` The location to extract the value from
-    /// `StepNode` The step that will use the resulting value. This will use RuntimeValue::FromAbove
-    /// e.x.
-    ///     (Number of cards in deck)/10 -> VP for gardens
-    ///     (number of cards in InternalBuffer) -> +# Card for Cellar
-    ///     (cost of cards in InternalBuffer)+3 -> +# Card for Mine
-    ExtractValue(ExtractedValueType, Location, Box<NodeTemplate>),
-
     /// https://wiki.dominionstrategy.com/index.php/Throne_Room_variant
     /// `RuntimeValue`, number of times to play the card
     /// `Vec<CardFilter>` List of filters for the card to be played
