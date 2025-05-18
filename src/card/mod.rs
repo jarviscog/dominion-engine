@@ -19,6 +19,25 @@ pub mod prosperity;
 pub mod seaside;
 pub mod test_cards;
 
+
+use std::collections::HashMap;
+use std::sync::OnceLock;
+
+// Registry setup
+type CardFactory = fn() -> Card;
+static CARD_REGISTRY: OnceLock<HashMap<&'static str, CardFactory>> = OnceLock::new();
+fn build_registry() -> HashMap<&'static str, CardFactory> {
+    dominion::register()
+        .into_iter()
+        .chain(intrigue::register())
+        .collect()
+}
+#[ctor::ctor]
+fn init_card_registry() {
+    CARD_REGISTRY.set(build_registry()).unwrap();
+}
+
+
 #[derive(Debug, Clone)]
 pub struct Card {
     name: String,
@@ -28,7 +47,13 @@ pub struct Card {
     cost: Vec<Cost>,
 }
 
+
 impl Card {
+
+    pub fn get_by_name(name: &str) -> Option<Card> {
+        CARD_REGISTRY.get().unwrap().get(name).map(|f| f())
+    }
+
     pub fn get_name(&self) -> String {
         self.name.clone()
     }

@@ -1,9 +1,41 @@
 use super::*;
 
+pub fn register() -> Vec<(&'static str, fn() -> Card)> {
+    vec![
+        ("Courtyard", Card::courtyard),
+        //("Baron", Card::baron),
+        //("Bridge", Card::bridge),
+        //("Conspirator", Card::conspirator),
+        //("Courtier", Card::courtier),
+        //("Diplomat", Card::diplomat),
+        ("Duke", Card::duke),
+        ("Farm", Card::farm),
+        //("Ironworks", Card::ironworks),
+        //("Lurker", Card::lurker),
+        //("Masquerade", Card::masquerade),
+        //("Mill", Card::mill),
+        //("Mining Village", Card::mining_village),
+        //("Minion", Card::minion),
+        //("Nobles", Card::nobles),
+        //("Patrol", Card::patrol),
+        //("Pawn", Card::pawn),
+        //("Replace", Card::replace),
+        //("Secret Passage", Card::secret_passage),
+        //("Shanty Town", Card::shanty_town),
+        //("Steward", Card::steward),
+        //("Swindler", Card::swindler),
+        //("Torturer", Card::torturer),
+        //("Trading Post", Card::tradingpost),
+        //("Upgrade", Card::upgrade),
+        //("Wishing Well", Card::wishing_well),
+
+    ]
+}
+
 impl Card {
     pub fn harem() -> Card {
         Card {
-            name: "Harem".to_owned(),
+            name: "Farm".to_owned(),
             expansion: Expansion::Intrigue,
             card_type: vec![
                 CardType::Treasure(RuntimeI32::Const(2)),
