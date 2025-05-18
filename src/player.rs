@@ -126,7 +126,6 @@ impl Player {
         println!("Drawing {} cards", number_of_cards);
         let mut number_of_cards_drawn = 0;
         while number_of_cards_drawn < number_of_cards {
-
             if let Some(card) = self.deck.pop_card() {
                 self.hand.push_card(card);
             } else {
@@ -136,7 +135,7 @@ impl Player {
                     self.hand.push_card(card);
                 } else {
                     println!("INFO: No more cards to shuffle. All cards must be in your hand");
-                    return
+                    return;
                 }
             }
             number_of_cards_drawn += 1;

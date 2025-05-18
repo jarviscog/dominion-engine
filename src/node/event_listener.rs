@@ -1,4 +1,3 @@
-
 use crate::card::RuntimePlayerIndex;
 
 use super::{EventListenerDestructCondition, EventListenerFireCondition, Node, NodeTemplate};
@@ -9,7 +8,7 @@ pub struct EventListener {
     pub played_by: RuntimePlayerIndex,
     pub fire_condition: EventListenerFireCondition, // When to fire the EventListener
     pub destruct_condition: EventListenerDestructCondition, // When to destuct the EventListener
-    pub steps: Vec<NodeTemplate>,                       // Steps to take when the EventListener fires
+    pub steps: Vec<NodeTemplate>,                   // Steps to take when the EventListener fires
     pub destruct_on_fire: bool,
 }
 

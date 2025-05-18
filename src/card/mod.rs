@@ -11,14 +11,13 @@ use crate::expansion::Expansion;
 pub use crate::runtime_values::*;
 
 // Functions to generate cards
-pub mod dominion;
-pub mod intrigue;
-pub mod seaside;
-pub mod prosperity;
-pub mod empires;
 pub mod dark_ages;
+pub mod dominion;
+pub mod empires;
+pub mod intrigue;
+pub mod prosperity;
+pub mod seaside;
 pub mod test_cards;
-
 
 #[derive(Debug, Clone)]
 pub struct Card {

@@ -1,7 +1,7 @@
 use std::fmt;
 
 use super::NodeTemplate;
-use crate::{runtime_values::RuntimeI32};
+use crate::runtime_values::RuntimeI32;
 
 // TODO There's a lot of spots that I don't like that you have to insert an empty vec to check a
 // card type. Maybe change that?

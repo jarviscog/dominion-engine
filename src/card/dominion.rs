@@ -158,9 +158,7 @@ impl Card {
             cost: vec![Cost::Coin(4)],
             on_gain: None,
             card_type: vec![CardType::Action(vec![
-
                 NodeTemplate::PlusCoin(RuntimeI32::Const(2)),
-
                 NodeTemplate::TransferCards(
                     true,
                     EffectedPlayers::AllOthers,
@@ -169,7 +167,6 @@ impl Card {
                     Location::Discard,
                     None,
                 ),
-
             ])],
         }
     }
@@ -186,16 +183,14 @@ impl Card {
                     None,
                     Location::Hand,
                     Location::Discard,
-                    Some("discarded-cards".to_string())
+                    Some("discarded-cards".to_string()),
                 ),
                 NodeTemplate::TransferCards(
                     true,
                     EffectedPlayers::You,
-                    Some(vec![
-                        CardFilter::CardCountEquals(
-                            RuntimeI32::CostFromContext("discarded-cards".to_string())
-                        )
-                    ]),
+                    Some(vec![CardFilter::CardCountEquals(
+                        RuntimeI32::CostFromContext("discarded-cards".to_string()),
+                    )]),
                     Location::InternalBuffer,
                     Location::Discard,
                     None,
@@ -246,9 +241,7 @@ impl Card {
                     NodeTemplate::TransferCards(
                         true,
                         EffectedPlayers::AllOthers,
-                        Some(vec![CardFilter::CardCountEquals(RuntimeI32::Const(
-                            2,
-                        ))]),
+                        Some(vec![CardFilter::CardCountEquals(RuntimeI32::Const(2))]),
                         Location::DeckTop,
                         Location::InternalBuffer,
                         None,
@@ -296,10 +289,9 @@ impl Card {
             on_gain: None,
             cost: vec![Cost::Coin(5)],
 
-            card_type: vec![
-                CardType::Action(vec![
-                    NodeTemplate::DrawCard(RuntimeI32::Const(2)),
-                    NodeTemplate::PlusAction(RuntimeI32::Const(1)),
+            card_type: vec![CardType::Action(vec![
+                NodeTemplate::DrawCard(RuntimeI32::Const(2)),
+                NodeTemplate::PlusAction(RuntimeI32::Const(1)),
             ])],
         }
     }
@@ -350,9 +342,7 @@ impl Card {
                 NodeTemplate::TransferCards(
                     true,
                     EffectedPlayers::You,
-                    Some(vec![CardFilter::CardCountEquals(RuntimeI32::Const(
-                        2,
-                    ))]),
+                    Some(vec![CardFilter::CardCountEquals(RuntimeI32::Const(2))]),
                     Location::DeckTop,
                     Location::InternalBuffer,
                     None,
@@ -431,14 +421,10 @@ impl Card {
                 NodeTemplate::TransferCards(
                     true,
                     EffectedPlayers::You,
-                    Some(vec![
-                        CardFilter::CoinCostUpto(
-                            RuntimeI32::Add(
-                                Box::new(RuntimeI32::CostFromContext("remodeled-card".to_string())),
-                                Box::new(RuntimeI32::Const(2)),
-                            )
-                        )
-                    ]),
+                    Some(vec![CardFilter::CoinCostUpto(RuntimeI32::Add(
+                        Box::new(RuntimeI32::CostFromContext("remodeled-card".to_string())),
+                        Box::new(RuntimeI32::Const(2)),
+                    ))]),
                     Location::Supply,
                     Location::Discard,
                     None,
@@ -453,17 +439,14 @@ impl Card {
             expansion: Expansion::Dominion,
             cost: vec![Cost::Coin(2)],
             on_gain: None,
-            card_type: vec![
-                CardType::Action(vec![NodeTemplate::TransferCards(
-                    false,
-                    EffectedPlayers::You,
-                    Some(vec![CardFilter::CardCountUpto(RuntimeI32::Const(4))]),
-                    Location::Hand,
-                    Location::Trash,
-                    None,
-                )
-                ])
-            ],
+            card_type: vec![CardType::Action(vec![NodeTemplate::TransferCards(
+                false,
+                EffectedPlayers::You,
+                Some(vec![CardFilter::CardCountUpto(RuntimeI32::Const(4))]),
+                Location::Hand,
+                Location::Trash,
+                None,
+            )])],
         }
     }
 
@@ -479,9 +462,7 @@ impl Card {
                 NodeTemplate::TransferCards(
                     true,
                     EffectedPlayers::AllOthers,
-                    Some(vec![
-                        CardFilter::CardCountEquals(RuntimeI32::Const(1))
-                    ]),
+                    Some(vec![CardFilter::CardCountEquals(RuntimeI32::Const(1))]),
                     Location::DeckTop,
                     Location::Hand,
                     None,
@@ -516,22 +497,18 @@ impl Card {
                 NodeTemplate::TransferCards(
                     false,
                     EffectedPlayers::You,
-                    Some(vec![CardFilter::Type(CardType::Treasure( RuntimeI32::Any,))]),
+                    Some(vec![CardFilter::Type(CardType::Treasure(RuntimeI32::Any))]),
                     Location::Hand,
                     Location::Trash,
-                    Some("mined-card".to_string())
+                    Some("mined-card".to_string()),
                 ),
                 NodeTemplate::TransferCards(
                     true,
                     EffectedPlayers::You,
-                    Some(vec![
-                        CardFilter::CoinCostUpto(
-                            RuntimeI32::Add(
-                                Box::new(RuntimeI32::CostFromContext("mined-card".to_string())), 
-                                Box::new(RuntimeI32::Const(3)),
-                            )
-                        )
-                    ]),
+                    Some(vec![CardFilter::CoinCostUpto(RuntimeI32::Add(
+                        Box::new(RuntimeI32::CostFromContext("mined-card".to_string())),
+                        Box::new(RuntimeI32::Const(3)),
+                    ))]),
                     Location::Supply,
                     Location::Trash,
                     None,
@@ -568,11 +545,11 @@ impl Card {
                     Some(vec![CardFilter::Name("Copper".to_owned())]),
                     Location::Hand,
                     Location::Trash,
-                    Some("moneylender-trash".to_string())
+                    Some("moneylender-trash".to_string()),
                 ),
                 NodeTemplate::Conditional(
-                    Condition::ContextContainsCard("moneylender-trash".to_string()), 
-                    Box::new(NodeTemplate::PlusCoin(RuntimeI32::Const(3))), 
+                    Condition::ContextContainsCard("moneylender-trash".to_string()),
+                    Box::new(NodeTemplate::PlusCoin(RuntimeI32::Const(3))),
                     Box::new(NodeTemplate::None),
                 ),
             ])],
@@ -601,12 +578,12 @@ impl Card {
                 ),
                 NodeTemplate::Conditional(
                     Condition::EqualCardType(
-                        RuntimeCardType::FromContext("vassal-discard".to_string()), 
-                        RuntimeCardType::Const(CardType::Action(vec![]))
-                    ), 
-                    Box::new(NodeTemplate::PlayCard(
-                        RuntimeCardName::FromContext("vassal-discard".to_string())
-                    )),
+                        RuntimeCardType::FromContext("vassal-discard".to_string()),
+                        RuntimeCardType::Const(CardType::Action(vec![])),
+                    ),
+                    Box::new(NodeTemplate::PlayCard(RuntimeCardName::FromContext(
+                        "vassal-discard".to_string(),
+                    ))),
                     Box::new(NodeTemplate::None),
                 ),
                 NodeTemplate::TransferCards(
@@ -641,15 +618,14 @@ impl Card {
             on_gain: None,
             card_type: vec![
                 CardType::Action(vec![NodeTemplate::DrawCard(RuntimeI32::Const(2))]),
-                CardType::Attack(vec![
-                    NodeTemplate::TransferCards(
-                        true,
-                        EffectedPlayers::AllOthers,
-                        Some(vec![CardFilter::Name("Curse".to_owned())]),
-                        Location::Supply,
-                        Location::Discard,
-                        None,
-                    )]),
+                CardType::Attack(vec![NodeTemplate::TransferCards(
+                    true,
+                    EffectedPlayers::AllOthers,
+                    Some(vec![CardFilter::Name("Curse".to_owned())]),
+                    Location::Supply,
+                    Location::Discard,
+                    None,
+                )]),
             ],
         }
     }

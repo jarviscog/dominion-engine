@@ -1,4 +1,3 @@
-
 use super::*;
 
 impl Card {
@@ -12,14 +11,11 @@ impl Card {
                 NodeTemplate::PlusCoin(RuntimeI32::Const(1)),
             ])],
             cost: vec![Cost::Coin(6)],
-            on_gain: Some(
-                NodeTemplate::Conditional(
-                    Condition::NotInBuyPhase, 
-                    Box::new(NodeTemplate::GotoActionPhase), 
-                    Box::new(NodeTemplate::PlusAction(RuntimeI32::Const(1))), 
-                ),
-            ),
+            on_gain: Some(NodeTemplate::Conditional(
+                Condition::NotInBuyPhase,
+                Box::new(NodeTemplate::GotoActionPhase),
+                Box::new(NodeTemplate::PlusAction(RuntimeI32::Const(1))),
+            )),
         }
     }
-
 }

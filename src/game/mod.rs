@@ -194,7 +194,6 @@ impl Game {
                     }
                     Decision::NameACard(x) => {
                         return Err("Cannot name a card during buy phase".to_owned())
-                    }
                     //&_ => todo!()
                 }
             }
@@ -209,7 +208,6 @@ impl Game {
     }
 
     /// Allow the current player to move a card
-    /// `play_anyways` allows you to play the card even if the game can't move it to InPlay 
     pub fn play_card(&mut self, card_to_play: &Card, from: Location, play_anyways: bool) -> Result<(), String> {
 
         return match self.current_state {
@@ -223,11 +221,8 @@ impl Game {
                 todo!()
             }
             CurrentGameState::GameFinished => {Err("WARNING. Cannot play card. Game over".to_owned())}
-
-        }
     }
 
-    /// Some values need to be resolved at runtime (such as the points for Gardens)
     pub fn resolve_runtime_value(&self, runtime_value: RuntimeValue) -> i32 {
         match runtime_value {
             RuntimeValue::Any => i32::max_value(),

@@ -1,18 +1,17 @@
-use std::fmt;
 use super::*;
 use crate::runtime_values::*;
+use std::fmt;
 
 /// Condition used for `Step::RepeatUntil`
 #[derive(Debug, Clone)]
 pub enum Condition {
-
     EqualI32(RuntimeI32, RuntimeI32),
     EqualCardName(RuntimeCardName, RuntimeCardName),
     EqualCardType(RuntimeCardType, RuntimeCardType),
     /// Check if a stack contains a certain number of cards
     EqualStackSize(Location, RuntimeI32),
     ContextContainsCard(String),
-    NotInBuyPhase
+    NotInBuyPhase,
 }
 
 impl fmt::Display for Condition {

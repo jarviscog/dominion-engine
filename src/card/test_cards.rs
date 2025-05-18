@@ -1,8 +1,6 @@
-
 use super::*;
 
 impl Card {
-
     pub fn plus_action_buy_coin() -> Card {
         Card {
             name: "Plus action, buy, coin".to_owned(),
@@ -22,9 +20,9 @@ impl Card {
             name: "Discard a card".to_owned(),
             expansion: Expansion::Custom,
             cost: vec![Cost::Coin(3)],
-            card_type: vec![CardType::Action(vec![
-                NodeTemplate::DiscardCard(RuntimeI32::Const(1))
-            ])],
+            card_type: vec![CardType::Action(vec![NodeTemplate::DiscardCard(
+                RuntimeI32::Const(1),
+            )])],
             on_gain: None,
         }
     }
@@ -36,21 +34,16 @@ impl Card {
             cost: vec![Cost::Coin(3)],
             card_type: vec![CardType::Action(vec![
                 NodeTemplate::TransferCards(
-                    true, 
-                    EffectedPlayers::All, 
-                    None, 
-                    Location::Hand, 
+                    true,
+                    EffectedPlayers::All,
+                    None,
+                    Location::Hand,
                     Location::Discard,
                     None,
                 ),
-                NodeTemplate::DiscardCard(RuntimeI32::Const(1))
+                NodeTemplate::DiscardCard(RuntimeI32::Const(1)),
             ])],
             on_gain: None,
         }
     }
 }
-
-
-
-
-

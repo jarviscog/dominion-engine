@@ -1,6 +1,6 @@
-use std::fmt;
 use super::*;
 use crate::runtime_values::*;
+use std::fmt;
 
 #[derive(Clone, Debug)]
 pub enum NodeType {
@@ -40,7 +40,6 @@ pub enum NodeType {
     Choice {
         options: Vec<Node>, // e.g., "Choose one"
     },
-
 }
 
 impl fmt::Display for NodeType {
