@@ -7,6 +7,8 @@ use std::rc::Rc;
 mod choice;
 mod current_game_state;
 mod decision;
+use colored::Colorize;
+
 
 pub use choice::Choice;
 pub use current_game_state::CurrentGameState;
@@ -293,33 +295,32 @@ impl Game {
     }
 
     pub fn print_game_state(&self) {
-        println!("Event History:");
-        for child in &self.game_state {
-            self.print_game_node(child);
+        println!("Game State:");
+        println!("Current Player: {}, ", self.current_player_index);
+        for child in &self.game_state.borrow().children {
+            self.print_node(&*child.borrow(), 0);
         }
         println!("");
     }
 
-    fn print_game_node(&self, game_node: &GameNode) {
-        println!("  {}", game_node.node_type);
-        for child in &game_node.children {
-            self.print_phase_node(child);
+    fn print_node(&self, node: &Node, indent: u32) {
+        let repeated: String = iter::repeat(" ").take(indent as usize).collect();
+        print!("{}", repeated);
+        let mut node_template = node.node_type.to_string();
+        if node.player_id == 0 {
+            node_template = node_template.blue().to_string()
+        } else if node.player_id == 1 {
+            node_template = node_template.green().to_string()
+        } else if node.player_id == 2 {
+            node_template = node_template.red().to_string()
         }
-        println!("");
-    }
-
-    fn print_phase_node(&self, phase_node: &PhaseNode) {
-
-        println!("Event History:");
-        println!("Phase ");
-
-        for child in &phase_node.children {
-            self.print_step_node(&child);
+        if !node.visited {
+            node_template = node_template.on_truecolor(80, 80, 80).to_string()
         }
-    }
-
-    fn print_step_node(&self, step_node: &StepNode) {
-
+        println!("{}", node_template);
+        for child in &node.children {
+            self.print_node(&*child.borrow(), indent + 2);
+        }
     }
 
     pub fn get_player_victory_points(&self, player: &Player) -> u32 {
@@ -332,7 +333,11 @@ impl Game {
         println!("End of game!");
         println!("Here are the total scores");
         for player in &self.players {
-            println!("Player: {} Score: {}", player.get_name(), self.get_player_victory_points(player));
+            println!(
+                "Player: {} Score: {}",
+                player.get_name(),
+                self.get_player_victory_points(player)
+            );
         }
     }
 }
