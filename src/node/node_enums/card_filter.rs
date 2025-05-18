@@ -45,10 +45,16 @@ impl fmt::Display for CardFilter {
             Self::All => write!(f, ""),
             Self::CoinCostUpto(x) => write!(f, "Cost <= {}", x),
             Self::CoinCostEquals(x) => write!(f, "Cost == {}", x),
+            Self::ValueUpto(x) => write!(f, "Value <= {}", x),
+            Self::ValueEquals(x) => write!(f, "Value == {}", x),
+            Self::CardCountUpto(x) => write!(f, "Count <= {}", x),
+            Self::CardCountEquals(x) => write!(f, "Count == {}", x),
+            Self::CardCountAll => write!(f, "All cards"),
             Self::ThisCard => write!(f, "This card"),
             Self::Type(x) => write!(f, "Type == {}", x),
             Self::NotType(x) => write!(f, "Type != {}", x),
             Self::Name(x) => write!(f, "Name == {}", x),
+            Self::NotName(x) => write!(f, "Name != {}", x),
             _ => write!(f, "{:?}", self),
         }
     }
