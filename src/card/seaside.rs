@@ -1,5 +1,38 @@
 use super::*;
 
+pub fn register() -> Vec<(&'static str, fn() -> Card)> {
+    vec![
+        //("Astrolabe", Card::astrolabe),
+        ("Bazaar", Card::bazaar),
+        //("Blockade", Card::blockade),
+        //("Caravan", Card::caravan),
+        //("Corsair", Card::corsair),
+        //("Cutpurse", Card::cutpurse),
+        //("Fishing Village", Card::fishing_village),
+        //("Haven", Card::haven),
+        //("Island", Card::island),
+        //("Lighthouse", Card::lighthouse),
+        //("Lookout", Card::lookout),
+        //("Merchant Ship", Card::merchant_ship),
+        //("Monkey", Card::monkey),
+        //("Native Village", Card::native_village),
+        //("Outpost", Card::outpost),
+        //("Pirate", Card::pirate),
+        //("Sailor", Card::sailor),
+        //("Salvager", Card::salvager),
+        //("Sea Chart", Card::sea_chart),
+        //("Sea Witch", Card::sea_witch),
+        //("Smugglers", Card::smugglers),
+        //("Tactician", Card::tactician),
+        //("Tide Pools", Card::tide_pools),
+        //("Treasure Map", Card::treasure_map),
+        //("Treasury", Card::treasury),
+        ("Warehouse", Card::warehouse),
+        //("Wharf", Card::wharf),
+    ]
+}
+
+
 impl Card {
 
     pub fn bazaar() -> Card {
