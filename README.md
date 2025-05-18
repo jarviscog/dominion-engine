@@ -126,6 +126,6 @@ This problem is solved using a context HashMap stored in the `Game` struct. When
 
 
 <figure>
-<img src="tools/replace.jpg" alt="Replace Card NodeTemplate example" style="width:100%">
+<img src="media/replace.jpg" alt="Replace Card NodeTemplate example" style="width:100%">
 <figcaption align="center"><b>Replace Card NodeTemplate example</b></figcaption>
 </figure>
