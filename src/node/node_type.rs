@@ -1,6 +1,6 @@
 use std::fmt;
 use super::*;
-use crate::RuntimeValue;
+use crate::runtime_values::*;
 
 #[derive(Clone, Debug)]
 pub enum NodeType {
@@ -13,10 +13,10 @@ pub enum NodeType {
     Night,
 
     // === Basic effects ===
-    PlusAction(RuntimeValue),
-    PlusCard(RuntimeValue),
-    PlusBuy(RuntimeValue),
-    PlusCoin(RuntimeValue),
+    PlusAction(RuntimeI32),
+    PlusCard(RuntimeI32),
+    PlusBuy(RuntimeI32),
+    PlusCoin(RuntimeI32),
 
     /// Transfer cards from one location to another
     /// Defaults to transferring one card, but can be set to more/less using filters
@@ -32,8 +32,8 @@ pub enum NodeType {
         Location,
         Location,
     ),
-    DrawCard(RuntimeValue),
-    DiscardCard(RuntimeValue),
+    DrawCard(RuntimeI32),
+    DiscardCard(RuntimeI32),
 
     GotoActionPhase,
     ThroneRoom,

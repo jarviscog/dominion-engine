@@ -1,13 +1,15 @@
 use std::fmt;
 
 use super::NodeTemplate;
-use crate::RuntimeValue;
+use crate::{runtime_values::RuntimeI32};
 
+// TODO There's a lot of spots that I don't like that you have to insert an empty vec to check a
+// card type. Maybe change that?
 #[derive(Debug, Clone)]
 pub enum CardType {
     Action(Vec<NodeTemplate>),
-    Treasure(RuntimeValue),
-    Victory(RuntimeValue),
+    Treasure(RuntimeI32),
+    Victory(RuntimeI32),
     Shelter,
     Curse,
     Attack(Vec<NodeTemplate>),   // Steps to follow for the attack
@@ -45,6 +47,7 @@ impl fmt::Display for CardType {
             Self::Treasure(v) => write!(f, "{}", v),
             Self::Victory(v) => write!(f, "{}", v),
             Self::Curse => write!(f, "Curse"),
+            Self::Shelter => write!(f, "Shelter"),
             //_ => write!(f, "{:?}", self),
         }
     }

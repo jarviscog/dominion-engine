@@ -7,9 +7,9 @@ impl Card {
             expansion: Expansion::Seaside,
             cost: vec![Cost::Coin(3)],
             card_type: vec![CardType::Action(vec![
-                NodeTemplate::DrawCard(RuntimeValue::FixedValue(3)),
-                NodeTemplate::PlusAction(RuntimeValue::FixedValue(1)),
-                NodeTemplate::DiscardCard(RuntimeValue::FixedValue(3)),
+                NodeTemplate::DrawCard(RuntimeI32::Const(3)),
+                NodeTemplate::PlusAction(RuntimeI32::Const(1)),
+                NodeTemplate::DiscardCard(RuntimeI32::Const(3)),
             ])],
             on_gain: None,
         }

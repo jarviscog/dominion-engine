@@ -1,5 +1,7 @@
 use std::fmt;
 
+use crate::card::{RuntimeCardName, RuntimeI32};
+
 use super::*;
 use crate::RuntimeValue;
 
@@ -21,18 +23,18 @@ pub enum NodeTemplate {
     BuyPhaseChoice,
     // STEP NODE TYPES
     None,
-    PlusCoin(RuntimeValue),
-    PlusAction(RuntimeValue),
-    PlusBuy(RuntimeValue),
+    PlusCoin(RuntimeI32),
+    PlusAction(RuntimeI32),
+    PlusBuy(RuntimeI32),
     /// Choose between two step paths
     Or(Box<NodeTemplate>, Box<NodeTemplate>),
 
     /// `RuntimeValue` name of the card to be played
-    PlayCard(RuntimeValue), // Play a card without modifying location of the card
+    PlayCard(RuntimeCardName), // Play a card without modifying location of the card
     /// Shorthand for TransferCards(true, You, [], Deck, Hand)
-    DrawCard(RuntimeValue),
+    DrawCard(RuntimeI32),
     /// Shorthand for TransferCards(true, You, [], Hand, Discard)
-    DiscardCard(RuntimeValue),
+    DiscardCard(RuntimeI32),
     /// Gain a card from the supply piles
     /// `Vec<CardFilter>` limit the options that the player can choose from
     GainCard(Vec<CardFilter>),

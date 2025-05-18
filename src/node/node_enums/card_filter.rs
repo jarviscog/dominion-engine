@@ -1,6 +1,6 @@
 use std::fmt::{self, Write};
 
-use crate::card_type::CardType;
+use crate::{card_type::CardType, runtime_values::RuntimeI32};
 
 use super::*;
 use crate::cost::Cost;
@@ -14,20 +14,20 @@ pub enum CardFilter {
     Type(CardType),
     NotType(CardType),
 
-    CoinCostUpto(RuntimeValue),
-    CoinCostEquals(RuntimeValue),
+    CoinCostUpto(RuntimeI32),
+    CoinCostEquals(RuntimeI32),
     ValueUpto(Cost),
     ValueEquals(Cost),
 
     // If no CardCount is specified in the filters, a default value of 1 will be used
-    CardCountUpto(RuntimeValue),
-    CardCountEquals(RuntimeValue),
+    CardCountUpto(RuntimeI32),
+    CardCountEquals(RuntimeI32),
     CardCountAll, // Move all cards
 
     ThisCard, // Some cards say 'trash this card' or likewise
 
     // Verify the From Location always contains a certain number of cards. This is used in militia
-    DownTo(RuntimeValue),
+    DownTo(RuntimeI32),
 
     // This is commented out for a reason. Please add values elsewhere
     //UpToXMoreValue(RuntimeValue, RuntimeValue), // (x, y) Up to x more value than y card

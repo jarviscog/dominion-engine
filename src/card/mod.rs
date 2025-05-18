@@ -8,7 +8,7 @@ pub use super::node::*;
 use crate::cost::Cost;
 use crate::expansion::Expansion;
 
-pub use crate::runtime_value::RuntimeValue;
+pub use crate::runtime_values::*;
 
 // Functions to generate cards
 pub mod dominion;
@@ -54,7 +54,7 @@ impl Card {
         None
     }
 
-    pub fn get_victory_points(&self) -> Option<RuntimeValue> {
+    pub fn get_victory_points(&self) -> Option<RuntimeI32> {
         for c_type in &self.card_type {
             return match c_type {
                 CardType::Victory(vps) => Some(vps.clone()),
@@ -64,7 +64,7 @@ impl Card {
         None
     }
 
-    pub fn get_value(&self) -> Option<RuntimeValue> {
+    pub fn get_value(&self) -> Option<RuntimeI32> {
         // TODO this function should return the value in either potions or coins.
         for c_type in &self.card_type {
             return match c_type {

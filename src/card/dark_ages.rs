@@ -10,7 +10,7 @@ impl Card {
             card_type: vec![
                 CardType::Action(
                     vec![
-                        NodeTemplate::PlusAction(RuntimeValue::FixedValue(2))
+                        NodeTemplate::PlusAction(RuntimeI32::Const(2))
                     ]
                 ),
                 CardType::Shelter,

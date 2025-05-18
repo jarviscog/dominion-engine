@@ -1,11 +1,12 @@
-use crate::card::RuntimeValue;
+
+use crate::card::RuntimePlayerIndex;
 
 use super::{EventListenerDestructCondition, EventListenerFireCondition, Node, NodeTemplate};
 
 /// Any event that does not happen right as a card is played.
 #[derive(Debug, Clone)]
 pub struct EventListener {
-    pub played_by: RuntimeValue,
+    pub played_by: RuntimePlayerIndex,
     pub fire_condition: EventListenerFireCondition, // When to fire the EventListener
     pub destruct_condition: EventListenerDestructCondition, // When to destuct the EventListener
     pub steps: Vec<NodeTemplate>,                       // Steps to take when the EventListener fires
@@ -14,7 +15,7 @@ pub struct EventListener {
 
 impl EventListener {
     pub fn new(
-        played_by: RuntimeValue,
+        played_by: RuntimePlayerIndex,
         fire_condition: EventListenerFireCondition,
         destruct_condition: EventListenerDestructCondition,
         steps: Vec<NodeTemplate>,
