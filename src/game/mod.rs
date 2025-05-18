@@ -33,6 +33,7 @@ pub struct Game {
     game_state: Rc<RefCell<Node>>,
     current_node: Rc<RefCell<Node>>,
     event_listeners: Vec<EventListener>,
+    next_node_id: usize,
 }
 
 impl Game {
@@ -47,6 +48,7 @@ impl Game {
             game_state: Rc::clone(&root_node),
             current_node: Rc::clone(&root_node),
             event_listeners: Vec::new(),
+            next_node_id: 1,
         }
     }
 
@@ -67,20 +69,27 @@ impl Game {
         }
     }
 
+    pub fn set_game_state(&mut self, node: Node) {
+        self.game_state = Rc::new(RefCell::new(node))
+    }
+
     /// Starts the game, locking out the ability to add new players
     pub fn start_game(&mut self) {
         for i in 0..self.players.len() {
-
             // Give each player a Setup node
-            let game_node = GameNode::new(
-                GameNodeType::Setup,
-                i.try_into().unwrap(),
-                Vec::new()
-            );
-            self.push_game_node(game_node)
+            let game_node = Node::new(NodeType::Setup, i.try_into().unwrap());
+            self.current_node
+                .borrow_mut()
+                .children
+                .push(Rc::new(RefCell::new(game_node)));
         }
+        self.game_state.borrow_mut().visited = true;
 
         self.bank.finish_population(self.players.len());
+        // Give an action phase to player 1
+        self.current_node
+            .borrow_mut()
+            .add_child(Node::new(NodeType::Action, 0));
 
         self.current_state = CurrentGameState::GameRunning;
     }
@@ -98,6 +107,194 @@ impl Game {
         } else {
             panic!("Error getting player name");
         }
+    }
+
+    pub fn get_next_unvisited_node(&self) -> Option<Rc<RefCell<Node>>> {
+        let next_node = self.game_state.borrow().get_first_unvisited_child();
+        next_node
+    }
+
+    /// Gets the next available node, and runs it
+    /// This may trigger a transition, such as ending a turn or going from action phase to buy
+    /// phase
+    pub fn run_next_node(&mut self) {
+        let maybe_next_node = self.get_next_unvisited_node();
+
+        if let Some(next_node) = maybe_next_node {
+            // Calculate any transition that may have occurred
+            //self.handle_transition(self.current_node.clone(), next_node.clone());
+
+            println!("Running node: {}", next_node.borrow().clone());
+            let node_template = next_node.borrow().node_type.clone();
+            next_node.borrow_mut().visited = true;
+            self.current_node = next_node.clone();
+            self.apply_step(next_node.borrow().clone());
+        } else {
+            println!("INFO: No more nodes");
+            // All of the nodes in the tree have been completed. We need to add more nodes
+            match self.get_last_phase() {
+                NodeType::Action => {
+                    let next_phase = Node::new(NodeType::Buy, self.current_player_index);
+                    self.game_state.borrow_mut().add_child(next_phase);
+                }
+                NodeType::Buy => {
+                    // TODO this needs to wrap around
+                    self.current_player_index += 1;
+                    self.turn_number += 1;
+                    let next_phase = Node::new(NodeType::Action, self.current_player_index);
+                    self.game_state.borrow_mut().add_child(next_phase);
+                }
+                _ => panic!("Unexpected node returned: {:?}", self.get_last_phase()),
+            }
+        }
+    }
+
+    /// Get the most recently played phase
+    fn get_last_phase(&self) -> NodeType {
+        let mut second_layer_nodes = self.game_state.borrow().children.clone();
+        second_layer_nodes.reverse();
+        for node in second_layer_nodes {
+            match node.borrow().node_type {
+                NodeType::Action => return NodeType::Action,
+                NodeType::Buy => return NodeType::Buy,
+                _ => {}
+            }
+        }
+        NodeType::Null
+    }
+
+    /// Handle any transitions that may occur from a node that has fired, to the next node
+    /// A Transition is a spot where an EventHandler could potentially fire. This will be a border
+    /// between nodes, usually
+    fn handle_transition(&mut self, old_node: Rc<RefCell<Node>>, new_node: Rc<RefCell<Node>>) {}
+
+    fn fire_event_listener(
+        &mut self,
+        event_listener_destruct_condition: EventListenerDestructCondition,
+    ) {
+        for event_listener in self.event_listeners.clone() {
+            if event_listener.destruct_condition == event_listener_destruct_condition {
+                todo!()
+            }
+        }
+    }
+
+    /// Using the current game context, convert a NodeTemplate into a real Node
+    pub fn convert_node_template_to_node(&self, node_template: NodeTemplate) -> Node {
+        // TODO This is currently not recursive, so all Sub NodeTemplates will be dropped
+        match node_template {
+            NodeTemplate::Root => {
+                panic!()
+            }
+            NodeTemplate::PlusCoin(value) => {
+                Node::new(NodeType::PlusCoin(value), self.get_current_player_index())
+            }
+            NodeTemplate::PlusAction(value) => {
+                Node::new(NodeType::PlusAction(value), self.get_current_player_index())
+            }
+            NodeTemplate::PlusBuy(value) => {
+                Node::new(NodeType::PlusBuy(value), self.get_current_player_index())
+            }
+            NodeTemplate::DrawCard(value) => {
+                Node::new(NodeType::DrawCard(value), self.get_current_player_index())
+            }
+            NodeTemplate::DiscardCard(value) => Node::new(
+                NodeType::DiscardCard(value),
+                self.get_current_player_index(),
+            ),
+            _ => todo!("convert_node_template_to_node {:?}", node_template),
+        }
+    }
+
+    /// Insert steps from a card into the current node.
+    /// This will convert them from NodeTemplate to a real Node
+    pub fn insert_into_current_node(&mut self, node_steps: Vec<NodeTemplate>) {
+        for step in node_steps {
+            let new_node = self.convert_node_template_to_node(step);
+            self.current_node.borrow_mut().add_child(new_node);
+        }
+    }
+
+    // Visit a node, and
+    fn apply_step(&mut self, in_node: Node) {
+        let node = in_node.clone();
+        match &node.node_type {
+            NodeType::Setup => {
+                self.players.get_mut(node.player_id).unwrap().draw_cards(5);
+            }
+            NodeType::Action => {}
+            NodeType::Buy => {}
+            NodeType::PlusCoin(runtime_value) => {
+                let value = self.resolve_runtime_i32(runtime_value);
+                self.atomic_add_coins(node.player_id, value);
+            }
+            NodeType::PlusAction(runtime_value) => {
+                let value = self.resolve_runtime_i32(runtime_value);
+                self.atomic_add_actions(node.player_id, value);
+            }
+            NodeType::PlusBuy(runtime_value) => {
+                let value = self.resolve_runtime_i32(runtime_value);
+                self.atomic_add_buys(node.player_id, value);
+            }
+            NodeType::DrawCard(runtime_value) => {
+                let value = self.resolve_runtime_i32(runtime_value);
+                self.atomic_draw_cards(node.player_id, value);
+            }
+            _ => todo!("apply_step: {}", &node), // ...
+        }
+    }
+
+    fn atomic_draw_cards(&mut self, player_id: usize, number_of_cards: i32) {
+        if let Some(player) = self.players.get_mut(player_id as usize) {
+            player.draw_cards(number_of_cards as u32);
+        } else {
+            println!("ERROR: Failed to index player_id: {player_id}")
+        }
+    }
+
+    fn atomic_add_coins(&mut self, player_id: usize, amount: i32) {
+        if let Some(player) = self.players.get_mut(player_id as usize) {
+            player.add_coins(amount);
+        } else {
+            println!("ERROR: Failed to index player_id: {player_id}")
+        }
+    }
+
+    fn atomic_add_actions(&mut self, player_id: usize, amount: i32) {
+        if let Some(player) = self.players.get_mut(player_id as usize) {
+            player.add_actions(amount);
+        } else {
+            println!("ERROR: Failed to index player_id: {player_id}")
+        }
+    }
+
+    fn atomic_add_buys(&mut self, player_id: usize, amount: i32) {
+        if let Some(player) = self.players.get_mut(player_id as usize) {
+            player.add_buys(amount);
+        } else {
+            println!("ERROR: Failed to index player_id: {player_id}")
+        }
+    }
+
+    fn atomic_add_debt(&mut self, player_id: usize, amount: i32) {
+        if let Some(player) = self.players.get_mut(player_id as usize) {
+            player.add_debt(amount);
+        } else {
+            println!("ERROR: Failed to index player_id: {player_id}")
+        }
+    }
+
+    fn resolve_runtime_i32(&self, val: &RuntimeI32) -> i32 {
+        return match val {
+            RuntimeI32::Const(x) => x.clone(),
+            RuntimeI32::Add(x, y) => self.resolve_runtime_i32(x) + self.resolve_runtime_i32(y),
+            RuntimeI32::Mult(x, y) => self.resolve_runtime_i32(x) * self.resolve_runtime_i32(y),
+            _ => todo!(),
+        };
+    }
+
+    fn resolve_condition(&self, condition: &Condition) -> bool {
+        todo!()
     }
 
     pub fn get_current_player_hand(&self) -> Vec<Card> {
@@ -125,7 +322,7 @@ impl Game {
     }
 
     /// Make a decision that the game is waiting for
-    pub fn make_decision(&mut self, d: Decision) -> Result<(), String>{
+    pub fn make_decision(&mut self, d: Decision) -> Result<(), String> {
         // TODO pull the choice from the event_q, and ensure the decision can only be made for the
         // choice required
         match self.get_current_choice() {
@@ -164,10 +361,10 @@ impl Game {
                     }
                     Decision::NameACard(x) => {
                         return Err("Cannot name a card during buy phase".to_owned())
-                    //&_ => todo!()
+                    } //&_ => todo!()
                 }
             }
-            _ => panic!()
+            _ => panic!(),
         }
 
         Ok(())
@@ -178,49 +375,26 @@ impl Game {
     }
 
     /// Allow the current player to move a card
-    pub fn play_card(&mut self, card_to_play: &Card, from: Location, play_anyways: bool) -> Result<(), String> {
-
+    /// `play_anyways` allows you to play the card even if the game can't move it to InPlay
+    pub fn play_card(
+        &mut self,
+        card_to_play: &Card,
+        from: Location,
+        play_anyways: bool,
+    ) -> Result<(), String> {
         return match self.current_state {
             CurrentGameState::GameNotStarted => {
                 Err("WARNING. Cannot play card. Game not started".to_owned())
             }
-            // TODO remove ActionPhase and BuyPhase. Replace with GameStarted. 
+            // TODO remove ActionPhase and BuyPhase. Replace with GameStarted.
             // PlayCard is not the place to check the validation of a card.
             CurrentGameState::GameRunning => {
-
                 todo!()
             }
-            CurrentGameState::GameFinished => {Err("WARNING. Cannot play card. Game over".to_owned())}
-    }
-
-    pub fn resolve_runtime_value(&self, runtime_value: RuntimeValue) -> i32 {
-        match runtime_value {
-            RuntimeValue::Any => i32::max_value(),
-            RuntimeValue::FixedValue(val) => val,
-            _ => {
-                // TODO finish all match branches
-                println!("WARNING: This type of value has not been finished");
-                0
+            CurrentGameState::GameFinished => {
+                Err("WARNING. Cannot play card. Game over".to_owned())
             }
-        }
-    }
-
-    fn push_game_node(&mut self, game_node: GameNode) {
-        self.game_state.push(game_node)
-    }
-
-    /// See `run_step()`
-    pub fn insert_steps(&mut self, steps: Vec<StepNodeType>) {
-        //println!("Running steps: ");
-        for step in steps {
-            println!("  {}", step);
-            self.insert_step(step);
-        }
-    }
-    
-    /// Inserts a StepNodeType into the game tree
-    pub fn insert_step(&mut self, in_step:StepNodeType) {
-        // TODO
+        };
     }
 
     pub fn get_player_names(&self) -> Vec<String> {
