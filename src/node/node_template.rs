@@ -101,11 +101,11 @@ pub enum NodeTemplate {
         Location,
     ),
 
-    Conditional {
-        condition: Condition,
-        then_branch: Vec<NodeTemplate>,
-        else_branch: Vec<NodeTemplate>,
-    },
+    Conditional (
+        Condition,
+        Box<NodeTemplate>,
+        Box<NodeTemplate>,
+    ),
 
     IgnoreAttacks,
 
