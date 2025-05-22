@@ -1,9 +1,9 @@
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::fmt::{self, Write};
-use std::{iter, usize};
 use std::ops::IndexMut;
 use std::rc::Rc;
+use std::{iter, usize};
 
 mod choice;
 mod current_game_state;
@@ -80,16 +80,19 @@ impl Game {
     /// Starts the game, locking out the ability to add new players
     pub fn start_game(&mut self) {
         for i in 0..self.players.len() {
+            println!("Setup for {i}");
             // Give each player a Setup node
-            let game_node = Node::new(NodeType::Setup, i.try_into().unwrap());
+            let game_node = self.resolve_template(NodeTemplate::Setup);
             self.current_node
                 .borrow_mut()
                 .children
                 .push(Rc::new(RefCell::new(game_node)));
+            self.current_player_index = i;
         }
+        self.current_player_index = 0;
         self.game_state.borrow_mut().visited = true;
-
         self.bank.finish_population(self.players.len());
+
         // Give an action phase to player 1
         self.current_node
             .borrow_mut()
@@ -183,8 +186,7 @@ impl Game {
         }
     }
 
-    /// Insert steps from a card into the current node.
-    /// This will convert them from NodeTemplate to a real Node
+    /// Add NodeTemplates into the current Node
     pub fn insert_into_current_node(&mut self, node_steps: Vec<NodeTemplate>) {
         for step in node_steps {
             let new_node = self.resolve_template(step);
@@ -192,13 +194,11 @@ impl Game {
         }
     }
 
-    // Visit a node, and
+    // Visit a node, and apply any atomic operations you might need to
     fn apply_step(&mut self, in_node: Node) {
         let node = in_node.clone();
         match &node.node_type {
-            NodeType::Setup => {
-                self.players.get_mut(node.player_id).unwrap().draw_cards(5);
-            }
+            NodeType::Setup => {}
             NodeType::Action => {}
             NodeType::Buy => {}
             NodeType::PlusCoin(runtime_value) => {
@@ -212,6 +212,12 @@ impl Game {
             NodeType::PlusBuy(runtime_value) => {
                 let value = self.resolve_runtime_i32(runtime_value);
                 self.atomic_add_buys(node.player_id, value);
+            }
+            NodeType::TransferCards(forced, effected_players, filters, from, to) => {
+                if !forced {
+                    panic!("Optional transfer not implemented")
+                }
+                for index in self.resolve_effected_players(effected_players).iter() {}
             }
             _ => todo!("apply_step: {}", &node), // ...
         }
@@ -257,11 +263,26 @@ impl Game {
         }
     }
 
+    pub fn add_action_phase_with_steps(&mut self, node_template: Vec<NodeTemplate>) {}
+
     fn resolve_template(&mut self, node_template: NodeTemplate) -> Node {
         let current_player_index = self.get_current_player_index();
         match node_template {
             NodeTemplate::Root => Node::new(NodeType::Root, current_player_index),
-            NodeTemplate::Setup => Node::new(NodeType::Setup, current_player_index),
+            NodeTemplate::Setup => {
+                let mut setup_node = Node::new(NodeType::Setup, current_player_index);
+                setup_node.add_child(Node::new(
+                    NodeType::TransferCards(
+                        true,
+                        EffectedPlayers::You,
+                        Some(vec![CardFilter::CardCountEquals(RuntimeI32::Const(5))]),
+                        Location::DeckTop,
+                        Location::Hand,
+                    ),
+                    0,
+                ));
+                setup_node
+            }
             NodeTemplate::Action => Node::new(NodeType::Action, current_player_index),
             NodeTemplate::Buy => Node::new(NodeType::Buy, current_player_index),
             NodeTemplate::Night => Node::new(NodeType::Night, current_player_index),
@@ -274,16 +295,24 @@ impl Game {
             NodeTemplate::PlusBuy(runtime_i32) => {
                 Node::new(NodeType::PlusBuy(runtime_i32), current_player_index)
             }
-            NodeTemplate::DrawCard(runtime_i32) => {
-                Node::new(NodeType::TransferCards(
-                    true, 
-                    EffectedPlayers::You, 
-                    Some(vec![CardFilter::CardCountEquals(runtime_i32)]), 
-                    Location::DeckTop, 
-                    Location::Hand
-                )
-                , current_player_index)
+            NodeTemplate::DrawCard(runtime_i32) => Node::new(
+                NodeType::TransferCards(
+                    true,
+                    EffectedPlayers::You,
+                    Some(vec![CardFilter::CardCountEquals(runtime_i32)]),
+                    Location::DeckTop,
+                    Location::Hand,
+                ),
+                current_player_index,
+            ),
+            NodeTemplate::Conditional(condition, then_branch, else_branch) => {
+                if self.resolve_condition(&condition) {
+                    self.resolve_template(*then_branch)
+                } else {
+                    self.resolve_template(*else_branch)
+                }
             }
+            NodeTemplate::None => Node::none(),
             _ => todo!("resolve_template {:?}", node_template),
         }
     }
@@ -292,7 +321,7 @@ impl Game {
     fn resolve_effected_players(&self, effected_players: &EffectedPlayers) -> Vec<usize> {
         let mut ret_vec = Vec::new();
         match effected_players {
-            EffectedPlayers::You => {ret_vec.push(self.get_current_player_index())}
+            EffectedPlayers::You => ret_vec.push(self.get_current_player_index()),
             EffectedPlayers::All => {
                 for i in 0..self.players.len() {
                     ret_vec.push(i)

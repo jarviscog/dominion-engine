@@ -1,5 +1,9 @@
 use super::*;
 
+pub fn register() -> Vec<(&'static str, fn() -> Card)> {
+    vec![("Oasis", Card::oasis)]
+}
+
 impl Card {
     pub fn villa() -> Card {
         Card {
