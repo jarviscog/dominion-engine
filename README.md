@@ -85,7 +85,7 @@ Root
 │  │  ├─ +1 🪙
 │  ├─ BuyCard(Village)
 ```
-Each node has a `NodeType` that explnin the operation that needs to happen (+1 Card, +2 Actions, etc.)
+Each node has a `NodeType` that explanin the operation that needs to happen (+1 Card, +2 Actions, etc.)
 The actual operation of the node happens when the node is visited, so some nodes may be in the history tree, but not visited yet.
 
 ### NodeTemplate
@@ -94,7 +94,7 @@ Steps on a card are stored as `NodeTemplate`s. These templates also defined as a
 
 To add nodes to the tree, they must be converted from a `NodeTemplate` to a `Node`. Some mappings are simple, such as `NodeTemplate::PlusCoin(RuntimeI32) -> Node::PlusCoin(RuntimeI32)`, while others are more complex.
 
-An good example to understand would be Throne Room. 
+A good example to understand would be Throne Room. 
 - The NodeTemplate for throne room is `NodeTemplate::RepeatCardXTimes(RuntimeI32, RuntimeCardName)`
 - When converting from `NodeTemplate` to `Node`
     - The player chooses an action card
