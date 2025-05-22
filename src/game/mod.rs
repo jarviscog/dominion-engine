@@ -1,9 +1,9 @@
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::fmt::{self, Write};
-use std::{iter, usize};
 use std::ops::IndexMut;
 use std::rc::Rc;
+use std::{iter, usize};
 
 mod choice;
 mod current_game_state;
@@ -192,7 +192,7 @@ impl Game {
         }
     }
 
-    // Visit a node, and
+    // Visit a node, and apply any atomic operations you might need to
     fn apply_step(&mut self, in_node: Node) {
         let node = in_node.clone();
         match &node.node_type {
@@ -292,7 +292,7 @@ impl Game {
     fn resolve_effected_players(&self, effected_players: &EffectedPlayers) -> Vec<usize> {
         let mut ret_vec = Vec::new();
         match effected_players {
-            EffectedPlayers::You => {ret_vec.push(self.get_current_player_index())}
+            EffectedPlayers::You => ret_vec.push(self.get_current_player_index()),
             EffectedPlayers::All => {
                 for i in 0..self.players.len() {
                     ret_vec.push(i)
