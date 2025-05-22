@@ -10,10 +10,16 @@ This is a hobby project used to learn more about large-scale Rust projects
 - Forwards/reversible history
 - Modern language
 
+## Current State
+This project is still in development! There are many functions that have not been implemented, and many breaking changes will happen
+
+Dominion is a difficult game to program. I have had to go back to the drawing board a few times to rethink how things will work, as I didn't want to make it to X expansion and realize I need a project-wide overhaul
+
 
 ## Usage
 
-No external dependencies are required. Just run `cargo run` 
+See `Cargo.toml` for the required dependencies. 
+Once installed, just run `cargo run` from the project root
 
 Example code:
 ```rust
@@ -79,8 +85,8 @@ Root
 │  │  ├─ +1 🪙
 │  ├─ BuyCard(Village)
 ```
-Each node has a `NodeType` that explanin the operation that needs to happen
-The actual operation of the node happens when the node is visited. 
+Each node has a `NodeType` that explnin the operation that needs to happen (+1 Card, +2 Actions, etc.)
+The actual operation of the node happens when the node is visited, so some nodes may be in the history tree, but not visited yet.
 
 ### NodeTemplate
 
@@ -92,7 +98,7 @@ An good example to understand would be Throne Room.
 - The NodeTemplate for throne room is `NodeTemplate::RepeatCardXTimes(RuntimeI32, RuntimeCardName)`
 - When converting from `NodeTemplate` to `Node`
     - The player chooses an action card
-    - The card `NodeTemplate` is retrieved
+    - The card `NodeTemplate` is retrieved for that card
     - The `NodeTemplate` is converted into a Node
     - The node are inserted into the game history, and ran
 ```
@@ -109,8 +115,8 @@ There are a few key ideas to keep things organized
 - `Node` does not contain any logic 
     - No "If x then y". This happens when converting from a NodeTemplate to a node
     - No Player Decisions
-    - No Player Decisions
-- All nodes should be reversible
+    - No conditional checks or loops
+- All nodes should be easily reversible
 
 ### RuntimeI32, RuntimeCardName, RuntimeCardType
 
@@ -122,7 +128,7 @@ There are many pieces of information that will not be known until the card has a
 One of the hardest things about this system is that there are often times where information needs to be passed between nodes in the tree. 
 Remodel needs to know the cost of a card that was trashed, while Cellar needs to know the number of cards discarded. 
 This boils down to steps needing to know what happened during previous steps, weather it was cost, value, type, or something else.
-This problem is solved using a context HashMap stored in the `Game` struct. When you are going to need a piece of information, store it in the context hashmap. Then, you can extract that piece of information in a later step.
+This problem is solved using a `game_context` `HashMap` stored in the `Game` struct. When you are going to need a piece of information, store it in the context hashmap. Then, you can extract that piece of information in a later step.
 
 
 <figure>
