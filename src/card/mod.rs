@@ -31,6 +31,7 @@ fn build_registry() -> HashMap<&'static str, CardFactory> {
         .into_iter()
         .chain(intrigue::register())
         .chain(prosperity::register())
+        .chain(empires::register())
         .collect()
 }
 #[ctor::ctor]
