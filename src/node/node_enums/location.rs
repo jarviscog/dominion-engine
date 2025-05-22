@@ -1,4 +1,3 @@
-
 use std::fmt::{self, Write};
 
 #[derive(Debug, Clone)]
@@ -15,6 +14,8 @@ pub enum Location {
 
     // Buffer internal to the lifetime of the Card playing it
     // This location MUST be empty once the card is done being played
+    // NOTE: This buffer is per-player, so transfers that effect all players each have their own
+    // buffer
     InternalBuffer,
 }
 
@@ -30,7 +31,6 @@ impl fmt::Display for Location {
             Self::Supply => write!(f, "the supply"),
             Self::SearchDeck => write!(f, "search your deck"),
             //_ => write!(f, "{:?}"),
-
         }
     }
     //write!(f, "{:?}", self)

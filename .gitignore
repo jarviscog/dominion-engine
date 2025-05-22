@@ -1,2 +1,6 @@
-/target
-extra-tools/
+.dbeaver/
+target/
+tools/
+
+.project
+*.db

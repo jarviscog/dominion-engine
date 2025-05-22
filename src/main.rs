@@ -1,71 +1,103 @@
 #![allow(unused)]
 
-use std::io::*;
-use std::io;
+use std::cell::{Ref, RefCell};
+use std::rc::Rc;
 use std::str::FromStr;
 
-mod game;
-mod bank;
-mod player;
-
-mod expansion;
-
 mod card;
-mod card_type;
-mod step;
-use step::Step;
-
+use card::*;
+mod game;
+use game::{Choice, Decision};
+mod bank;
 mod cost;
-
+mod expansion;
+mod node;
 mod pile;
+mod player;
+mod runtime_values;
+mod terminal_player;
+use card::Card;
+use game::Game;
+
+use terminal_player::*;
+
+fn test_run_card_steps(in_game: &mut Game) {
+    //    println!("\nLab:");
+    //    if let Some(steps) = Card::laboratory().get_action_steps() {
+    //        in_game.insert_into_current_node(steps);
+    //    }
+
+    //    println!("\nVillage:");
+    //    if let Some(steps) = Card::village().get_action_steps() {
+    //        in_game.insert_into_current_node(steps);
+    //    }
+
+    if let Some(steps) = card::Card::plus_action_buy_coin().get_action_steps() {
+        in_game.insert_into_current_node(steps);
+    }
+
+    if let Some(steps) = card::Card::discard_a_card().get_action_steps() {
+        in_game.insert_into_current_node(steps);
+    }
+    //
+    //    println!("\nCellar:");
+    //    if let Some(steps) = card::Card::cellar().get_action_steps() {
+    //        in_game.insert_into_current_node(steps);
+    //    }
+    //
+    //    println!("\nRemodel:");
+    //    if let Some(steps) = card::Card::remodel().get_action_steps() {
+    //        in_game.insert_into_current_node(steps);
+    //    }
+}
 
 fn main() {
-
-    let mut new_game = game::Game::new();
-
+    let mut new_game = Game::new();
     new_game.add_terminal_player("Jarvis".to_owned());
     new_game.add_bot("Bot".to_owned());
-
     new_game.set_bank(bank::Bank::first_game());
     new_game.start_game();
 
-    let player_names = new_game.get_player_names();
-    println!("Players: ");
-    println!("  {:#?}", player_names);
-
-    println!("\nMarket:");
-    if let Some(steps) = card::Card::market().get_steps() {
-        new_game.run_steps(steps);
+    //test_run_card_steps(&mut new_game);
+    if let Some(steps) = card::Card::laboratory().get_action_steps() {
+        new_game.insert_into_current_node(steps);
     }
 
-    println!("\nCellar:");
-    if let Some(steps) = card::Card::cellar().get_steps() {
-        new_game.run_steps(steps);
+    new_game.print_player_stats();
+    new_game.print_event_listeners();
+    new_game.print_game_state();
+
+    while new_game.get_next_unvisited_node().is_some() {
+        new_game.run_next_node();
+        new_game.print_player_stats();
+        new_game.print_game_state();
     }
-
-    println!("\nMoneylender:");
-    if let Some(steps) = card::Card::moneylender().get_steps() {
-        new_game.run_steps(steps);
-    }
-
-    println!("\nVassal:");
-    if let Some(steps) = card::Card::vassal().get_steps() {
-        new_game.run_steps(steps);
-    }
-
-    //println!("{:#?}", card::Card::copper());
-
-
+    new_game.run_next_node();
+    new_game.print_player_stats();
+    new_game.print_game_state();
 }
 
+fn game_loop(in_game: &mut Game) {
+    loop {
+        in_game.print_player_stats();
+        in_game.print_event_listeners();
+        in_game.print_game_state();
 
+        println!("Playing turn: {}", in_game.get_current_player_name());
+        for card in in_game.get_current_player_hand() {
+            println!("{:?}", card);
+        }
 
-
-
-
-
-
-
-
-
-
+        let d = match in_game.get_current_choice() {
+            Choice::ActionPhase => prompt_for_action_phase_decision(),
+            Choice::BuyPhase => prompt_for_buy_phase_decision(),
+            _ => todo!(),
+        };
+        match in_game.make_decision(d) {
+            Ok(v) => {}
+            Err(e) => {
+                println!("{}", e)
+            }
+        }
+    }
+}
