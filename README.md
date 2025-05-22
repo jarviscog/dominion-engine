@@ -130,8 +130,14 @@ Remodel needs to know the cost of a card that was trashed, while Cellar needs to
 This boils down to steps needing to know what happened during previous steps, weather it was cost, value, type, or something else.
 This problem is solved using a `game_context` `HashMap` stored in the `Game` struct. When you are going to need a piece of information, store it in the context hashmap. Then, you can extract that piece of information in a later step.
 
+Here are some example `NodeTemplates`. Many chunks of data have been omitted if obvious.
+
+<figure>
+<img src="media/council_room.jpg" alt="Council Room NodeTemplate example" style="width:100%">
+<figcaption align="center"><b>Council Room</b></figcaption>
+</figure>
 
 <figure>
 <img src="media/replace.jpg" alt="Replace Card NodeTemplate example" style="width:100%">
-<figcaption align="center"><b>Replace Card NodeTemplate example</b></figcaption>
+<figcaption align="center"><b></b></figcaption>
 </figure>
