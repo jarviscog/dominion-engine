@@ -134,10 +134,8 @@ Here are some example `NodeTemplates`. Many chunks of data have been omitted if 
 
 <figure>
 <img src="media/council_room.jpg" alt="Council Room NodeTemplate example" style="width:100%">
-<figcaption align="center"><b>Council Room</b></figcaption>
 </figure>
 
 <figure>
 <img src="media/replace.jpg" alt="Replace Card NodeTemplate example" style="width:100%">
-<figcaption align="center"><b></b></figcaption>
 </figure>
