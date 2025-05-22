@@ -60,7 +60,7 @@ fn main() {
 
     //test_run_card_steps(&mut new_game);
     if let Some(steps) = card::Card::laboratory().get_action_steps() {
-        new_game.insert_into_current_node(steps);
+        new_game.add_action_phase_with_steps(steps);
     }
 
     new_game.print_player_stats();
